@@ -1,0 +1,28 @@
+{
+    "Example_responses": [
+        {
+            "Response": "Modify_event",
+            "Event": {
+                "id": 123,
+                "title": "Zombies",
+                "status": "wait" 
+            }
+        },
+        {
+            "Response": "Modify_event",
+            "Event": {
+                "id": 123,
+                "title": "Zombies",
+                "status": "accepted" 
+            }   
+        },
+        {
+            "Response": "Modify_event",
+            "Event": {
+                "id": 123,
+                "title": "Zombies",
+                "status": "denied" 
+            }   
+        }
+    ]
+}

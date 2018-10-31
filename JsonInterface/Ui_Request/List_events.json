@@ -1,0 +1,8 @@
+{
+    "Request": "List_events",
+    "User": {
+        "email": "myaldiz@kaist.ac.kr",
+        "pw_hash": "XXA83jd3kljsdf",
+        "ip": "143.248.143.29"
+    }
+}
