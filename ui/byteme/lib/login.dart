@@ -4,6 +4,9 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: Text("Log in"),
+        ),
         body: Center(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -11,9 +14,7 @@ class LoginPage extends StatelessWidget {
   }
 
   final main_widgets = <Widget>[
-    Text(
-      "Byte Me"
-      ),
+    FlutterLogo(size: 50.0),
     SizedBox(height: 50.0),
     TextFormField(
       keyboardType: TextInputType.emailAddress,
