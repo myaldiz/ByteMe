@@ -14,6 +14,7 @@ class LoginPage extends StatelessWidget {
     Text(
       "Byte Me"
       ),
+    SizedBox(height: 50.0),
     TextFormField(
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
@@ -23,6 +24,7 @@ class LoginPage extends StatelessWidget {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
     ),
+    SizedBox(height: 20.0),
     TextFormField(
       obscureText: true,
       autofocus: false,
@@ -32,7 +34,9 @@ class LoginPage extends StatelessWidget {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
     ),
+    SizedBox(height: 35.0),
     MaterialButton(
+      color: Colors.blue, //tmp
       child: Text("Log in"),
       onPressed: null,
     ),
