@@ -1,3 +1,32 @@
 from django.db import models
+from django.contrib.auth.models import User
+# TODO: import classes from events app
 
-# Create your models here.
+class Person(models.Model):
+	univ = models.CharField(max_length=100)
+	dept = models.CharField(max_length=100)
+
+	class Meta:
+		abstract = True
+
+class Speaker(Person):
+	name = models.CharField(max_length=50)
+	speakerEmail = models.EmailField(unique=True)
+	bio = models.TextField()
+
+class UserProfile(Person):
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	userEmail = models.EmailField(unique=True)
+	isAdmin = models.BooleanField()
+
+	def addTags(self, tags):
+		pass
+
+	def addAttend(self, identifier):
+		pass
+
+	def __str__(self):
+		return "%s"%(self.user)
+
+def createUser(email, username, password, isAdmin=False):
+	pass
