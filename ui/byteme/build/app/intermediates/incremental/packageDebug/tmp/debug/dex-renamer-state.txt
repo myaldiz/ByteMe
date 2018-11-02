@@ -1,4 +1,0 @@
-#Fri Nov 02 01:57:49 KST 2018
-base.0=/home/mohamed/Code/ByteMe/ui/byteme/build/app/intermediates/transforms/dexMerger/debug/0
-path.0=classes.dex
-renamed.0=classes.dex
