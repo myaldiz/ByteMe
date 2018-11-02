@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text("Log in"),
+          title: Text("Sign up"),
         ),
         body: Center(
             child: Column(
@@ -35,18 +34,27 @@ class LoginPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(32.0)),
                 ),
               ),
-              SizedBox(height: 35.0),
-              RaisedButton(
-                child: Text("Log in"),
-                onPressed: () {
-                  Navigator.of(context).popAndPushNamed('/');
-                },
+              SizedBox(height: 20.0),
+              TextFormField(
+                obscureText: true,
+                autofocus: false,
+                decoration: InputDecoration(
+                  hintText: 'Repeat Password',
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(32.0)),
+                ),
               ),
               SizedBox(height: 7.0),
               RaisedButton(
                 child: Text("Register"),
                 onPressed: () {
-                  Navigator.of(context).pushNamed('/signup');
+                  Navigator.of(context).pop();
+                  showDialog(
+                      context: context,
+                      builder: (context){return AlertDialog(content: Text("Successful!"),
+                      actions: <Widget>[RaisedButton(onPressed: (){Navigator.of(context).pop();},
+                          child: Text("OK"))]);});
                 },
               ),
             ])));
