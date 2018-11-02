@@ -1,8 +1,3 @@
 *.pyc
 **/build
-**/ios
-**/android
-**/.packages
-**/local.properties
-**/Generated.xcconfig
 .DS_Store
