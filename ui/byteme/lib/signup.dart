@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _SignupState();
+  }
+}
+
+class _SignupState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+//        backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           title: Text("Sign up"),
         ),
@@ -52,9 +60,17 @@ class SignupPage extends StatelessWidget {
                   Navigator.of(context).pop();
                   showDialog(
                       context: context,
-                      builder: (context){return AlertDialog(content: Text("Successful!"),
-                      actions: <Widget>[RaisedButton(onPressed: (){Navigator.of(context).pop();},
-                          child: Text("OK"))]);});
+                      builder: (context) {
+                        return AlertDialog(
+                            content: Text("Successful!"),
+                            actions: <Widget>[
+                              RaisedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("OK"))
+                            ]);
+                      });
                 },
               ),
             ])));
