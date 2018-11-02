@@ -15,20 +15,20 @@ class Event(models.Model):
 		('mod', 'Modification'),
 	)
 	req = models.CharField(max_length=3, choices = REQUEST, default='non')
-	abstractReq = models.TextField(max_length=3000)
-	placeReq = models.CharField(max_length=100)
-	timeReq = models.DateTimeField()
-	titleReq = models.CharField(max_length=300)
-	detailsReq = models.TextField()
+	abstractReq = models.TextField(max_length=3000, default=None)
+	placeReq = models.CharField(max_length=100, default=None)
+	timeReq = models.DateTimeField(default=None)
+	titleReq = models.CharField(max_length=300, default=None)
+	detailsReq = models.TextField(default=None)
 
-	__rankingVector = models.DecimalField()
+	rankingVector = models.DecimalField(decimal_places=0, max_digits=5)
 
 	def generateRankingVector():
 		pass
 
 class Tag(models.Model):
 	name = models.CharField(max_length=30)
-	rankingScore = models.DecimalField()
+	rankingScore = models.DecimalField(decimal_places=0, max_digits=5)
 
 	def calculateRankingScore():
 		pass
