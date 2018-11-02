@@ -7,13 +7,13 @@ import 'browse.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  final app_theme = ThemeData();
+  final appTheme = ThemeData();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: app_theme,
+      title: 'ByteMe',
+      theme: appTheme,
       initialRoute: '/login',
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) => BrowsePage(),

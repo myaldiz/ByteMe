@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -8,14 +11,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginPage> {
-  static final emailController = TextEditingController();
-  static final passwordController = TextEditingController();
+  static final _email = TextEditingController();
+  static final _password = TextEditingController();
   String email, password;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-//        backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text("Log in"),
@@ -26,20 +28,28 @@ class _LoginState extends State<LoginPage> {
                 children: mainWidgets(context))));
   }
 
-  bool authenticate(){
-    setState(){
-      email = emailController.text;
-      password = passwordController.text;
+  Future<bool> authenticate() async{
+    setState((){
+      email = _email.text;
+      password = _password.text;
+    });
+    String responseString = await rootBundle.loadString('JsonInterface/Server_Response/login.json');
+    Map<String,dynamic> responseContent = json.decode(responseString);
+    String result = responseContent["Example_responses"][1]["result"];
+    if(result == "accepted"){
+      return true;
     }
-    return true;
+    else{
+      return false;
+    }
   }
 
-  mainWidgets(BuildContext context) {
+  mainWidgets(BuildContext context){
     return <Widget>[
       FlutterLogo(size: 50.0),
       SizedBox(height: 50.0),
       TextFormField(
-        controller: emailController,
+        controller: _email,
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
         decoration: InputDecoration(
@@ -51,7 +61,7 @@ class _LoginState extends State<LoginPage> {
       ),
       SizedBox(height: 20.0),
       TextFormField(
-        controller: passwordController,
+        controller: _password,
         obscureText: true,
         autofocus: false,
         decoration: InputDecoration(
@@ -64,19 +74,31 @@ class _LoginState extends State<LoginPage> {
       SizedBox(height: 35.0),
       RaisedButton(
         child: Text("Log in"),
-        onPressed: () {
-          if(authenticate()) {
+        onPressed: () async {
+          if(await authenticate()) {
             Navigator.of(context).popAndPushNamed('/');
+          }else{
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                      content: Text("Login Failed!"),
+                      actions: <Widget>[
+                        RaisedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text("Try Again"))
+                      ]);
+                });
           }
         },
       ),
       SizedBox(height: 7.0),
       RaisedButton(
         child: Text("Register"),
-        onPressed: () {
-          if(authenticate()) {
+        onPressed: () async {
             Navigator.of(context).pushNamed('/signup');
-          }
         },
       ),
     ];

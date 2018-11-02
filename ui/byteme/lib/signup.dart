@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
 
 class SignupPage extends StatefulWidget {
   @override
@@ -8,6 +10,11 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupState extends State<SignupPage> {
+  static final _email = TextEditingController();
+  static final _password = TextEditingController();
+  static final _passwordRepeat = TextEditingController();
+  String email, password, passwordRepeat;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,11 +28,34 @@ class _SignupState extends State<SignupPage> {
                 children: mainWidgets(context))));
   }
 
+  Future<bool> authenticate() async {
+    setState(() {
+      email = _email.text;
+      password = _password.text;
+      passwordRepeat = _passwordRepeat.text;
+    });
+
+    if (password != passwordRepeat) {
+      return false;
+    }
+
+    String responseString =
+        await rootBundle.loadString('JsonInterface/Server_Response/login.json');
+    Map<String, dynamic> responseContent = json.decode(responseString);
+    String result = responseContent["Example_responses"][1]["result"];
+    if (result == "accepted") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   mainWidgets(BuildContext context) {
     return <Widget>[
       FlutterLogo(size: 50.0),
       SizedBox(height: 50.0),
       TextFormField(
+        controller: _email,
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
         decoration: InputDecoration(
@@ -36,6 +66,7 @@ class _SignupState extends State<SignupPage> {
       ),
       SizedBox(height: 20.0),
       TextFormField(
+        controller: _password,
         obscureText: true,
         autofocus: false,
         decoration: InputDecoration(
@@ -46,6 +77,7 @@ class _SignupState extends State<SignupPage> {
       ),
       SizedBox(height: 20.0),
       TextFormField(
+        controller: _passwordRepeat,
         obscureText: true,
         autofocus: false,
         decoration: InputDecoration(
@@ -56,24 +88,39 @@ class _SignupState extends State<SignupPage> {
       ),
       SizedBox(height: 7.0),
       RaisedButton(
-        child: Text("Register"),
-        onPressed: () {
-          Navigator.of(context).pop();
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                    content: Text("Successful!"),
-                    actions: <Widget>[
-                      RaisedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text("OK"))
-                    ]);
-              });
-        },
-      ),
+          child: Text("Register"),
+          onPressed: () async {
+            if (await authenticate()) {
+              Navigator.of(context).pop();
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                        content: Text("Successful!"),
+                        actions: <Widget>[
+                          RaisedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text("OK"))
+                        ]);
+                  });
+            } else {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                        content: Text("Signup Failed!"),
+                        actions: <Widget>[
+                          RaisedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text("Try Again"))
+                        ]);
+                  });
+            }
+          }),
     ];
   }
 }
