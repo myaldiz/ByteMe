@@ -17,34 +17,16 @@ class BrowsePageState extends State<BrowsePage> {
   Widget build(BuildContext context) {
     if (cardsList.length == 0) {
       createCardList();
-      return Scaffold();
+      return Container();
     }
-    return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(
-            title: Text("Browse"),
-            automaticallyImplyLeading: false,
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.exit_to_app),
-                  onPressed: () {
-                    Navigator.popAndPushNamed(context, '/login');
-                  })
-            ]),
-        bottomNavigationBar: BottomNavigationBar(items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home), title: Text("Browse")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), title: Text("Manage")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), title: Text("View"))
-        ]),
-        body: ListView(
+    return Container(
+        child: ListView(
           children: cardsList,
         ));
   }
 
   Future<void> createCardList() async {
+    List<Widget> newCardsList = [];
     String responseString = await rootBundle
         .loadString('JsonInterface/Server_Response/List_events.json');
     Map<String, dynamic> responseContent = json.decode(responseString);
@@ -56,9 +38,10 @@ class BrowsePageState extends State<BrowsePage> {
           Text(event["time"])
         ])
       );
-      setState(() {
-        cardsList.add(card);
-      });
+      newCardsList.add(card);
+    });
+    setState(() {
+      cardsList = newCardsList;
     });
   }
 }
