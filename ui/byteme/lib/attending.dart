@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'utils.dart';
 
-class BrowsePage extends StatefulWidget {
+class AttendingPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return BrowsePageState();
+    return AttendingPageState();
   }
 }
 
-class BrowsePageState extends State<BrowsePage> {
+class AttendingPageState extends State<AttendingPage> {
   List<Widget> cardsList = [];
 
   @override

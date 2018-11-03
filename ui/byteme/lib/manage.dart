@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'utils.dart';
 
-class BrowsePage extends StatefulWidget {
+class ManagePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return BrowsePageState();
+    return ManagePageState();
   }
 }
 
-class BrowsePageState extends State<BrowsePage> {
+class ManagePageState extends State<ManagePage> {
   List<Widget> cardsList = [];
 
   @override
@@ -26,7 +26,7 @@ class BrowsePageState extends State<BrowsePage> {
 
   Future<void> updateList() async {
     List<Widget> newList = await createCardList(
-        'JsonInterface/Server_Response/List_events.json');
+        'JsonInterface/Server_Response/modify_event.json');
     setState(() {
       cardsList = newList;
     });

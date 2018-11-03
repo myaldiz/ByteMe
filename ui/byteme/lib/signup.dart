@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
+
+import 'utils.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -38,11 +38,8 @@ class _SignupState extends State<SignupPage> {
     if (password != passwordRepeat) {
       return false;
     }
-
-    String responseString =
-        await rootBundle.loadString('JsonInterface/Server_Response/login.json');
-    Map<String, dynamic> responseContent = json.decode(responseString);
-    String result = responseContent["Example_responses"][1]["result"];
+    Map<String, dynamic> response = await getJson('JsonInterface/Server_Response/login.json');
+    String result = response["Example_responses"][1]["result"];
     if (result == "accepted") {
       return true;
     } else {

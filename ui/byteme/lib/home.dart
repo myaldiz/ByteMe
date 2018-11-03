@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'browse.dart';
+import 'manage.dart';
+import 'attending.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,10 +13,15 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
 
-  List<Widget> _children = [
+  List<Widget> _bodies = [
     BrowsePage(),
-    BrowsePage(),
-    BrowsePage(),
+    ManagePage(),
+    AttendingPage(),
+  ];
+  List<Text> _titles = [
+    Text("Browse"),
+    Text("Manage"),
+    Text("Attending")
   ];
   int _currentIndex = 0;
 
@@ -23,7 +30,7 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
-            title: Text("Browse"),
+            title: _titles[_currentIndex],
             automaticallyImplyLeading: false,
             actions: <Widget>[
               IconButton(
@@ -46,7 +53,7 @@ class HomePageState extends State<HomePage> {
               _currentIndex = index;
             });
           },),
-        body: _children[_currentIndex]
+        body: _bodies[_currentIndex]
     );
   }
 }

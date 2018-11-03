@@ -43,6 +43,7 @@ flutter:
     - JsonInterface/Server_Response/login.json
     - JsonInterface/Server_Response/sign_up.json
     - JsonInterface/Server_Response/List_events.json
+    - JsonInterface/Server_Response/modify_event.json
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 

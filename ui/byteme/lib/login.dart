@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
 
+import 'utils.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -33,9 +32,8 @@ class _LoginState extends State<LoginPage> {
       email = _email.text;
       password = _password.text;
     });
-    String responseString = await rootBundle.loadString('JsonInterface/Server_Response/login.json');
-    Map<String,dynamic> responseContent = json.decode(responseString);
-    String result = responseContent["Example_responses"][1]["result"];
+    Map<String,dynamic> response = await getJson('JsonInterface/Server_Response/login.json');
+    String result = response["Example_responses"][1]["result"];
     if(result == "accepted"){
       return true;
     }
