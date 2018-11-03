@@ -1,15 +1,14 @@
 {
-    "Example_responses": [
+    "Response": "Modify_event",
+    "Events": [
         {
-            "Response": "Modify_event",
             "Event": {
                 "id": 123,
                 "title": "Zombies",
-                "status": "wait" 
+                "status": "wait"
             }
         },
         {
-            "Response": "Modify_event",
             "Event": {
                 "id": 123,
                 "title": "Zombies",
@@ -17,7 +16,6 @@
             }   
         },
         {
-            "Response": "Modify_event",
             "Event": {
                 "id": 123,
                 "title": "Zombies",
