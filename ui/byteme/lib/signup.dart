@@ -38,7 +38,8 @@ class _SignupState extends State<SignupPage> {
     if (password != passwordRepeat) {
       return false;
     }
-    Map<String, dynamic> response = await getJson('JsonInterface/Server_Response/login.json');
+    Map<String, dynamic> response =
+        await getJson('JsonInterface/Server_Response/login.json');
     String result = response["Example_responses"][1]["result"];
     if (result == "accepted") {
       return true;

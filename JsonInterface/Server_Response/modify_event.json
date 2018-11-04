@@ -8,32 +8,35 @@
                 "place": "KAIST",
                 "time": "09:30 June 26th",
                 "title": "Zombies",
-                "details": "Blabla",
                 "poster_image": "imageimage",
+                "department": "CS",
+                "speaker": "Dr. Who",
                 "status": "Processing"
             }
         },
         {
             "Event": {
-                "id": 124,
+                "id": 123,
                 "abstract": "BlaBla",
                 "place": "KAIST",
                 "time": "09:30 June 26th",
-                "title": "Zombies2",
-                "details": "Blabla",
+                "title": "Zombies",
                 "poster_image": "imageimage",
+                "department": "CS",
+                "speaker": "Dr. Who",
                 "status": "Accepted" 
             }   
         },
         {
             "Event": {
-                "id": 125,
+                "id": 123,
                 "abstract": "BlaBla",
                 "place": "KAIST",
                 "time": "09:30 June 26th",
-                "title": "Zombies3",
-                "details": "Blabla",
+                "title": "Zombies",
                 "poster_image": "imageimage",
+                "department": "CS",
+                "speaker": "Dr. Who",
                 "status": "Rejected" 
             }   
         }

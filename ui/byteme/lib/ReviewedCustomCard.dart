@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './ModifyEventViewController.dart';
 
 class ReviewedCustomCard extends StatelessWidget {
   final Map<String, dynamic> event;
@@ -47,7 +48,12 @@ class ReviewedCustomCard extends StatelessWidget {
           Text(event["status"]),
           IconButton(
             icon: Icon(Icons.edit),
-            onPressed: () {},
+            onPressed: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ModifyEventViewController(event)),
+            );
+        },
           )
         ]))
       ],

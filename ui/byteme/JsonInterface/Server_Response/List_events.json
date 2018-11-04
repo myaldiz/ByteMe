@@ -8,30 +8,33 @@
                 "place": "KAIST",
                 "time": "09:30 June 26th",
                 "title": "Zombies",
-                "details": "Blablafseegerwgeafbliesjdhzncaksdnfilenfedaksjnfileruhgfnak",
-                "poster_image": "imageimage"
+                "poster_image": "imageimage",
+                "department": "CS",
+                "speaker": "Dr. Who"
             }
         },
         {
             "Event": {
-                "id": 124,
+                "id": 123,
                 "abstract": "BlaBla",
                 "place": "KAIST",
                 "time": "09:30 June 26th",
-                "title": "Zombies2",
-                "details": "Blablalablafseegerwgeafbliesjdhzncaksdnfilenfedaksjnfileruhgfnak",
-                "poster_image": "imageimage" 
+                "title": "Zombies",
+                "poster_image": "imageimage",
+                "department": "CS",
+                "speaker": "Dr. Who"
             }
         },
         {
             "Event": {
-                "id": 125,
+                "id": 123,
                 "abstract": "BlaBla",
                 "place": "KAIST",
                 "time": "09:30 June 26th",
-                "title": "Zombies3",
-                "details": "Blablalablafseegerwgeafbliesjdhzncaksdnfilenfedaksjnfileruhgfnak",
-                "poster_image": "imageimage"
+                "title": "Zombies",
+                "poster_image": "imageimage",
+                "department": "CS",
+                "speaker": "Dr. Who"
             }
         }
     ]
