@@ -20,7 +20,7 @@ class _SignupState extends State<SignupPage> {
     return Scaffold(
 //        backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
-          title: Text("Sign up"),
+          title: Text("Sign Up"),
         ),
         body: Center(
             child: Column(
@@ -85,7 +85,7 @@ class _SignupState extends State<SignupPage> {
       ),
       SizedBox(height: 7.0),
       RaisedButton(
-          child: Text("Register"),
+          child: Text("Sign Up"),
           onPressed: () async {
             if (await authenticate()) {
               Navigator.of(context).pop();
@@ -93,7 +93,7 @@ class _SignupState extends State<SignupPage> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                        content: Text("Successful!"),
+                        content: Text("Account created. Please, Log In."),
                         actions: <Widget>[
                           RaisedButton(
                               onPressed: () {
@@ -107,7 +107,7 @@ class _SignupState extends State<SignupPage> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                        content: Text("Signup Failed!"),
+                        content: Text("Sign Up Failed!"),
                         actions: <Widget>[
                           RaisedButton(
                               onPressed: () {

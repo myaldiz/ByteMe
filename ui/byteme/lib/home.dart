@@ -12,18 +12,13 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-
   List<Widget> _bodies = [
-    BrowsePage(),
     ManagePage(),
+    BrowsePage(),
     AttendingPage(),
   ];
-  List<Text> _titles = [
-    Text("Browse"),
-    Text("Manage"),
-    Text("Attending")
-  ];
-  int _currentIndex = 0;
+  List<Text> _titles = [Text("Manage"), Text("Events"), Text("Attending")];
+  int _currentIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -32,28 +27,23 @@ class HomePageState extends State<HomePage> {
         appBar: AppBar(
             title: _titles[_currentIndex],
             automaticallyImplyLeading: false,
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.exit_to_app),
-                  onPressed: () {
-                    Navigator.popAndPushNamed(context, '/login');
-                  })
-            ]),
-        bottomNavigationBar: BottomNavigationBar(items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home), title: Text("Browse")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), title: Text("Manage")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), title: Text("View"))
-        ],
+            ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.assignment_turned_in), title: Text("Manage")),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.search), title: Text("Events")),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.calendar_today), title: Text("Attending"))
+          ],
           currentIndex: _currentIndex,
           onTap: (index) {
             setState(() {
               _currentIndex = index;
             });
-          },),
-        body: _bodies[_currentIndex]
-    );
+          },
+        ),
+        body: _bodies[_currentIndex]);
   }
 }

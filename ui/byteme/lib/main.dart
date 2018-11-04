@@ -7,7 +7,9 @@ import 'home.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  final appTheme = ThemeData();
+  final appTheme = ThemeData(
+    primaryColor: Colors.blue
+  );
 
   @override
   Widget build(BuildContext context) {

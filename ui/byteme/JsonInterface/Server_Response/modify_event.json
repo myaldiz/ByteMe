@@ -4,22 +4,37 @@
         {
             "Event": {
                 "id": 123,
+                "abstract": "BlaBla",
+                "place": "Kaist",
+                "time": "26-JUN-02 09:39:16.78",
                 "title": "Zombies",
-                "status": "wait"
+                "details": "Blabla",
+                "poster_image": "imageimage",
+                "status": "Processing"
             }
         },
         {
             "Event": {
-                "id": 123,
-                "title": "Zombies",
-                "status": "accepted" 
+                "id": 124,
+                "abstract": "BlaBla",
+                "place": "Kaist",
+                "time": "26-JUN-02 09:39:16.78",
+                "title": "Zombies2",
+                "details": "Blabla",
+                "poster_image": "imageimage",
+                "status": "Accepted" 
             }   
         },
         {
             "Event": {
-                "id": 123,
-                "title": "Zombies",
-                "status": "denied" 
+                "id": 125,
+                "abstract": "BlaBla",
+                "place": "Kaist",
+                "time": "26-JUN-02 09:39:16.78",
+                "title": "Zombies3",
+                "details": "Blabla",
+                "poster_image": "imageimage",
+                "status": "Rejected" 
             }   
         }
     ]

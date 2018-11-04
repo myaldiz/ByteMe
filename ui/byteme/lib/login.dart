@@ -19,7 +19,7 @@ class _LoginState extends State<LoginPage> {
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: Text("Log in"),
+          title: Text("Log In"),
         ),
         body: Center(
             child: Column(
@@ -71,7 +71,7 @@ class _LoginState extends State<LoginPage> {
       ),
       SizedBox(height: 35.0),
       RaisedButton(
-        child: Text("Log in"),
+        child: Text("Log In"),
         onPressed: () async {
           if(await authenticate()) {
             Navigator.of(context).popAndPushNamed('/');
@@ -94,7 +94,7 @@ class _LoginState extends State<LoginPage> {
       ),
       SizedBox(height: 7.0),
       RaisedButton(
-        child: Text("Register"),
+        child: Text("Sign Up"),
         onPressed: () async {
             Navigator.of(context).pushNamed('/signup');
         },
