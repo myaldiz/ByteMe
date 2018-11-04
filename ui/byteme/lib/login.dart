@@ -27,22 +27,22 @@ class _LoginState extends State<LoginPage> {
                 children: mainWidgets(context))));
   }
 
-  Future<bool> authenticate() async{
-    setState((){
+  Future<bool> authenticate() async {
+    setState(() {
       email = _email.text;
       password = _password.text;
     });
-    Map<String,dynamic> response = await getJson('JsonInterface/Server_Response/login.json');
+    Map<String, dynamic> response =
+        await getJson('JsonInterface/Server_Response/login.json');
     String result = response["Example_responses"][1]["result"];
-    if(result == "accepted"){
+    if (result == "accepted") {
       return true;
-    }
-    else{
+    } else {
       return false;
     }
   }
 
-  mainWidgets(BuildContext context){
+  mainWidgets(BuildContext context) {
     return <Widget>[
       FlutterLogo(size: 50.0),
       SizedBox(height: 50.0),
@@ -53,8 +53,7 @@ class _LoginState extends State<LoginPage> {
         decoration: InputDecoration(
           hintText: 'Email',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(32.0)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
         ),
       ),
       SizedBox(height: 20.0),
@@ -65,17 +64,20 @@ class _LoginState extends State<LoginPage> {
         decoration: InputDecoration(
           hintText: 'Password',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(32.0)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
         ),
       ),
       SizedBox(height: 35.0),
       RaisedButton(
-        child: Text("Log In"),
+        color: Theme.of(context).primaryColor,
+        child: Text(
+          'Log In',
+          style: TextStyle(color: Colors.white),
+        ),
         onPressed: () async {
-          if(await authenticate()) {
+          if (await authenticate()) {
             Navigator.of(context).popAndPushNamed('/');
-          }else{
+          } else {
             showDialog(
                 context: context,
                 builder: (context) {
@@ -83,10 +85,14 @@ class _LoginState extends State<LoginPage> {
                       content: Text("Login Failed!"),
                       actions: <Widget>[
                         RaisedButton(
+                            color: Theme.of(context).primaryColor,
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text("Try Again"))
+                            child: Text(
+                              'Try Again',
+                              style: TextStyle(color: Colors.white),
+                            ))
                       ]);
                 });
           }
@@ -94,9 +100,13 @@ class _LoginState extends State<LoginPage> {
       ),
       SizedBox(height: 7.0),
       RaisedButton(
-        child: Text("Sign Up"),
+        color: Theme.of(context).primaryColor,
+        child: Text(
+          'Sign Up',
+          style: TextStyle(color: Colors.white),
+        ),
         onPressed: () async {
-            Navigator.of(context).pushNamed('/signup');
+          Navigator.of(context).pushNamed('/signup');
         },
       ),
     ];

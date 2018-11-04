@@ -49,10 +49,9 @@ class ReviewedCustomCard extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () async {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ModifyEventViewController(event)),
-            );
+              Navigator.of(context).push( MaterialPageRoute(
+                    builder: (BuildContext context) => ModifyEventViewController(event)
+                  ));
         },
           )
         ]))

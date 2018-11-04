@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './AddEventViewController.dart';
 
 import 'browse.dart';
 import 'manage.dart';
@@ -19,15 +20,29 @@ class HomePageState extends State<HomePage> {
   ];
   List<Text> _titles = [Text("Manage"), Text("Events"), Text("Attending")];
   int _currentIndex = 1;
+  // Widget customBar;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
-            title: _titles[_currentIndex],
-            automaticallyImplyLeading: false,
+          title: _titles[_currentIndex],
+          automaticallyImplyLeading: false,
+          // if (_currentIndex == 0) {customBar = iconbutton}
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddEventViewController()),
+                );
+              },
             ),
+          ],
+        ),
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(

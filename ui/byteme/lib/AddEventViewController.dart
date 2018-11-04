@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
 
-class ModifyEventViewController extends StatelessWidget {
-  final Map<String, dynamic> event;
-  ModifyEventViewController(this.event);
+class AddEventViewController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       //        backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        title: Text("Edit Information"),
+        title: Text("Add Event"),
       ),
-      body: MyCustomForm(event),
+      body: MyCustomForm(),
     );
   }
 }
 
 // Create a Form Widget
 class MyCustomForm extends StatefulWidget {
-  final Map<String, dynamic> event;
-  MyCustomForm(this.event);
   @override
   MyCustomFormState createState() {
-    return MyCustomFormState(event);
+    return MyCustomFormState();
   }
 }
 
@@ -33,8 +29,6 @@ class MyCustomFormState extends State<MyCustomForm> {
   //
   // Note: This is a GlobalKey<FormState>, not a GlobalKey<MyCustomFormState>!
   final _formKey = GlobalKey<FormState>();
-  final Map<String, dynamic> event;
-  MyCustomFormState(this.event);
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +42,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
-                decoration:
-                    InputDecoration(hintText: "Title", labelText: "Title"),
-                initialValue: event["title"],
+                decoration: InputDecoration(hintText: "Title"),
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -58,9 +50,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
-                decoration:
-                    InputDecoration(hintText: "Time", labelText: "Time"),
-                initialValue: event["time"],
+                decoration: InputDecoration(hintText: "Time"),
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -68,9 +58,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
-                decoration:
-                    InputDecoration(hintText: "Place", labelText: "Place"),
-                initialValue: event["place"],
+                decoration: InputDecoration(hintText: "Place"),
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -78,9 +66,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(
-                    hintText: "Department", labelText: "Department"),
-                initialValue: event["department"],
+                decoration: InputDecoration(hintText: "Department"),
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -88,9 +74,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
-                decoration:
-                    InputDecoration(hintText: "Speaker", labelText: "Speaker"),
-                initialValue: event["speaker"],
+                decoration: InputDecoration(hintText: "Speaker"),
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -98,9 +82,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(
-                    hintText: "Image URL", labelText: "Image URL"),
-                initialValue: event["poster_image"],
+                decoration: InputDecoration(hintText: "Image URL"),
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -108,9 +90,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(
-                    hintText: "Abstract", labelText: "Abstract"),
-                initialValue: event["abstract"],
+                decoration: InputDecoration(hintText: "Abstract"),
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -130,7 +110,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                     }
                   },
                   child: Text(
-                    'Edit',
+                    'Add',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

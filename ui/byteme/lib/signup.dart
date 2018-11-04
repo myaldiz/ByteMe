@@ -86,7 +86,11 @@ class _SignupState extends State<SignupPage> {
       ),
       SizedBox(height: 7.0),
       RaisedButton(
-          child: Text("Sign Up"),
+          color: Theme.of(context).primaryColor,
+          child: Text(
+            'Sign Up',
+            style: TextStyle(color: Colors.white),
+          ),
           onPressed: () async {
             if (await authenticate()) {
               Navigator.of(context).pop();
@@ -97,10 +101,14 @@ class _SignupState extends State<SignupPage> {
                         content: Text("Account created. Please, Log In."),
                         actions: <Widget>[
                           RaisedButton(
+                              color: Theme.of(context).primaryColor,
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: Text("OK"))
+                              child: Text(
+                                'OK',
+                                style: TextStyle(color: Colors.white),
+                              ))
                         ]);
                   });
             } else {
@@ -111,10 +119,14 @@ class _SignupState extends State<SignupPage> {
                         content: Text("Sign Up Failed!"),
                         actions: <Widget>[
                           RaisedButton(
+                              color: Theme.of(context).primaryColor,
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: Text("Try Again"))
+                              child: Text(
+                                'Try Again',
+                                style: TextStyle(color: Colors.white),
+                              ))
                         ]);
                   });
             }
