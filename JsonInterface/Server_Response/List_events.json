@@ -5,8 +5,8 @@
             "Event": {
                 "id": 123,
                 "abstract": "BlaBla",
-                "place": "Kaist",
-                "time": "26-JUN-02 09:39:16.78",
+                "place": "KAIST",
+                "time": "09:30 June 26th",
                 "title": "Zombies",
                 "details": "Blabla",
                 "poster_image": "imageimage"
@@ -16,8 +16,8 @@
             "Event": {
                 "id": 124,
                 "abstract": "BlaBla",
-                "place": "Kaist",
-                "time": "26-JUN-02 09:39:16.78",
+                "place": "KAIST",
+                "time": "09:30 June 26th",
                 "title": "Zombies2",
                 "details": "Blabla",
                 "poster_image": "imageimage" 
@@ -27,8 +27,8 @@
             "Event": {
                 "id": 125,
                 "abstract": "BlaBla",
-                "place": "Kaist",
-                "time": "26-JUN-02 09:39:16.78",
+                "place": "KAIST",
+                "time": "09:30 June 26th",
                 "title": "Zombies3",
                 "details": "Blabla",
                 "poster_image": "imageimage"
