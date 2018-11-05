@@ -1,0 +1,17 @@
+{
+    "Request": "Modify_event",
+    "User": {
+        "email": "myaldiz@kaist.ac.kr",
+        "pw_hash": "XXA83jd3kljsdf",
+        "ip": "143.248.143.29"
+    },
+    "Event": {
+        "id": 123,
+        "abstract": "BlaBla",
+        "place": "Kaist",
+        "time": "26-JUN-02 09:39:16.78",
+        "title": "Zombies",
+        "details": "Blabla",
+        "poster_image": "imageimage"
+    }
+}

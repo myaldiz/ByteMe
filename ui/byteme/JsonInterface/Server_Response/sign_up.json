@@ -1,0 +1,14 @@
+{
+    "Example_responses": [
+        {
+            "Response": "Sign_up",
+            "id": "mustafa",
+            "result": "denied"
+        },
+        {
+            "Response": "Sign_up",
+            "id": "mustafa",
+            "result": "accepted"
+        }
+    ]
+}

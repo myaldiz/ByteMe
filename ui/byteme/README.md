@@ -4,5 +4,4 @@ SWE Project
 
 ## Getting Started
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+1. You need to generate packages links using `flutter packages get`. This is needed to use the flutter material package.
