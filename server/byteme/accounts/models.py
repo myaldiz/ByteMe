@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 class Person(models.Model):
 	univ = models.CharField(max_length=100)
 	dept = models.CharField(max_length=100)
+	tags = models.ManyToManyField(Tag)		# why do we need this
 
 	class Meta:
 		abstract = True
