@@ -1,10 +1,13 @@
 from .models import Event
+from accounts.models import UserProfile
+from accounts.models import Speaker
 from .serializers import EventSerializer
 
 from django.http import JsonResponse
 from django.http import Http404
 from django.utils import timezone
 from django.db.models import Q
+from django.contrib.auth.models import User
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -12,7 +15,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 
 # helper fuction
-def queryEvent(ID = None, username = None):
+def queryEvent(ID = None, creater = None):
     """
     query event from the sqlitle using django defalut model API
 
@@ -26,8 +29,8 @@ def queryEvent(ID = None, username = None):
     TODO: not sure that if we are going to query event by id/username or not
     """
     try:
-        if username:
-            return Event.objects.get(identifier = ID).filter(~Q(req = "add"))
+        if creater:
+            return Event.objects.get(creater = creater).filter(~Q(req = "add"))
         else:
             return Event.objects.all().filter(~Q(req = "add"))
     except Event.DoesNotExist:
@@ -75,20 +78,31 @@ def approveEventChange(ID, req):
 
 #API
 @api_view(['GET'])
-def BrowseEvent(request):
+def BrowseEvent(request, user_name):
+    #TODO authentication
+    creater = UserProfile.objects.get(user = User.objects.get(username = user_name))
+
+    Event_List   = queryEvent(creater = creater)
+    Event_json   = EventSerializer(Event_List, many = True)
+    return_json  = {"Response":"List_events", "Events":[Event_json.data]}
+    return Response(return_json)
+ 
+#API
+@api_view(['GET'])
+def BrowseAllEvent(request):
     #TODO authentication
 
     Event_List   = queryEvent()
     Event_json   = EventSerializer(Event_List, many = True)
     return_json  = {"Response":"List_events", "Events":[Event_json.data]}
     return Response(return_json)
- 
+
 #API
 @api_view(['POST'])
 def AddEvent(request):
     #TODO authentication
     #TODO What is the return json looks like
-
+    
     Event_json = EventSerializer(data = request.data.get("event"))
 
     if Event_json.is_valid():

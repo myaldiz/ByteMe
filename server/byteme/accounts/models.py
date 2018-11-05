@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
+from events.tag import Tag
 # TODO: import classes from events app
 
 class Person(models.Model):
 	univ = models.CharField(max_length=100)
 	dept = models.CharField(max_length=100)
-	tags = models.ManyToManyField(Tag)		# why do we need this
+	tags = models.ManyToManyField(Tag, default = None)		# why do we need this
 
 	class Meta:
 		abstract = True
@@ -14,6 +15,9 @@ class Speaker(Person):
 	name = models.CharField(max_length=50)
 	speakerEmail = models.EmailField(unique=True)
 	bio = models.TextField()
+
+	def __str__(self):
+		return "%s"%(self.name)
 
 class UserProfile(Person):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -28,6 +32,3 @@ class UserProfile(Person):
 
 	def __str__(self):
 		return "%s"%(self.user)
-
-def createUser(email, username, password, isAdmin=False):
-	pass

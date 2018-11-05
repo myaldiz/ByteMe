@@ -22,7 +22,8 @@ http -f POST http://127.0.0.1:8000/api/v1/event/request/approvel/<event_id> req=
 
 
 urlpatterns = [
-    url(r'^browse', views.BrowseEvent),
+    url(r'^browse', views.BrowseAllEvent),
+    url(r'^browse/(?P<user_name>\w+)', views.BrowseEvent),
     url(r'^add', views.AddEvent),
     url(r'^delete/(?P<event_id>[^/]+)', views.DeleteEvent),
     url(r'^modify/(?P<event_id>[^/]+)', views.ModiftEvent),

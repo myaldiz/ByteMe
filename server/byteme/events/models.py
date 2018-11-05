@@ -1,18 +1,19 @@
 import uuid
 from django.db import models
-from byteme import Speaker, UserProfile
+from accounts.models import Speaker, UserProfile
+from .tag import Tag
 
 class Event(models.Model):
-	identifier = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-	created = models.ForeignKey(UserProfile, on_delete=models.SET_NULL)
-	attended = models.ManyToManyField(UserProfile)
-	abstract = models.TextField(max_length=3000)
-	place = models.CharField(max_length=100)
+	identifier = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
+	creater = models.ForeignKey(UserProfile, on_delete = models.CASCADE, related_name="creater", default = None)
+	attendant = models.ManyToManyField(UserProfile, related_name="attendant", default = None)
+	abstract = models.TextField(max_length = 3000)
+	place = models.CharField(max_length = 100)
 	time = models.DateTimeField()
-	title = models.CharField(max_length=300)
+	title = models.CharField(max_length = 300)
 	details = models.TextField()
-	tags = models.ManyToManyField(Tag)
-	speaker = models.ForeignKey(Speaker, on_delete=models.SET_NULL)
+	tags = models.ManyToManyField(Tag, related_name="tags")
+	speaker = models.ForeignKey(Speaker, on_delete = models.CASCADE, related_name="speacker", default = None)
 
 	REQUEST = (
 		('non', 'No Request'),
@@ -26,8 +27,8 @@ class Event(models.Model):
 	timeReq = models.DateTimeField(default=None, null=True)
 	titleReq = models.CharField(max_length=300, default=None, null=True)
 	detailsReq = models.TextField(default=None, null=True)
-	tagsReq = models.ManyToManyField(Tag)
-	speakerReq = models.ForeignKey(Speaker, on_delete=models.SET_NULL)
+	tagsReq = models.ManyToManyField(Tag, related_name="tagsReq", default = None)
+	speakerReq = models.ForeignKey(Speaker, on_delete=models.CASCADE, related_name="speakerReq", default = None, null=True)
 
 	rankingVector = models.DecimalField(decimal_places=0, max_digits=5, null=True)
 
@@ -38,14 +39,5 @@ class Event(models.Model):
 	
 	def __str__(self):
 		return str(self.identifier)
-
-
-class Tag(models.Model):
-	name = models.CharField(max_length=30)
-	rankingScore = models.DecimalField(decimal_places=0, max_digits=5)
-
-	def calculateRankingScore():
-		pass
-
 
 
