@@ -21,7 +21,6 @@ class UserProfile(Person):
 	userEmail = models.EmailField(unique=True)
 	isAdmin = models.BooleanField()
 	attends = models.ManyToManyField(Event)
-	created = models.ManyToManyField(Event)
 
 	def addTags(self, tags):
 		pass

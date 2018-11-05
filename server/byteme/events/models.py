@@ -9,8 +9,9 @@ class Event(models.Model):
 	time = models.DateTimeField()
 	title = models.CharField(max_length=300)
 	details = models.TextField()
-	speakers = models.ManyToManyField(Speaker)
 	tags = models.ManyToManyField(Tag)
+	speakers = models.ForeignKey(Speaker, on_delete=models.SET_NULL)
+	created = models.ForeignKey(UserProfile, on_delete=models.SET_NULL)
 
 	REQUEST = (
 		('non', 'No Request'),
