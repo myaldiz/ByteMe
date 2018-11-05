@@ -10,17 +10,17 @@ class AttendingPage extends StatefulWidget {
 }
 
 class AttendingPageState extends State<AttendingPage> {
-  List<Widget> cardsList = [];
+  List<Widget> _cardsList = [];
 
   @override
   Widget build(BuildContext context) {
-    if (cardsList.length == 0) {
+    if (_cardsList.length == 0) {
       updateList();
       return Container();
     }
     return Container(
         child: ListView(
-          children: cardsList,
+          children: _cardsList,
         ));
   }
 
@@ -28,7 +28,21 @@ class AttendingPageState extends State<AttendingPage> {
     List<Widget> newList = await createCardList(
         'JsonInterface/Server_Response/List_events.json');
     setState(() {
-      cardsList = newList;
+      _cardsList = newList;
     });
+  }
+}
+
+class AttendingPageAppBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: Text("Attending"),
+      automaticallyImplyLeading: false,
+      // if (_currentIndex == 0) {customBar = iconbutton}
+      actions: <Widget>[
+
+      ],
+    );
   }
 }
