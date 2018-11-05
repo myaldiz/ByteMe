@@ -1,10 +1,11 @@
 import uuid
 from django.db import models
-from byteme import Speaker
+from byteme import Speaker, UserProfile
 
 class Event(models.Model):
 	identifier = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	created = models.ForeignKey(UserProfile, on_delete=models.SET_NULL)
+	attended = models.ManyToManyField(UserProfile)
 	abstract = models.TextField(max_length=3000)
 	place = models.CharField(max_length=100)
 	time = models.DateTimeField()

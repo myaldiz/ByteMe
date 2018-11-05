@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from byteme.events import Tag, Event
 # TODO: import classes from events app
 
 class Person(models.Model):
@@ -20,7 +19,6 @@ class UserProfile(Person):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	userEmail = models.EmailField(unique=True)
 	isAdmin = models.BooleanField()
-	attends = models.ManyToManyField(Event)
 
 	def addTags(self, tags):
 		pass
