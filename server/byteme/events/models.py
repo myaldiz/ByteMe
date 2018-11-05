@@ -1,5 +1,6 @@
-from django.db import models
 import uuid
+from django.db import models
+from byteme import Speaker
 
 class Event(models.Model):
 	identifier = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -8,6 +9,8 @@ class Event(models.Model):
 	time = models.DateTimeField()
 	title = models.CharField(max_length=300)
 	details = models.TextField()
+	speakers = models.ManyToManyField(Speaker)
+	tags = models.ManyToManyField(Tag)
 
 	REQUEST = (
 		('non', 'No Request'),
