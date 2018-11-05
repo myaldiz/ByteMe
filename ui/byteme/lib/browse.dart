@@ -10,17 +10,17 @@ class BrowsePage extends StatefulWidget {
 }
 
 class BrowsePageState extends State<BrowsePage> {
-  List<Widget> cardsList = [];
+  List<Widget> _cardsList = [];
 
   @override
   Widget build(BuildContext context) {
-    if (cardsList.length == 0) {
+    if (_cardsList.length == 0) {
       updateList();
       return Container();
     }
     return Container(
         child: ListView(
-          children: cardsList,
+          children: _cardsList,
         ));
   }
 
@@ -28,7 +28,21 @@ class BrowsePageState extends State<BrowsePage> {
     List<Widget> newList = await createCardList(
         'JsonInterface/Server_Response/List_events.json');
     setState(() {
-      cardsList = newList;
+      _cardsList = newList;
     });
+  }
+}
+
+class BrowsePageAppBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: Text("Browse"),
+      automaticallyImplyLeading: false,
+      // if (_currentIndex == 0) {customBar = iconbutton}
+      actions: <Widget>[
+
+      ],
+    );
   }
 }

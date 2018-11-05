@@ -10,25 +10,27 @@ class ManagePage extends StatefulWidget {
 }
 
 class ManagePageState extends State<ManagePage> {
-  List<Widget> cardsList = [];
+  List<Widget> _cardsList = [];
+  static List<Widget> actions = [];
 
   @override
   Widget build(BuildContext context) {
-    if (cardsList.length == 0) {
+    if (_cardsList.length == 0) {
       updateList();
       return Container();
     }
     return Container(
         child: ListView(
-          children: cardsList,
-        ));
+      children: _cardsList,
+    ));
   }
 
   Future<void> updateList() async {
-    List<Widget> newList = await createCardList(
-        'JsonInterface/Server_Response/modify_event.json');
+    List<Widget> newList =
+        await createCardList('JsonInterface/Server_Response/modify_event.json');
     setState(() {
-      cardsList = newList;
+      _cardsList = newList;
     });
   }
 }
+

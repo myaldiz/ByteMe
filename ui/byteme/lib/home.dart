@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import './AddEventViewController.dart';
 
 import 'browse.dart';
 import 'manage.dart';
 import 'attending.dart';
+import './AddEventViewController.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,31 +19,59 @@ class HomePageState extends State<HomePage> {
     BrowsePage(),
     AttendingPage(),
   ];
+
   List<Text> _titles = [Text("Manage"), Text("Events"), Text("Attending")];
+
   int _currentIndex = 1;
   // Widget customBar;
 
   @override
   Widget build(BuildContext context) {
+    List<List<Widget>> _actions = [
+      [
+        IconButton(
+          icon: Icon(Icons.sort),
+          onPressed: null,
+        ),
+        IconButton(
+          icon: Icon(Icons.filter_list),
+          onPressed: null,
+        ),
+        IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddEventViewController()),
+              );
+            })
+      ],
+      [
+        IconButton(
+          icon: Icon(Icons.sort),
+          onPressed: null,
+        ),
+        IconButton(
+          icon: Icon(Icons.filter_list),
+          onPressed: null,
+        ),
+      ],
+      [
+        IconButton(
+          icon: Icon(Icons.sort),
+          onPressed: null,
+        ),
+        IconButton(
+          icon: Icon(Icons.filter_list),
+          onPressed: null,
+        ),
+      ],
+    ];
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(
-          title: _titles[_currentIndex],
-          automaticallyImplyLeading: false,
-          // if (_currentIndex == 0) {customBar = iconbutton}
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddEventViewController()),
-                );
-              },
-            ),
-          ],
-        ),
+        appBar: AppBar(title: _titles[_currentIndex],
+            actions: _actions[_currentIndex]),
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
