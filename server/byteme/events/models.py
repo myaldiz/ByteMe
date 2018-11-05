@@ -40,47 +40,5 @@ class Tag(models.Model):
 	def calculateRankingScore():
 		pass
 
-class EventHandler():
-	def addEvent(self, username, identifier, abstract = None, place = None, time = None, title = None, details = None):
-		event = Event.objects.get(identifier = identifier)
-		event.req = "non"
-		event.save()
-		return event
 
-	def deleteEvent(self, username, identifier):
-		Event.objects.get(identifier = identifier).delete()
-		return
-
-	def modifyEvent(self, username, identifier, abstract = None, place= None, time= None, title= None, details= None):
-		event = Event.objects.get(identifier = identifier)
-		event.abstract = event.abstractReq
-		event.place    = event.placeReq
-		event.time     = event.timeReq
-		event.title    = event.titleReq
-		event.details  = event.detailsReq
-		event.req      = "non"
-		event.abstractReq = None
-		event.placeReq	  = None
-		event.timeReq	  = None
-		event.titleReq	  = None
-		event.detailsReq  = None
-		event.save()
-		return event
-
-	def queryEvent(self, username):
-		try:
-			return Event.objects.all()
-		except Event.DoesNotExist:
-			raise Http404
-
-	def approveEventChange(self, identifier, req):
-		if req == "mod":
-			return self.modifyEvent(username = None, identifier = identifier)
-
-		if req == "add":
-			return self.addEvent(username = None, identifier = identifier)
-
-		if req == "del":
-			self.deleteEvent(username = None, identifier = identifier)
-			return True
 

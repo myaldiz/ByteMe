@@ -4,11 +4,20 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 
 """
+Browse event:
 http GET http://127.0.0.1:8000/api/v1/event/browse
+
+Modify event:
 http POST http://127.0.0.1:8000/api/v1/event/modify/<event_id> event:='{"abstract": "BlaBla", "place": "Kaist", "time": "2018-11-03 03:01:00.914138+00:00", "title": "Zombies", "details": "Blabla"}'
-http POST http://127.0.0.1:8000/api/v1/event/request/approvel/<event_id> 
-http POST http://127.0.0.1:8000/api/v1/event/add '{"abstract": "BlaBla", "place": "Kaist", "time": "2018-11-03 03:01:00.914138+00:00", "title": "Zombies", "details": "Blabla"}'
+
+Add event:
+http POST http://127.0.0.1:8000/api/v1/event/add event:='{"abstract": "BlaBla", "place": "Kaist", "time": "2018-11-03 03:01:00.914138+00:00", "title": "Zombies", "details": "Blabla"}'
+
+Delete event:
 http DELETE http://127.0.0.1:8000/api/v1/event/delete/<event_id> 
+
+Approve event:
+http -f POST http://127.0.0.1:8000/api/v1/event/request/approvel/<event_id> req="add" | req="mod" | req="del"
 """
 
 
