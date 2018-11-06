@@ -85,24 +85,24 @@ def approveEventChange(ID, req):
     if req == "del":
         Event.objects.get(identifier = ID).delete()
         return True
-
-#API
-@api_view(['GET'])
-def BrowseEvent(request, user_name):
-    #TODO authentication
-    creater = UserProfile.objects.get(user = User.objects.get(username = user_name))
-
-    Event_List   = queryEvent(creater = creater)
-    Event_json   = EventSerializer(Event_List, many = True)
-    return_json  = {"Response":"List_events", "Events":[Event_json.data]}
-    return Response(return_json)
  
 #API
 @api_view(['GET'])
-def BrowseAllEvent(request):
+def BrowseEvent(request):
     #TODO authentication
+    user_name = request.GET.get("user", False)
 
-    Event_List   = queryEvent()
+    if user_name:
+        try:
+            user = User.objects.get(username = user_name) 
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+            
+        creater = UserProfile.objects.get(user = user)
+        Event_List = queryEvent(creater)
+    else:
+        Event_List   = queryEvent()
+
     Event_json   = EventSerializer(Event_List, many = True)
     return_json  = {"Response":"List_events", "Events":[Event_json.data]}
     return Response(return_json)
