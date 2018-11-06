@@ -19,7 +19,7 @@ Please don't forget to write README.md files for others to understand..
 
 
 ## How to use the server
-###Installation
+### Installation
 1. Install django
 `pip install django == 1.11`
 
@@ -33,16 +33,16 @@ Please don't forget to write README.md files for others to understand..
 > You can also use curl to test it
 -----
 
-###Running
+### Running
 1. cd server/byteme
 run `python manage.py runserver`
 
-#####View Admin website
+##### View Admin website
 1. use browser, url: http://127.0.0.1:8000/admin/
 > account:  admin
 > password: password@
 
-#####Test the API
+##### Test the API
 
 1. Browse API:
 - Name: http://127.0.0.1:8000/api/v1/event/browse
@@ -54,7 +54,7 @@ run `python manage.py runserver`
 > http://127.0.0.1:8000/api/v1/event/browse?user=Wuharlem
 
 -----
-###Model
+### Model
 If you change the code in the model, you need to run:
 `python manage.py makemigrations`
 `python manage.py migrate`
