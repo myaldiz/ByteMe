@@ -11,8 +11,8 @@ class Event(models.Model):
 	place = models.CharField(max_length = 100)
 	time = models.DateTimeField()
 	title = models.CharField(max_length = 300)
-	details = models.TextField()
-	tags = models.ManyToManyField(Tag, related_name="tags")
+	details = models.TextField(max_length = 3000)
+	tags = models.ManyToManyField(Tag, default = None, related_name="tags")
 	speaker = models.ForeignKey(Speaker, on_delete = models.CASCADE, related_name="speacker", default = None)
 
 	REQUEST = (
@@ -38,6 +38,6 @@ class Event(models.Model):
 		pass
 	
 	def __str__(self):
-		return str(self.identifier)
+		return "%s %s"%(self.creater, self.title)
 
 

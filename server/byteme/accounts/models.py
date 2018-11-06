@@ -4,8 +4,8 @@ from events.tag import Tag
 # TODO: import classes from events app
 
 class Person(models.Model):
-	univ = models.CharField(max_length=100)
-	dept = models.CharField(max_length=100)
+	univ = models.CharField(max_length=100, null=True)
+	dept = models.CharField(max_length=100, null=True)
 	tags = models.ManyToManyField(Tag, default = None)		# why do we need this
 
 	class Meta:
@@ -13,8 +13,8 @@ class Person(models.Model):
 
 class Speaker(Person):
 	name = models.CharField(max_length=50)
-	speakerEmail = models.EmailField(unique=True)
-	bio = models.TextField()
+	speakerEmail = models.EmailField(unique=True, null=True)
+	bio = models.TextField(null=True)
 
 	def __str__(self):
 		return "%s"%(self.name)

@@ -68,7 +68,17 @@ def approveEventChange(ID, req):
 
     if req == "add":
         event = Event.objects.get(identifier = ID)
-        event.req = "non"
+        event.abstract    = event.abstractReq
+        event.place       = event.placeReq
+        event.time        = event.timeReq
+        event.title       = event.titleReq
+        event.details     = event.detailsReq
+        event.req         = "non"
+        event.abstractReq = None
+        event.placeReq	  = None
+        event.timeReq	  = None
+        event.titleReq	  = None
+        event.detailsReq  = None
         event.save()
         return event
 
@@ -102,8 +112,24 @@ def BrowseAllEvent(request):
 def AddEvent(request):
     #TODO authentication
     #TODO What is the return json looks like
+
+    json_emial   = request.data.get("add_event").get('User').get("email")
+    json_speaker = request.data.get("add_event").get('speaker').get('name')
+    json_event   = request.data.get("add_event").get('Event')
+    json_time    = request.data.get("add_event").get('Event').get("time")
     
-    Event_json = EventSerializer(data = request.data.get("event"))
+    # create/update a speaker
+    Speaker.objects.update_or_create(name = json_speaker)
+
+    # get speaker/creater
+    speaker = Speaker.objects.get(name = json_speaker)
+    creater = UserProfile.objects.get(userEmail = json_emial)
+
+    #create new event
+    New_event = Event.objects.create(creater = creater, time = json_time, speaker = speaker, req = "add")
+
+    #make it become json and updata the data
+    Event_json = EventSerializer(New_event, data = json_event)
 
     if Event_json.is_valid():
         Event_json.save()
