@@ -20,43 +20,43 @@ Please don't forget to write README.md files for others to understand..
 
 ## How to use the server
 ### Installation
-1. Install django
-`pip install django == 1.11`
+1. Install django   
+`pip install django == 1.11`    
 
-2. Install djano rest framework
-`pip install djangorestframework`
-`pip install markdown`
-`pip install django-filter`
+2. Install djano rest framework   
+`pip install djangorestframework`   
+`pip install markdown`    
+`pip install django-filter`   
 
-3. Install httpie - for test API
-`pip install --upgrade httpie`
-> You can also use curl to test it
------
+3. Install httpie - for test API    
+`pip install --upgrade httpie`    
+> You can also use curl to test it    
+-----   
 
 ### Running
-1. cd server/byteme
-run `python manage.py runserver`
+1. cd server/byteme   
+run `python manage.py runserver`    
 
 ##### View Admin website
-1. use browser, url: http://127.0.0.1:8000/admin/
-> account:  admin
-> password: password@
+1. use browser, url: http://127.0.0.1:8000/admin/   
+> account:  admin   
+> password: password@   
 
 ##### Test the API
 
 1. Browse API:
-- Name: http://127.0.0.1:8000/api/v1/event/browse
-- Method: GET
-- Description: Browse the events by user or all events
-- Parameters: User(String/optional)
-- Example: 
-> http://127.0.0.1:8000/api/v1/event/browse
-> http://127.0.0.1:8000/api/v1/event/browse?user=Wuharlem
+- Name: http://127.0.0.1:8000/api/v1/event/browse   
+- Method: GET   
+- Description: Browse the events by user or all events    
+- Parameters: User(String/optional)   
+- Example:    
+> http://127.0.0.1:8000/api/v1/event/browse   
+> http://127.0.0.1:8000/api/v1/event/browse?user=Wuharlem   
 
 -----
 ### Model
-If you change the code in the model, you need to run:
-`python manage.py makemigrations`
-`python manage.py migrate`
-
-this is for modifying the table in sqlite
+If you change the code in the model, you need to run:   
+`python manage.py makemigrations`   
+`python manage.py migrate`    
+    
+this is for modifying the table in sqlite   
