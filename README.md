@@ -53,13 +53,52 @@ run `python manage.py runserver`
 use httpe   
 > http http://127.0.0.1:8000/api/v1/event/browse   
 > http http://127.0.0.1:8000/api/v1/event/browse?user=Wuharlem   
-
+```
+{
+    "Events": [
+        {
+            "abstract": "Test",
+            "attendant": [
+                "Wuharlem",
+                "User1"
+            ],
+            "creater": "Wuharlem",
+            "details": "details",
+            "identifier": "6207788a-3530-40da-be59-8bc41124c750",
+            "place": "KAIST",
+            "req": "non",
+            "speaker": "Zombie",
+            "tags": [
+                "AI  9.87",
+                "ML  10.00",
+                "SE  0.87"
+            ],
+            "time": "2018-11-03 03:01:00+00:00",
+            "title": "test"
+        },
+        {
+            "abstract": "BlaBla",
+            "attendant": [],
+            "creater": "Wuharlem",
+            "details": "Blabla",
+            "identifier": "ec8ba317-2c50-4298-a2d3-086b47541758",
+            "place": "Kaist",
+            "req": "non",
+            "speaker": "Zombie",
+            "tags": [],
+            "time": "2018-11-03 03:01:00.914138+00:00",
+            "title": "Zombies"
+        }
+    ],
+    "Response": "List_events"
+}
+```
 2. Add Event API:
 - Name: http POST http://127.0.0.1:8000/api/v1/event/add
 - Method: POST
 - Description: Request to add the event
 - Request:  
-``
+```
 {   
     add_event: {    
         "Request": "Add_event",     
@@ -80,10 +119,10 @@ use httpe
         }       
     }       
 }       
-``
+```
 - Respond:      
 HTTP/1.0 202 Accepted  
-``
+```
 {       
     "Events": {     
         "id": "51dca183-1dd7-4342-ae22-a10efe1d9d3f",       
@@ -92,14 +131,14 @@ HTTP/1.0 202 Accepted
     },      
     "Response": "Add_Event"     
 }           
-``
+```
 HTTP/1.0 400 Bad Request                
-``
+```
 {       
     "Response": "Add_Event",        
     "status": "please check response json"      
 }       
-``
+```
 - Example:      
 use httpe   
 > http POST http://127.0.0.1:8000/api/v1/event/add add_event:='{"Request": "Add_event", "User": {"email": "user1@gmail.com", "pw_hash": "XXA83jd3kljsdf", "ip": "143.248.143.29"}, "speaker":{"name": "Zombie"}, "Event": { "abstract": "BlaBla", "place": "Kaist", "time": "2018-11-03 03:01:00.914138+00:00", "title": "Zombies", "details": "Blabla"}}'  
@@ -110,7 +149,7 @@ use httpe
 - Description: Request to delete the event
 - Parameters: event_id(UUID/required) 
 - Response:     
-``
+```
 HTTP/1.0 205 Reset Content  
 {       
     "Response": "Delete_event",        
@@ -120,7 +159,7 @@ HTTP/1.0 205 Reset Content
         "status": "wait"             
     }                   
 }           
-``
+```
 - Example:            
 use httpe             
 > http DELETE http://127.0.0.1:8000/api/v1/event/delete/<event_id> 
@@ -131,14 +170,14 @@ use httpe
 - Description: Delete request to add/mod/del the event
 - Parameters: event_id(UUID/required) 
 - Request:    
-```json
+```
 {
     req: add | del | mod
 }
 ```
 - Response:     
 HTTP/1.0 205 Reset Content  
-``
+```
 {       
     "Response": "Add_event",        
     "Event": {      
@@ -147,7 +186,7 @@ HTTP/1.0 205 Reset Content
         "status": "accepted"        
     }           
 }
-``
+```
 
 - Example:      
 use httpe       
