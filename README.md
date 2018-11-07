@@ -131,11 +131,11 @@ use httpe
 - Description: Delete request to add/mod/del the event
 - Parameters: event_id(UUID/required) 
 - Request:    
-``
+```json
 {
     req: add | del | mod
 }
-``
+```
 - Response:     
 HTTP/1.0 205 Reset Content  
 ``
