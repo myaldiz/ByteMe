@@ -59,6 +59,7 @@ use httpe
 - Method: POST
 - Description: Request to add the event
 - Request:  
+``
 {   
     add_event: {    
         "Request": "Add_event",     
@@ -79,9 +80,10 @@ use httpe
         }       
     }       
 }       
-
+``
 - Respond:      
 HTTP/1.0 202 Accepted  
+``
 {       
     "Events": {     
         "id": "51dca183-1dd7-4342-ae22-a10efe1d9d3f",       
@@ -90,13 +92,14 @@ HTTP/1.0 202 Accepted
     },      
     "Response": "Add_Event"     
 }           
-
+``
 HTTP/1.0 400 Bad Request                
+``
 {       
     "Response": "Add_Event",        
     "status": "please check response json"      
 }       
-
+``
 - Example:      
 use httpe   
 > http POST http://127.0.0.1:8000/api/v1/event/add add_event:='{"Request": "Add_event", "User": {"email": "user1@gmail.com", "pw_hash": "XXA83jd3kljsdf", "ip": "143.248.143.29"}, "speaker":{"name": "Zombie"}, "Event": { "abstract": "BlaBla", "place": "Kaist", "time": "2018-11-03 03:01:00.914138+00:00", "title": "Zombies", "details": "Blabla"}}'  
@@ -107,6 +110,7 @@ use httpe
 - Description: Request to delete the event
 - Parameters: event_id(UUID/required) 
 - Response:     
+``
 HTTP/1.0 205 Reset Content  
 {       
     "Response": "Delete_event",        
@@ -116,7 +120,7 @@ HTTP/1.0 205 Reset Content
         "status": "wait"             
     }                   
 }           
-
+``
 - Example:            
 use httpe             
 > http DELETE http://127.0.0.1:8000/api/v1/event/delete/<event_id> 
@@ -126,13 +130,15 @@ use httpe
 - Method: POST
 - Description: Delete request to add/mod/del the event
 - Parameters: event_id(UUID/required) 
-- Request:          
+- Request:    
+``
 {
     req: add | del | mod
 }
-
+``
 - Response:     
 HTTP/1.0 205 Reset Content  
+``
 {       
     "Response": "Add_event",        
     "Event": {      
@@ -141,7 +147,7 @@ HTTP/1.0 205 Reset Content
         "status": "accepted"        
     }           
 }
-
+``
 
 - Example:      
 use httpe       
