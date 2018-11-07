@@ -92,8 +92,8 @@ run `python manage.py runserver`
 ```
 - Example:      
 use httpe   
-> `http http://127.0.0.1:8000/api/v1/event/browse  ` 
-> `http http://127.0.0.1:8000/api/v1/event/browse?user=Wuharlem   `
+> `http http://127.0.0.1:8000/api/v1/event/browse  `            
+> `http http://127.0.0.1:8000/api/v1/event/browse?user=Wuharlem   `             
 
 
 2. Add Event API:
