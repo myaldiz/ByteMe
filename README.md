@@ -21,7 +21,7 @@ Please don't forget to write README.md files for others to understand..
 ## How to use the server
 ### Installation
 1. Install django   
-`pip install django == 1.11`    
+`pip install django==1.11`    
 
 2. Install djano rest framework   
 `pip install djangorestframework`   
