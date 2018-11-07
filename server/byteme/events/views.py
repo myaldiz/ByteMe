@@ -15,7 +15,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 
 # helper fuction
-def queryEvent(ID = None, creater = None):
+def queryEvent(creater = None):
     """
     query event from the sqlitle using django defalut model API
 
@@ -30,8 +30,8 @@ def queryEvent(ID = None, creater = None):
     """
     try:
         if creater:
-            return Event.objects.get(creater = creater).filter(~Q(req = "add"))
-        else:
+            return Event.objects.filter(~Q(req = "add")).filter(creater = creater)
+        # else:
             return Event.objects.all().filter(~Q(req = "add"))
     except Event.DoesNotExist:
         raise Http404
@@ -94,30 +94,37 @@ def BrowseEvent(request):
 
     if user_name:
         try:
-            user = User.objects.get(username = user_name) 
+            user = User.objects.get(username = user_name)
+            creater = UserProfile.objects.get(user = user) 
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        except UserProfile.DoesNotExist:
+            return_json  = {"Response":"List_events", "Events":[]}
+            return Response(return_json, status=status.HTTP_200_OK)
             
-        creater = UserProfile.objects.get(user = user)
-        Event_List = queryEvent(creater)
+        Event_List = queryEvent(creater = creater)
     else:
         Event_List   = queryEvent()
 
     Event_json   = EventSerializer(Event_List, many = True)
-    return_json  = {"Response":"List_events", "Events":[Event_json.data]}
-    return Response(return_json)
+    # Event_json.data.
+    return_json  = {"Response":"List_events", "Events":Event_json.data}
+    return Response(return_json, status=status.HTTP_200_OK)
 
 #API
 @api_view(['POST'])
 def AddEvent(request):
     #TODO authentication
     #TODO What is the return json looks like
-
-    json_emial   = request.data.get("add_event").get('User').get("email")
-    json_speaker = request.data.get("add_event").get('speaker').get('name')
-    json_event   = request.data.get("add_event").get('Event')
-    json_time    = request.data.get("add_event").get('Event').get("time")
-    
+    try:
+        json_emial   = request.data.get("add_event").get('User').get("email")
+        json_speaker = request.data.get("add_event").get('speaker').get('name')
+        json_event   = request.data.get("add_event").get('Event')
+        json_time    = request.data.get("add_event").get('Event').get("time")
+        json_title   = request.data.get("add_event").get('Event').get("title")
+    except : 
+        return Response({"Response":"Add_Event", "status": "Please check response json"}, status=status.HTTP_400_BAD_REQUEST)
     # create/update a speaker
     Speaker.objects.update_or_create(name = json_speaker)
 
@@ -133,13 +140,15 @@ def AddEvent(request):
 
     if Event_json.is_valid():
         Event_json.save()
-        return Response(Event_json.data, status = status.HTTP_202_ACCEPTED)
+        Updated_Event_json = {"id": Event_json.data["identifier"], "title": json_title, "status": "wait"}
+        return_json  = {"Response":"Add_Event", "Events":Updated_Event_json}
+        return Response(return_json, status = status.HTTP_202_ACCEPTED)
     
     return Response(Event_json.data, status = status.HTTP_400_BAD_REQUEST)
 
 #API
 @api_view(['POST'])
-def ModiftEvent(request, event_id):
+def ModifyEvent(request, event_id):
     #TODO authentication
     #TODO What is the return json looks like
 
@@ -148,7 +157,8 @@ def ModiftEvent(request, event_id):
 
     if Event_json.is_valid():
         Event_json.save()
-        return Response(Event_json.data, status = status.HTTP_202_ACCEPTED)
+        return_json  = {"Response":"Modify_Event", "Events":Event_json.data}
+        return Response(return_json, status = status.HTTP_202_ACCEPTED)
 
     return Response(Event_json.data, status = status.HTTP_400_BAD_REQUEST)
 
@@ -161,7 +171,9 @@ def DeleteEvent(request, event_id):
     event = Event.objects.get(identifier = event_id)
     event.req = "del"
     event.save()
-    return Response(status = status.HTTP_202_ACCEPTED)
+    event_json = {"id": event_id, "title": event.title, "status": "wait"}
+    return_json = {"Response": "Delete_event", "Event": event_json}
+    return Response(return_json, status = status.HTTP_202_ACCEPTED)
 
 #API
 @api_view(['POST'])
@@ -171,5 +183,17 @@ def ApproveEvent(request, event_id):
 
     req = request.POST.get("req", False)
     event = approveEventChange(event_id, req)
-    return Response(status = status.HTTP_205_RESET_CONTENT)
+    if req == "add":
+        res = "Add_event"
+        title = event.title
+        event_json = {"id": event_id, "title": title, "status": "accepted"}
+
+    if req == "mod":
+        res = "Modify_event"
+
+    if req == "del":
+        res = "Delete_event"
+        event_json = {"id": event_id, "status": "accepted"}
+
+    return Response({"Response": res, "Event": event_json}, status = status.HTTP_205_RESET_CONTENT)
 

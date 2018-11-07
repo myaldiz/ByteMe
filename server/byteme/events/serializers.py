@@ -27,6 +27,7 @@ class EventSerializer(serializers.Serializer):
         instance.titleReq    = validated_data.get('title'   , instance.titleReq)
         instance.detailsReq  = validated_data.get('details' , instance.detailsReq)
         # instance.tagsReq
-        instance.req         = "mod"
+        if instance.req == "non":
+            instance.req = "mod"
         instance.save()
         return instance
