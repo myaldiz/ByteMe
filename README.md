@@ -49,10 +49,7 @@ run `python manage.py runserver`
 - Method: GET   
 - Description: Browse the events by user or all events    
 - Parameters: User(String/optional)   
-- Example:      
-use httpe   
-> http http://127.0.0.1:8000/api/v1/event/browse   
-> http http://127.0.0.1:8000/api/v1/event/browse?user=Wuharlem   
+- Response:     
 ```
 {
     "Events": [
@@ -93,6 +90,12 @@ use httpe
     "Response": "List_events"
 }
 ```
+- Example:      
+use httpe   
+> `http http://127.0.0.1:8000/api/v1/event/browse  ` 
+> `http http://127.0.0.1:8000/api/v1/event/browse?user=Wuharlem   `
+
+
 2. Add Event API:
 - Name: http POST http://127.0.0.1:8000/api/v1/event/add
 - Method: POST
@@ -141,7 +144,7 @@ HTTP/1.0 400 Bad Request
 ```
 - Example:      
 use httpe   
-> http POST http://127.0.0.1:8000/api/v1/event/add add_event:='{"Request": "Add_event", "User": {"email": "user1@gmail.com", "pw_hash": "XXA83jd3kljsdf", "ip": "143.248.143.29"}, "speaker":{"name": "Zombie"}, "Event": { "abstract": "BlaBla", "place": "Kaist", "time": "2018-11-03 03:01:00.914138+00:00", "title": "Zombies", "details": "Blabla"}}'  
+> `http POST http://127.0.0.1:8000/api/v1/event/add add_event:='{"Request": "Add_event", "User": {"email": "user1@gmail.com", "pw_hash": "XXA83jd3kljsdf", "ip": "143.248.143.29"}, "speaker":{"name": "Zombie"}, "Event": { "abstract": "BlaBla", "place": "Kaist", "time": "2018-11-03 03:01:00.914138+00:00", "title": "Zombies", "details": "Blabla"}}'  `
 
 3. Approve Event request:       
 - Name: http -f POST http://127.0.0.1:8000/api/v1/event/request/approvel/<event_id>
@@ -162,7 +165,7 @@ HTTP/1.0 205 Reset Content
 ```
 - Example:            
 use httpe             
-> http DELETE http://127.0.0.1:8000/api/v1/event/delete/<event_id> 
+> `http DELETE http://127.0.0.1:8000/api/v1/event/delete/<event_id> `
 
 4. Delete Event:       
 - Name: http DELETE http://127.0.0.1:8000/api/v1/event/delete/<event_id>
@@ -190,7 +193,7 @@ HTTP/1.0 205 Reset Content
 
 - Example:      
 use httpe       
-> http -f POST http://127.0.0.1:8000/api/v1/event/request/approvel/<event_id> req="add"
+> `http -f POST http://127.0.0.1:8000/api/v1/event/request/approvel/<event_id> req="add"`
 
 
 -----
