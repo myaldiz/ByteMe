@@ -169,7 +169,7 @@ use httpe
 
 4. Delete Event:       
 - Name: http DELETE http://127.0.0.1:8000/api/v1/event/delete/<event_id>
-- Method: POST
+- Method: DELETE
 - Description: Delete request to add/mod/del the event
 - Parameters: event_id(UUID/required) 
 - Request:    
