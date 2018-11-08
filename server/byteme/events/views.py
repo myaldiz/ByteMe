@@ -31,7 +31,7 @@ def queryEvent(creater = None):
     try:
         if creater:
             return Event.objects.filter(~Q(req = "add")).filter(creater = creater)
-        # else:
+        else:
             return Event.objects.all().filter(~Q(req = "add"))
     except Event.DoesNotExist:
         raise Http404
