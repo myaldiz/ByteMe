@@ -1,32 +1,18 @@
 <!DOCTYPE html>
 <html lang=en>
-
 <head>
 </head>
 <body>
-<h1>Hello World!</h1>
-<p>
-    This is {{ html_var }} coming through
-</p>
-<p>
-{% if bool_item %}
-    {% for list in some_list %}
-        {% if list|divisibleby:"2" %}
-            It is even: 
-        {% endif %}
-        {{ list }} <br/>
-    {% endfor %}
-{% endif %}
-</p>
-<p>
-    You can find further things in this link: <br/>
-    https://docs.djangoproject.com/en/1.11/ref/templates/builtins/
-</p>
-{% verbatim %}
-<p>
-    Verbatim will actually show the actual template itself:
-    {% variable %}
-</p>
-{% endverbatim %}
+<h1>
+    Hello dear.com.. This is homebar
+</h1>
+<a href="/">Home</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<div class='container '>
+{% block content %}
+Hello!
+{% endblock content %}
+</div>
 </body>
 </html>

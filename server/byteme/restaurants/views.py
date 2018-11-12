@@ -21,4 +21,10 @@ def home(request):
     "some_list": my_list
     }
     dic['bool_item'] = True
-    return render(request, "base.html", dic)
+    return render(request, "home.html", dic)
+
+def content(request):
+    return render(request, "content.html", {})
+
+def about(request):
+    return render(request, "about.html", {})

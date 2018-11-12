@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+Let's put original super class stuff here:
+{{ block.super }}
+<head>
+    Sulo
+</head>
+<body>
+<h1>Hello World from home.html </h1>
+<p>
+    This is {{ html_var }} coming through
+</p>
+<p>
+{% if bool_item %}
+    {% for list in some_list %}
+        {% if list|divisibleby:"2" %}
+            It is even: 
+        {% endif %}
+        {{ list }} <br/>
+    {% endfor %}
+{% endif %}
+</p>
+<p>
+    You can find further things in this link: <br/>
+    https://docs.djangoproject.com/en/1.11/ref/templates/builtins/
+</p>
+{% verbatim %}
+<p>
+    Verbatim will actually show the actual template itself:
+    {% variable %}
+</p>
+{% endverbatim %}
+<p>
+    This actually looks like developments improvements on html using django!!
+</p>
+</body>
+{% endblock content %}

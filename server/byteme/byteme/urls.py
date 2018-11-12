@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from restaurants.views import home
+from restaurants.views import home, content, about
 
 urlpatterns = [
     # url(r'^api-auth/', include('rest_framework.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^api/v1/event/', include('events.urls')),
-    url(r'^$', home)
+    url(r'^$', home),
+    url(r'^about/$', about),
+    url(r'^contact/$', content),
 ]
