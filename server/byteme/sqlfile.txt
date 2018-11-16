@@ -1,0 +1,16 @@
+BEGIN;
+--
+-- Create model Customer
+--
+CREATE TABLE "restaurants_customer" ("id" serial NOT NULL PRIMARY KEY, "name" varchar(200) NOT NULL, "money" integer NOT NULL);
+--
+-- Create model Table
+--
+CREATE TABLE "restaurants_table" ("id" serial NOT NULL PRIMARY KEY, "table_name" varchar(200) NOT NULL, "create_time" timestamp with time zone NOT NULL);
+--
+-- Add field table to customer
+--
+ALTER TABLE "restaurants_customer" ADD COLUMN "table_id" integer NOT NULL;
+CREATE INDEX "restaurants_customer_table_id_9e41e13f" ON "restaurants_customer" ("table_id");
+ALTER TABLE "restaurants_customer" ADD CONSTRAINT "restaurants_customer_table_id_9e41e13f_fk_restaurants_table_id" FOREIGN KEY ("table_id") REFERENCES "restaurants_table" ("id") DEFERRABLE INITIALLY DEFERRED;
+COMMIT;
