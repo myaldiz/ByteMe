@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^$', home),
     url(r'^about/$', about),
     url(r'^contact/$', content),
+    url(r'^snip_test/', include('snippets.urls'))
 ]
