@@ -6,7 +6,7 @@ from events.tag import Tag
 class Person(models.Model):
 	univ = models.CharField(max_length=100, null=True)
 	dept = models.CharField(max_length=100, null=True)
-	tags = models.ManyToManyField(Tag, default = None)		# why do we need this
+	tags = models.ManyToManyField(Tag, default = None)
 
 	class Meta:
 		abstract = True
