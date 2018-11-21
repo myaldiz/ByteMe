@@ -1,9 +1,12 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from . import views  
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
 	url(r'^register', views.CreateProfile),
+    url(r'^', include('rest_framework.urls')),
+    url(r'^user', views.example_view),
+	url(r'^register', views.CreatePerson),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
