@@ -5,7 +5,7 @@ from .tag import Tag
 
 class Event(models.Model):
 	identifier = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
-	creater = models.ForeignKey(UserProfile, on_delete = models.CASCADE, related_name="creater", default = None)
+	creater = models.ForeignKey(UserProfile, on_delete = models.CASCADE, related_name="created", default = None)
 	attendant = models.ManyToManyField(UserProfile, related_name="attendant", default = None)
 	abstract = models.TextField(max_length = 3000)
 	place = models.CharField(max_length = 100)
@@ -13,7 +13,7 @@ class Event(models.Model):
 	title = models.CharField(max_length = 300)
 	details = models.TextField(max_length = 3000)
 	tags = models.ManyToManyField(Tag, default = None, related_name="tags")
-	speaker = models.ForeignKey(Speaker, on_delete = models.CASCADE, related_name="speacker", default = None)
+	speaker = models.ForeignKey(Speaker, on_delete = models.CASCADE, related_name="events", default = None)
 
 	REQUEST = (
 		('non', 'No Request'),

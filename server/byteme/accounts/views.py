@@ -24,3 +24,6 @@ def example_view(request):
         'userEmail': userprofile.userEmail,  # `django.contrib.auth.User` instance.
     }
     return Response(content)
+@api_view(['POST'])
+def CreatePerson(profile):
+	pass
