@@ -12,7 +12,10 @@ from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.renderers import TemplateHTMLRenderer
 
 # helper fuction
 def queryEvent(creater = None):
@@ -52,45 +55,59 @@ def approveEventChange(ID, req):
     """
     if req == "mod":
         event = Event.objects.get(identifier = ID)
-        event.abstract    = event.abstractReq
-        event.place       = event.placeReq
-        event.time        = event.timeReq
-        event.title       = event.titleReq
-        event.details     = event.detailsReq
-        event.req         = "non"
-        event.abstractReq = None
-        event.placeReq	  = None
-        event.timeReq	  = None
-        event.titleReq	  = None
-        event.detailsReq  = None
-        event.save()
-        return event
+        if req == event.req:
+            event.abstract    = event.abstractReq
+            event.place       = event.placeReq
+            event.time        = event.timeReq
+            event.title       = event.titleReq
+            event.details     = event.detailsReq
+            event.req         = "non"
+            event.abstractReq = None
+            event.placeReq	  = None
+            event.timeReq	  = None
+            event.titleReq	  = None
+            event.detailsReq  = None
+            event.save()
+            return event
+        else:
+            return False
 
     if req == "add":
         event = Event.objects.get(identifier = ID)
-        event.abstract    = event.abstractReq
-        event.place       = event.placeReq
-        event.time        = event.timeReq
-        event.title       = event.titleReq
-        event.details     = event.detailsReq
-        event.req         = "non"
-        event.abstractReq = None
-        event.placeReq	  = None
-        event.timeReq	  = None
-        event.titleReq	  = None
-        event.detailsReq  = None
-        event.save()
-        return event
+        if req == event.req:
+            event.abstract    = event.abstractReq
+            event.place       = event.placeReq
+            event.time        = event.timeReq
+            event.title       = event.titleReq
+            event.details     = event.detailsReq
+            event.req         = "non"
+            event.abstractReq = None
+            event.placeReq	  = None
+            event.timeReq	  = None
+            event.titleReq	  = None
+            event.detailsReq  = None
+            event.save()
+            return event
+        else:
+            return False
 
     if req == "del":
-        Event.objects.get(identifier = ID).delete()
-        return True
+        event = Event.objects.get(identifier = ID)
+        if req == event.req:
+            Event.objects.get(identifier = ID).delete()
+            return True
+        else: 
+            return False
  
 #API
 @api_view(['GET'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
 def BrowseEvent(request):
     #TODO authentication
     user_name = request.GET.get("user", False)
+    # renderer_classes = [TemplateHTMLRenderer]
+    # template_name = 'login.html'
 
     if user_name:
         try:
@@ -114,15 +131,17 @@ def BrowseEvent(request):
 
 #API
 @api_view(['POST'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
 def AddEvent(request):
     #TODO authentication
     #TODO What is the return json looks like
     try:
-        json_emial   = request.data.get("add_event").get('User').get("email")
-        json_speaker = request.data.get("add_event").get('speaker').get('name')
-        json_event   = request.data.get("add_event").get('Event')
-        json_time    = request.data.get("add_event").get('Event').get("time")
-        json_title   = request.data.get("add_event").get('Event').get("title")
+        json_emial   = request.data.get('User').get("email")
+        json_speaker = request.data.get('speaker').get('name')
+        json_event   = request.data.get('Event')
+        json_time    = request.data.get('Event').get("time")
+        json_title   = request.data.get('Event').get("title")
     except : 
         return Response({"Response":"Add_Event", "status": "Please check response json"}, status=status.HTTP_400_BAD_REQUEST)
     # create/update a speaker
@@ -148,22 +167,36 @@ def AddEvent(request):
 
 #API
 @api_view(['POST'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
 def ModifyEvent(request, event_id):
     #TODO authentication
     #TODO What is the return json looks like
+    try:
+        json_emial   = request.data.get('User').get("email")
+        json_event   = request.data.get('Event')
+        json_time    = request.data.get('Event').get("time")
+        json_title   = request.data.get('Event').get("title")
+    except : 
+        return Response({"Response":"Add_Event", "status": "Please check response json"}, status=status.HTTP_400_BAD_REQUEST)
 
-    event = Event.objects.get(identifier = event_id)
-    Event_json = EventSerializer(event, data = request.data.get("event"))
+    creater = UserProfile.objects.get(userEmail = json_emial)
+    
+    event = Event.objects.get(creater = creater)
+    Event_json = EventSerializer(event, data = json_event)
 
     if Event_json.is_valid():
         Event_json.save()
-        return_json  = {"Response":"Modify_Event", "Events":Event_json.data}
+        Updated_Event_json = Event_json.data
+        return_json  = {"Response":"Modify_Event", "Events":Updated_Event_json}
         return Response(return_json, status = status.HTTP_202_ACCEPTED)
 
     return Response(Event_json.data, status = status.HTTP_400_BAD_REQUEST)
 
 #API
 @api_view(['DELETE'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
 def DeleteEvent(request, event_id):
     #TODO authentication
     #TODO What is the return json looks like
@@ -177,23 +210,29 @@ def DeleteEvent(request, event_id):
 
 #API
 @api_view(['POST'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
 def ApproveEvent(request, event_id):
     #TODO authentication
     #TODO not approve?
 
     req = request.POST.get("req", False)
     event = approveEventChange(event_id, req)
-    if req == "add":
-        res = "Add_event"
-        title = event.title
-        event_json = {"id": event_id, "title": title, "status": "accepted"}
+    if (event):
+        if req == "add":
+            res = "Add_event"
+            title = event.title
+            event_json = {"id": event_id, "title": title, "status": "accepted"}
 
-    if req == "mod":
-        res = "Modify_event"
+        if req == "mod":
+            res = "Modify_event"
+            title = event.title
+            event_json = {"id": event_id, "title": title, "status": "accepted"}
 
-    if req == "del":
-        res = "Delete_event"
-        event_json = {"id": event_id, "status": "accepted"}
-
-    return Response({"Response": res, "Event": event_json}, status = status.HTTP_205_RESET_CONTENT)
+        if req == "del":
+            res = "Delete_event"
+            event_json = {"id": event_id, "status": "accepted"}
+        return Response({"Response": res, "Event": event_json}, status = status.HTTP_205_RESET_CONTENT)
+    else:
+        return Response("something wrong", status = status.HTTP_400_BAD_REQUEST)
 
