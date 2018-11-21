@@ -21,7 +21,7 @@ class Speaker(Person):
 
 class UserProfile(Person):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	userEmail = models.EmailField(unique=True)
+	# userEmail = models.EmailField(unique=True) # this can be stored in the user model
 	isAdmin = models.BooleanField()
 
 	def addTags(self, tags):
