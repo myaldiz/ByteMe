@@ -137,11 +137,12 @@ def AddEvent(request):
     #TODO authentication
     #TODO What is the return json looks like
     try:
-        json_emial   = request.data.get('User').get("email")
+        json_email   = request.data.get('User').get("email")
         json_speaker = request.data.get('speaker').get('name')
         json_event   = request.data.get('Event')
         json_time    = request.data.get('Event').get("time")
         json_title   = request.data.get('Event').get("title")
+
     except : 
         return Response({"Response":"Add_Event", "status": "Please check response json"}, status=status.HTTP_400_BAD_REQUEST)
     # create/update a speaker
@@ -149,7 +150,7 @@ def AddEvent(request):
 
     # get speaker/creater
     speaker = Speaker.objects.get(name = json_speaker)
-    creater = UserProfile.objects.get(userEmail = json_emial)
+    creater = UserProfile.objects.get(userEmail = json_email)
 
     #create new event
     New_event = Event.objects.create(creater = creater, time = json_time, speaker = speaker, req = "add")
