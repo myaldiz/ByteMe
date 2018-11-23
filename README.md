@@ -94,7 +94,7 @@ run `python manage.py runserver`
 
 
 2. Add Event API:
-- Name: http POST http://127.0.0.1:8000/api/v1/event/add
+- Name: http://127.0.0.1:8000/api/v1/event/add
 - Method: POST
 - Description: Request to add the event
 - Request json interface:  
@@ -140,7 +140,7 @@ HTTP/1.0 400 Bad Request
 ```
 
 3. Delete Event:       
-- Name: http DELETE http://127.0.0.1:8000/api/v1/event/delete/<event_id>
+- Name: http://127.0.0.1:8000/api/v1/event/delete/<event_id>
 - Method: DELETE
 - Description: Delete request to add/mod/del the event
 - Parameters: event_id(UUID/required)       
@@ -159,7 +159,7 @@ HTTP/1.0 202 Accepted
 ```
 
 4. Modify Event:       
-- Name: http DELETE http://127.0.0.1:8000/api/v1/event/modify/<event_id>
+- Name: http://127.0.0.1:8000/api/v1/event/modify/<event_id>
 - Method: DELETE
 - Description: Delete request to add/mod/del the event
 - Parameters: event_id(UUID/required)       
@@ -201,7 +201,7 @@ HTTP/1.0 202 Accepted
 ```
 
 5. Approve Event request:       
-- Name: http -f POST http://127.0.0.1:8000/api/v1/event/request/approvel/<event_id>
+- Name: http://127.0.0.1:8000/api/v1/event/request/approvel/<event_id>
 - Method: POST
 - Description: Request to delete the event      
 - Parameters: event_id(UUID/required)  *need to use form to pass!!
