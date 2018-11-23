@@ -7,6 +7,8 @@ urlpatterns = [
     url(r'^add', views.AddEvent),
     url(r'^delete/(?P<event_id>[^/]+)', views.DeleteEvent),
     url(r'^modify/(?P<event_id>[^/]+)', views.ModifyEvent),
+    url(r'^attend/(?P<event_id>[^/]+)', views.MarkEvent),
+    url(r'^unattend/(?P<event_id>[^/]+)', views.UnMarkEvent),
     url(r'^request/approvel/(?P<event_id>[^/]+)', views.ApproveEvent),
 ]
 

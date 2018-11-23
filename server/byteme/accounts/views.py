@@ -21,15 +21,15 @@ from rest_framework.renderers import TemplateHTMLRenderer
 @api_view(['GET'])
 @authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((IsAuthenticated,))
-def example_view(request):
-    
-    userprofile = UserProfile.objects.get(user = request.user)
+def GetProfile(request):
+    login_user = request.user #get login user
+    login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
 
     content = {
-        'name': str(request.user),
-        'userEmail': userprofile.userEmail,  # `django.contrib.auth.User` instance.
+        'name': str(login_user),
+        'userEmail': login_user.email,  
     }
-    return Response(content)
+    return Response(content, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def CreateProfile(request):
@@ -49,7 +49,7 @@ def CreateProfile(request):
 		return Response({"Response":"Sign_up", "status": "Not a KAIST email"}, status=status.HTTP_400_BAD_REQUEST)
 
 	try:
-		user = User.objects.create_user(json_username, password=json_password)
+		user = User.objects.create_user(json_username, password=json_password, email= json_email)
 	except:
 		return Response({"Response":"Sign_up", "status": "Not a unique username"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -62,3 +62,9 @@ def CreateProfile(request):
 
 	return_json  = {"Response": "Sign_up", "id": json_email, "result": "accepted"}
 	return Response(return_json, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
+def AddTags(request):
+	pass

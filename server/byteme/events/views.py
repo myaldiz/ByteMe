@@ -225,6 +225,9 @@ def DeleteEvent(request, event_id):
 @authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((IsAuthenticated,))
 def ApproveEvent(request, event_id):
+    login_user = request.user #get login user
+    login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
+
     req = request.POST.get("req", False) #get it from form
 
     event = approveEventChange(event_id, req)
@@ -246,4 +249,35 @@ def ApproveEvent(request, event_id):
         return Response({"Response": res, "Event": event_json}, status = status.HTTP_205_RESET_CONTENT)
     else:
         return Response({"Response":"Approve_event", "status": "Different request proccessing"}, status = status.HTTP_400_BAD_REQUEST)
+
+#API
+@api_view(['POST'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
+def MarkEvent(request, event_id):
+    login_user = request.user #get login user
+    login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
+
+    event = Event.objects.get(identifier = event_id) #get the event 
+
+    event.attendant.add(login_userprofile)
+    event.save()
+
+    return Response({"Response":"Mark_event", "status": "accepted"}, status = status.HTTP_200_OK)
+
+
+#API
+@api_view(['POST'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
+def UnMarkEvent(request, event_id):
+    login_user = request.user #get login user
+    login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
+
+    event = Event.objects.get(identifier = event_id) #get the event 
+
+    event.attendant.remove(login_userprofile)
+    event.save()
+
+    return Response({"Response":"Unmark_event", "status": "accepted"}, status = status.HTTP_200_OK)
 

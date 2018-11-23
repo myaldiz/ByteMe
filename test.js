@@ -13,9 +13,19 @@ let postData = "";
 let flag = false;
 let _headers = "";
 
+function makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  
+    for (var i = 0; i < 5; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  
+    return text;
+  }
+
 switch(API) {
     case "browse?type=all":
-        url = "browse?type=all";
+        url = "event/browse?type=all";
         _headers = {
             "Content-Type": "application/json",
             'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
@@ -23,7 +33,7 @@ switch(API) {
         break;
 
     case "browse?type=attending":
-        url = "browse?type=attending";
+        url = "event/browse?type=attending";
         _headers = {
             "Content-Type": "application/json",
             'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
@@ -31,7 +41,7 @@ switch(API) {
         break;    
 
     case "browse?type=created":
-        url = "browse?type=created";
+        url = "event/browse?type=created";
         _headers = {
             "Content-Type": "application/json",
             'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
@@ -40,7 +50,7 @@ switch(API) {
 
     case "add":
         http_method = "POST";
-        url = "add";
+        url = "event/add";
         postData = JSON.stringify(
             {    
                 "Request": "Add_event",     
@@ -71,7 +81,7 @@ switch(API) {
 
     case "del":
         http_method = "DELETE";
-        url = "delete/"+ID;
+        url = "event/delete/"+ID;
         _headers = {
             "Content-Type": "application/json",
             'Content-Length': postData.length,
@@ -81,7 +91,7 @@ switch(API) {
 
     case "mod":
         http_method = "POST";
-        url = "modify/"+ID;
+        url = "event/modify/"+ID;
         postData = JSON.stringify(
             {
                 "Request": "Modify_event",
@@ -117,12 +127,31 @@ switch(API) {
             'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
         }
         break;
+
+    case "register":
+        http_method = "POST";
+        url = "account/register"
+        postData = JSON.stringify(
+            {
+                "User": {
+                    "id": makeid(), 
+                    "email": makeid()+"@kaist.ac.kr", 
+                    "pw_hash": "password@"
+                }
+            }
+        );
+        _headers = {
+            'Content-Type': 'application/json',
+            'Content-Length': postData.length,
+            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+        }
+        break;
 }
 
 var options = {
     url: "127.0.0.1",
     port: "8000",
-    path: "/api/v1/event/"+url,
+    path: "/api/v1/"+url,
     method: http_method,
     headers: _headers,
 };
