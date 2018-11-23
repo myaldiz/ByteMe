@@ -45,10 +45,11 @@ run `python manage.py runserver`
 ##### Test the API
 
 1. Browse API:
-- Name: http://127.0.0.1:8000/api/v1/event/browse   
+- Name: http://127.0.0.1:8000/api/v1/event/browse?type=   
 - Method: GET   
 - Description: Browse the events by user or all events    
-- Parameters: User(String/optional)   
+- Parameters: type(String/required) value: attending or created or all          
+- Example: http://127.0.0.1:8000/api/v1/event/browse?type=all                   
 - Response:     
 ```
 {
@@ -89,41 +90,36 @@ run `python manage.py runserver`
     ],
     "Response": "List_events"
 }
-```
-- Example:      
-use httpe   
-> `http http://127.0.0.1:8000/api/v1/event/browse  `            
-> `http http://127.0.0.1:8000/api/v1/event/browse?user=Wuharlem   `             
+```        
 
 
 2. Add Event API:
 - Name: http POST http://127.0.0.1:8000/api/v1/event/add
 - Method: POST
 - Description: Request to add the event
-- Request:  
+- Request json interface:  
 ```
-{   
-    add_event: {    
-        "Request": "Add_event",     
-        "User": {   
-            "email": "user1@gmail.com", (required)        
-            "pw_hash": "XXA83jd3kljsdf",    
-            "ip": "143.248.143.29"  
-        },      
-        "speaker":{     
-            "name": "Zombie"    (required)
-        },      
-        "Event": {      
-            "abstract": "BlaBla",       
-            "place": "Kaist",       
-            "time": "2018-11-03 03:01:00.914138+00:00",         
-            "title": "Zombies",         
-            "details": "Blabla"     
-        }       
+{    
+    "Request": "Add_event",     
+    "User": {   
+        "email": "user1@gmail.com",      
+        "pw_hash": "XXA83jd3kljsdf",    
+        "ip": "143.248.143.29"  
+    },      
+    "speaker":{     
+        "name": "Zombie"   
+    },      
+    "Event": {      
+        "abstract": "BlaBla",       
+        "place": "Kaist",       
+        "time": "2018-11-03 03:01:00.914138+00:00",         
+        "title": "Zombies",         
+        "details": "Blabla",
+        "poster_image": "imageimage" 
     }       
-}       
+}     
 ```
-- Respond:      
+- Response json interface:   
 HTTP/1.0 202 Accepted  
 ```
 {       
@@ -139,61 +135,89 @@ HTTP/1.0 400 Bad Request
 ```
 {       
     "Response": "Add_Event",        
-    "status": "please check response json"      
+    "status": "please check the response json"      
 }       
 ```
-- Example:      
-use httpe   
-> `http POST http://127.0.0.1:8000/api/v1/event/add add_event:='{"Request": "Add_event", "User": {"email": "user1@gmail.com", "pw_hash": "XXA83jd3kljsdf", "ip": "143.248.143.29"}, "speaker":{"name": "Zombie"}, "Event": { "abstract": "BlaBla", "place": "Kaist", "time": "2018-11-03 03:01:00.914138+00:00", "title": "Zombies", "details": "Blabla"}}'  `
 
-3. Approve Event request:       
+3. Delete Event:       
+- Name: http DELETE http://127.0.0.1:8000/api/v1/event/delete/<event_id>
+- Method: DELETE
+- Description: Delete request to add/mod/del the event
+- Parameters: event_id(UUID/required)       
+- Example: http://127.0.0.1:8000/api/v1/event/delete/aa6634c6-b10c-4339-b2c4-3e4baf49880e               
+- Response json interface:     
+HTTP/1.0 202 Accepted  
+```
+{
+    "Response":"Delete_event",
+    "Event":{
+        "id":"aa6634c6-b10c-4339-b2c4-3e4baf49880e",
+        "title":"Superman",
+        "status":"processing"}
+    }
+}
+```
+
+4. Modify Event:       
+- Name: http DELETE http://127.0.0.1:8000/api/v1/event/modify/<event_id>
+- Method: DELETE
+- Description: Delete request to add/mod/del the event
+- Parameters: event_id(UUID/required)       
+- Example: http://127.0.0.1:8000/api/v1/event/modify/aa6634c6-b10c-4339-b2c4-3e4baf49880e       
+- Request json interface:  
+```
+{
+    "Request": "Modify_event",
+    "User": {   
+        "email": "user1@gmail.com",      
+        "pw_hash": "XXA83jd3kljsdf",    
+        "ip": "143.248.143.29"  
+    },   
+    "Event": {
+        "abstract": "Superman is the best",
+        "place": "Kaist",
+        "time": "2018-11-03 03:01:00.914138+00:00",         
+        "title": "Superman",         
+        "details": "Blabla",
+        "poster_image": "imageimage",
+    }
+}   
+```             
+- Response json interface:     
+HTTP/1.0 202 Accepted        
+```
+{
+    "Response":"Modify_Event",
+    "Events":{
+        "abstract":"Superman is the best",
+        "place":"Kaist",
+        "time":"2018-11-03 03:01:00.914138+00:00",
+        "title":"Superman",
+        "details":"Blabla",
+        "poster_image":"imageimage"
+    },
+    "status":"processing"
+}
+```
+
+5. Approve Event request:       
 - Name: http -f POST http://127.0.0.1:8000/api/v1/event/request/approvel/<event_id>
 - Method: POST
-- Description: Request to delete the event
-- Parameters: event_id(UUID/required) 
-- Response:     
+- Description: Request to delete the event      
+- Parameters: event_id(UUID/required)  *need to use form to pass!!
+- Example: http://127.0.0.1:8000/api/v1/event/request/approvel/aa6634c6-b10c-4339-b2c4-3e4baf49880e               
+- Response json interface:        
 ```
 HTTP/1.0 205 Reset Content  
 {       
     "Response": "Delete_event",        
     "Event": {      
-        "id": 123,      
+        "id": aa6634c6-b10c-4339-b2c4-3e4baf49880e,      
         "title": "Zombies",     
         "status": "wait"             
     }                   
 }           
 ```
-- Example:            
-use httpe             
-> `http DELETE http://127.0.0.1:8000/api/v1/event/delete/<event_id> `
-
-4. Delete Event:       
-- Name: http DELETE http://127.0.0.1:8000/api/v1/event/delete/<event_id>
-- Method: DELETE
-- Description: Delete request to add/mod/del the event
-- Parameters: event_id(UUID/required) 
-- Request:    
-```
-{
-    req: add | del | mod
-}
-```
-- Response:     
-HTTP/1.0 205 Reset Content  
-```
-{       
-    "Response": "Add_event",        
-    "Event": {      
-        "id": 123,      
-        "title": "Zombies",     
-        "status": "accepted"        
-    }           
-}
-```
-
-- Example:      
-use httpe       
-> `http -f POST http://127.0.0.1:8000/api/v1/event/request/approvel/<event_id> req="add"`
 
 
 -----

@@ -18,7 +18,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import TemplateHTMLRenderer
 
 # helper fuction
-def queryEvent(user = None, event_type):
+def queryEvent(user, event_type):
     """
     query event from the sqlitle using django defalut model API
 
@@ -28,12 +28,10 @@ def queryEvent(user = None, event_type):
 
     returns:
         events/event or Http404
-
-    TODO: not sure that if we are going to query event by id/username or not
     """
     try:
         if event_type == "attending":
-            return Event.objects.filter(~Q(req="add")).filter(attendants__contains=user)
+            return Event.objects.filter(~Q(req="add")).filter(attendant__user__username = str(user))
         elif event_type == "created":
             return Event.objects.filter(~Q(req="add")).filter(creater=user)
         else:
@@ -52,30 +50,40 @@ def approveEventChange(ID, req):
 
     returns:
         events for add/mod, True for del
-
-    TODO: Authentication
     """
     if req == "mod":
-        event = Event.objects.get(identifier = ID)
+        event = Event.objects.get(identifier = ID) #get the event 
+
         if req == event.req:
-            event.abstract    = event.abstractReq
-            event.place       = event.placeReq
-            event.time        = event.timeReq
-            event.title       = event.titleReq
-            event.details     = event.detailsReq
-            event.req         = "non"
-            event.abstractReq = None
-            event.placeReq	  = None
-            event.timeReq	  = None
-            event.titleReq	  = None
-            event.detailsReq  = None
+            if event.abstractReq != None: 
+                event.abstract = event.abstractReq
+                event.abstractReq = None
+
+            if event.placeReq != None:
+                event.place = event.placeReq
+                event.placeReq = None
+
+            if event.timeReq != None:
+                event.time = event.timeReq
+                event.timeReq = None
+
+            if event.title != None:
+                event.title = event.titleReq
+                event.titleReq = None
+
+            if event.detailsReq != None:
+                event.details = event.detailsReq
+                event.detailsReq  = None
+
+            event.req = "non"
             event.save()
             return event
         else:
             return False
 
     if req == "add":
-        event = Event.objects.get(identifier = ID)
+        event = Event.objects.get(identifier = ID) #get the event 
+
         if req == event.req:
             event.abstract    = event.abstractReq
             event.place       = event.placeReq
@@ -94,7 +102,8 @@ def approveEventChange(ID, req):
             return False
 
     if req == "del":
-        event = Event.objects.get(identifier = ID)
+        event = Event.objects.get(identifier = ID) #get the event 
+
         if req == event.req:
             Event.objects.get(identifier = ID).delete()
             return True
@@ -106,37 +115,20 @@ def approveEventChange(ID, req):
 @authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((IsAuthenticated,))
 def BrowseEvent(request):
-    #TODO authentication
-    user_name = request.GET.get("user", False)
+    login_user = request.user #get login user
+    login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
+    
     try:
         event_type = request.GET.get("type", False) # attending or created
     except:
         return Response({"Response":"List_events", "status": "No request type"}, status=status.HTTP_400_BAD_REQUEST)
-    # renderer_classes = [TemplateHTMLRenderer]
-    # template_name = 'login.html'
 
-    if user_name:
-        try:
-            user = User.objects.get(username=user_name)
-            user = UserProfile.objects.get(user=user) 
-        except User.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        
-        except UserProfile.DoesNotExist:
-            return_json  = {"Response":"List_events", "Events":[]}
-            return Response(return_json, status=status.HTTP_200_OK)
+    if event_type != "attending" and event_type != "created" and event_type != "all":
+        return Response({"Response":"List_events", "status": "Invalid request type"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    Event_List = queryEvent(login_userprofile, event_type)
+    Event_json = EventSerializer(Event_List, many = True)
 
-        if event_type is not "attending" or event_type is not "created" or event_type is not "all":
-            return Response({"Response":"List_events", "status": "Invalid request type"}, status=status.HTTP_400_BAD_REQUEST)
-            
-        Event_List = queryEvent(user=user, event_type=event_type)
-    else:
-        if event_type is not "all":
-            return Response({"Response":"List_events", "status": "Invalid request type"}, status=status.HTTP_400_BAD_REQUEST)
-
-        Event_List = queryEvent(event_type=event_type)
-
-    Event_json   = EventSerializer(Event_List, many = True)
     # Event_json.data.
     return_json  = {"Response":"List_events", "Events":Event_json.data}
     return Response(return_json, status=status.HTTP_200_OK)
@@ -146,33 +138,37 @@ def BrowseEvent(request):
 @authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((IsAuthenticated,))
 def AddEvent(request):
-    #TODO authentication
-    #TODO What is the return json looks like
+    login_user = request.user #get login user
+    login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
+
     try:
-        json_email   = request.data.get('User').get("email")
         json_speaker = request.data.get('speaker').get('name')
         json_event   = request.data.get('Event')
-        json_time    = request.data.get('Event').get("time")
-        json_title   = request.data.get('Event').get("title")
 
     except : 
-        return Response({"Response":"Add_Event", "status": "Please check response json"}, status=status.HTTP_400_BAD_REQUEST)
-    # create/update a speaker
+        return Response({"Response":"Add_Event", "status": "Please check the response json"}, status=status.HTTP_400_BAD_REQUEST)
+
+    # create or update a speaker
     Speaker.objects.update_or_create(name = json_speaker)
 
-    # get speaker/creater
+    # get the speaker and creater
     speaker = Speaker.objects.get(name = json_speaker)
-    creater = UserProfile.objects.get(userEmail = json_email)
+    creater = login_userprofile
 
-    #create new event
+    # get time and title to create a initial event
+    json_time  = request.data.get('Event').get("time")
+    json_title = request.data.get('Event').get("title")
+
+    #create a new event
     New_event = Event.objects.create(creater = creater, time = json_time, speaker = speaker, req = "add")
 
-    #make it become json and updata the data
+    #make it becomes json and updatas the data
     Event_json = EventSerializer(New_event, data = json_event)
 
+    #check if json valod
     if Event_json.is_valid():
         Event_json.save()
-        Updated_Event_json = {"id": Event_json.data["identifier"], "title": json_title, "status": "wait"}
+        Updated_Event_json = {"id": Event_json.data["identifier"], "title": json_title, "status": "processing"}
         return_json  = {"Response":"Add_Event", "Events":Updated_Event_json}
         return Response(return_json, status = status.HTTP_202_ACCEPTED)
     
@@ -183,25 +179,25 @@ def AddEvent(request):
 @authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((IsAuthenticated,))
 def ModifyEvent(request, event_id):
-    #TODO authentication
-    #TODO What is the return json looks like
-    try:
-        json_emial   = request.data.get('User').get("email")
-        json_event   = request.data.get('Event')
-        json_time    = request.data.get('Event').get("time")
-        json_title   = request.data.get('Event').get("title")
-    except : 
-        return Response({"Response":"Add_Event", "status": "Please check response json"}, status=status.HTTP_400_BAD_REQUEST)
+    login_user = request.user #get login user
+    login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
 
-    creater = UserProfile.objects.get(userEmail = json_emial)
+    try:
+        json_event   = request.data.get('Event')
+    except : 
+        return Response({"Response":"Modify_Event", "status": "Please check response json"}, status=status.HTTP_400_BAD_REQUEST)
+
+    # get the creater
+    creater = login_userprofile
     
+    # get the certain event
     event = Event.objects.get(creater = creater)
     Event_json = EventSerializer(event, data = json_event)
 
+    #check if json valod
     if Event_json.is_valid():
         Event_json.save()
-        Updated_Event_json = Event_json.data
-        return_json  = {"Response":"Modify_Event", "Events":Updated_Event_json}
+        return_json  = {"Response":"Modify_Event", "Events": json_event, "status": "processing"}
         return Response(return_json, status = status.HTTP_202_ACCEPTED)
 
     return Response(Event_json.data, status = status.HTTP_400_BAD_REQUEST)
@@ -211,14 +207,17 @@ def ModifyEvent(request, event_id):
 @authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((IsAuthenticated,))
 def DeleteEvent(request, event_id):
-    #TODO authentication
-    #TODO What is the return json looks like
+    login_user = request.user #get login user
+    login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
 
+    # get certain event
     event = Event.objects.get(identifier = event_id)
     event.req = "del"
     event.save()
-    event_json = {"id": event_id, "title": event.title, "status": "wait"}
+
+    event_json = {"id": event_id, "title": event.title, "status": "processing"}
     return_json = {"Response": "Delete_event", "Event": event_json}
+
     return Response(return_json, status = status.HTTP_202_ACCEPTED)
 
 #API
@@ -226,11 +225,10 @@ def DeleteEvent(request, event_id):
 @authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((IsAuthenticated,))
 def ApproveEvent(request, event_id):
-    #TODO authentication
-    #TODO not approve?
+    req = request.POST.get("req", False) #get it from form
 
-    req = request.POST.get("req", False)
     event = approveEventChange(event_id, req)
+
     if (event):
         if req == "add":
             res = "Add_event"
@@ -247,5 +245,5 @@ def ApproveEvent(request, event_id):
             event_json = {"id": event_id, "status": "accepted"}
         return Response({"Response": res, "Event": event_json}, status = status.HTTP_205_RESET_CONTENT)
     else:
-        return Response("something wrong", status = status.HTTP_400_BAD_REQUEST)
+        return Response({"Response":"Approve_event", "status": "Different request proccessing"}, status = status.HTTP_400_BAD_REQUEST)
 

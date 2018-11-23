@@ -34,11 +34,11 @@ def example_view(request):
 @api_view(['POST'])
 def CreateProfile(request):
 	try:
-        json_username = request.data.get("User").get("id")
-        json_email = request.data.get("User").get("email")
-        json_password = request.data.get("User").get("pw_hash")
-    except : 
-        return Response({"Response":"Sign_up", "status": "Please check request json"}, status=status.HTTP_400_BAD_REQUEST)
+		json_username = request.data.get("User").get("id")
+		json_email = request.data.get("User").get("email")
+		json_password = request.data.get("User").get("pw_hash")
+	except : 
+		return Response({"Response":"Sign_up", "status": "Please check the request json"}, status=status.HTTP_400_BAD_REQUEST)
 	
 	try:
 		validate_email(json_email)

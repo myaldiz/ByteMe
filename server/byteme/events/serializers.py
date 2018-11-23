@@ -29,5 +29,6 @@ class EventSerializer(serializers.Serializer):
         # instance.tagsReq
         if instance.req == "non":
             instance.req = "mod"
+            
         instance.save()
         return instance
