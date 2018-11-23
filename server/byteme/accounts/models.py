@@ -20,8 +20,8 @@ class Speaker(Person):
 		return "%s"%(self.name)
 
 class UserProfile(Person):
-	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	# userEmail = models.EmailField(unique=True) # this can be stored in the user model
+	user = models.OneToOneField(User, on_delete=models.CASCADE)	# email not saved in here
+	userEmail = models.EmailField(unique=True)
 	isAdmin = models.BooleanField()
 
 	def addTags(self, tags):

@@ -18,7 +18,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import TemplateHTMLRenderer
 
 # helper fuction
-def queryEvent(creater = None):
+def queryEvent(user = None, event_type):
     """
     query event from the sqlitle using django defalut model API
 
@@ -32,10 +32,12 @@ def queryEvent(creater = None):
     TODO: not sure that if we are going to query event by id/username or not
     """
     try:
-        if creater:
-            return Event.objects.filter(~Q(req = "add")).filter(creater = creater)
+        if event_type == "attending":
+            return Event.objects.filter(~Q(req="add")).filter(attendants__contains=user)
+        elif event_type == "created":
+            return Event.objects.filter(~Q(req="add")).filter(creater=user)
         else:
-            return Event.objects.all().filter(~Q(req = "add"))
+            return Event.objects.all().filter(~Q(req="add"))
     except Event.DoesNotExist:
         raise Http404
 
@@ -106,23 +108,33 @@ def approveEventChange(ID, req):
 def BrowseEvent(request):
     #TODO authentication
     user_name = request.GET.get("user", False)
+    try:
+        event_type = request.GET.get("type", False) # attending or created
+    except:
+        return Response({"Response":"List_events", "status": "No request type"}, status=status.HTTP_400_BAD_REQUEST)
     # renderer_classes = [TemplateHTMLRenderer]
     # template_name = 'login.html'
 
     if user_name:
         try:
-            user = User.objects.get(username = user_name)
-            creater = UserProfile.objects.get(user = user) 
+            user = User.objects.get(username=user_name)
+            user = UserProfile.objects.get(user=user) 
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
         except UserProfile.DoesNotExist:
             return_json  = {"Response":"List_events", "Events":[]}
             return Response(return_json, status=status.HTTP_200_OK)
+
+        if event_type is not "attending" or event_type is not "created" or event_type is not "all":
+            return Response({"Response":"List_events", "status": "Invalid request type"}, status=status.HTTP_400_BAD_REQUEST)
             
-        Event_List = queryEvent(creater = creater)
+        Event_List = queryEvent(user=user, event_type=event_type)
     else:
-        Event_List   = queryEvent()
+        if event_type is not "all":
+            return Response({"Response":"List_events", "status": "Invalid request type"}, status=status.HTTP_400_BAD_REQUEST)
+
+        Event_List = queryEvent(event_type=event_type)
 
     Event_json   = EventSerializer(Event_List, many = True)
     # Event_json.data.
