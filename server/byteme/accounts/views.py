@@ -58,6 +58,16 @@ def CreateProfile(request):
 	except:
 		user.delete()
 		return Response({"Response":"Sign_up", "status": "Not a unique email"}, status=status.HTTP_400_BAD_REQUEST)
+"""=======
+    try:
+        json_username = request.data.get("register").get("username")
+        json_email = request.data.get("register").get("email")
+        json_password = request.data.get("register").get("password")
+    except : 
+        return Response({"Response":"Register", "status": "Please check response json"}, status=status.HTTP_400_BAD_REQUEST)
+    user = User.objects.create_user(json_username, email=json_email, password=json_password)
+    person = UserProfile.objects.create(user=user, isAdmin=False)
+>>>>>>> 4fed7d9f92f1e7fdc741d9fad1b0f182f0a2808a"""
 
 	return_json  = {"Response": "Sign_up", "id": json_email, "result": "accepted"}
 	return Response(return_json, status=status.HTTP_200_OK)
