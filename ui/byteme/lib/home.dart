@@ -69,7 +69,6 @@ class HomePageState extends State<HomePage> {
       ],
     ];
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(title: _titles[_currentIndex],
             actions: _actions[_currentIndex]),
         bottomNavigationBar: BottomNavigationBar(
