@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'browse.dart';
 import 'manage.dart';
 import 'attending.dart';
-import './AddEventViewController.dart';
 
+class Tag{
+  Tag(this.name);
+  final name;
+}
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,63 +17,22 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  List<Tag> allTags;
+  List<Tag> selectedTags;
+
   List<Widget> _bodies = [
     ManagePage(),
     BrowsePage(),
     AttendingPage(),
   ];
 
-  List<Text> _titles = [Text("Manage"), Text("Events"), Text("Attending")];
 
   int _currentIndex = 1;
   // Widget customBar;
 
   @override
   Widget build(BuildContext context) {
-    List<List<Widget>> _actions = [
-      [
-        IconButton(
-          icon: Icon(Icons.sort),
-          onPressed: null,
-        ),
-        IconButton(
-          icon: Icon(Icons.filter_list),
-          onPressed: null,
-        ),
-        IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AddEventViewController()),
-              );
-            })
-      ],
-      [
-        IconButton(
-          icon: Icon(Icons.sort),
-          onPressed: null,
-        ),
-        IconButton(
-          icon: Icon(Icons.filter_list),
-          onPressed: null,
-        ),
-      ],
-      [
-        IconButton(
-          icon: Icon(Icons.sort),
-          onPressed: null,
-        ),
-        IconButton(
-          icon: Icon(Icons.filter_list),
-          onPressed: null,
-        ),
-      ],
-    ];
     return Scaffold(
-        appBar: AppBar(title: _titles[_currentIndex],
-            actions: _actions[_currentIndex]),
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(

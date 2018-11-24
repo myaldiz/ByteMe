@@ -11,17 +11,55 @@ class AttendingPage extends StatefulWidget {
 
 class AttendingPageState extends State<AttendingPage> {
   List<Widget> _cardsList = [];
+  List<Tag> selectedTags = [];
+  Tag selectedSort;
 
   @override
   Widget build(BuildContext context) {
     if (_cardsList.length == 0) {
       updateList();
-      return Container();
+      return Scaffold(
+        appBar: AppBar(),
+        body: Container());
     }
-    return Container(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Attending"),
+        actions: [
+        IconButton(
+            icon: Icon(Icons.sort),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SortForm(onSubmit: (Tag newSort) {
+                      setState(() {
+                        selectedSort = newSort;
+                      });
+                    });
+                  });
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.filter_list),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return TagForm(onSubmit: (List<Tag> newList) {
+                      setState(() {
+                        selectedTags = newList;
+                      });
+                    });
+                  });
+            },
+          ),
+      ],
+      ),
+      body: Container(
         child: ListView(
           children: _cardsList,
-        ));
+        )));
   }
 
   Future<void> updateList() async {
