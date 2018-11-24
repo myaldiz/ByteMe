@@ -71,17 +71,17 @@ class GoogleSearch:
         user_agents_list = [USER_AGENT]
 
     # Get a random user agent.
-    def get_random_user_agent():
+    def get_random_user_agent(self):
         """
         Get a random user agent string.
         :rtype: str
         :return: Random user agent string.
         """
-        return random.choice(user_agents_list)
+        return random.choice(self.user_agents_list)
 
 
     # Request the given URL and return the response page, using the cookie jar.
-    def get_page(url, user_agent=None):
+    def get_page(self, url, user_agent=None):
         """
         Request the given URL and return the response page, using the cookie jar.
         :param str url: URL to retrieve.
@@ -94,16 +94,16 @@ class GoogleSearch:
         :raises urllib2.HTTPError: An exception is raised on error.
         """
         if user_agent is None:
-            user_agent = USER_AGENT
+            user_agent = self.USER_AGENT
         request = Request(url)
-        request.add_header('User-Agent', USER_AGENT)
-        cookie_jar.add_cookie_header(request)
+        request.add_header('User-Agent', self.USER_AGENT)
+        self.cookie_jar.add_cookie_header(request)
         response = urlopen(request)
-        cookie_jar.extract_cookies(response, request)
+        self.cookie_jar.extract_cookies(response, request)
         html = response.read()
         response.close()
         try:
-            cookie_jar.save()
+            self.cookie_jar.save()
         except Exception:
             pass
         return html
@@ -111,7 +111,7 @@ class GoogleSearch:
 
     # Filter links found in the Google result pages HTML code.
     # Returns None if the link doesn't yield a valid result.
-    def filter_result(link):
+    def filter_result(self, link):
         try:
 
             # Valid results are absolute URLs not pointing to a Google domain
@@ -137,7 +137,7 @@ class GoogleSearch:
 
 
     # Returns a generator that yields URLs.
-    def search(query, tld='com', lang='en', tbs='0', safe='off', num=10, start=0,
+    def search(self, query, tld='com', lang='en', tbs='0', safe='off', num=10, start=0,
             stop=None, domains=None, pause=2.0, only_standard=False,
             extra_params={}, tpe='', user_agent=None):
         """
@@ -199,19 +199,19 @@ class GoogleSearch:
                 )
 
         # Grab the cookie from the home page.
-        get_page(url_home % vars())
+        self.get_page(self.url_home % vars())
 
         # Prepare the URL of the first request.
         if start:
             if num == 10:
-                url = url_next_page % vars()
+                url = self.url_next_page % vars()
             else:
-                url = url_next_page_num % vars()
+                url = self.url_next_page_num % vars()
         else:
             if num == 10:
-                url = url_search % vars()
+                url = self.url_search % vars()
             else:
-                url = url_search_num % vars()
+                url = self.url_search_num % vars()
 
         # Loop until we reach the maximum result, if any (otherwise, loop forever).
         while not stop or start < stop:
@@ -228,7 +228,7 @@ class GoogleSearch:
             time.sleep(pause)
 
             # Request the Google Search results page.
-            html = get_page(url)
+            html = self.get_page(url)
 
             # Parse the response and process every anchored URL.
             if is_bs4:
@@ -251,7 +251,7 @@ class GoogleSearch:
                     continue
 
                 # Filter invalid links and links pointing to Google itself.
-                link = filter_result(link)
+                link = self.filter_result(link)
                 if not link:
                     continue
 
@@ -275,16 +275,16 @@ class GoogleSearch:
             # Prepare the URL for the next request.
             start += num
             if num == 10:
-                url = url_next_page % vars()
+                url = self.url_next_page % vars()
             else:
-                url = url_next_page_num % vars()
+                url = self.url_next_page_num % vars()
 
 class Crawler:
     def __init__(self, trend_sleep=5, scholar_sleep=5):
         self.scholar_sleep = scholar_sleep
         self.scholar_q = queue.Queue()
         self.scholar_thread = None
-        self.google = GoogleSearch
+        self.google = GoogleSearch()
         #self.pytrend = TrendReq(hl='en-US', tz=360)
 
         
@@ -309,105 +309,142 @@ class Crawler:
         else:
             self.scholar_q.put(tag)
 
-    def parse_scholar_id(in_str):
-        idx1 = in_str.find('user=') + 5
-        idx2 = in_str.find('&') #Check this!!
-        if idx1 == -1 or idx2 == -1:
-            return ''
-        substr = in_str[idx1:idx2]
+    def parse_scholar_id(self, in_str):
+        idx1 = in_str.find('citations?user') + 14
+        if(in_str[idx1] == '='):
+            idx1 += 1
+        elif (in_str[idx1] == '%'):
+            idx1 += 3
+        substr = in_str[idx1:idx1+12]
         return substr
 
-    def create_link(scholar_id):
+    def create_link(self, scholar_id):
         return "http://scholar.google.com/citations?user=" + scholar_id + "&hl=en"
 
-    def create_google_query(scholar):
+    def create_google_query(self, scholar):
         query = scholar.name + " " + scholar.univ + " google scholar"
         return query
 
-    def crawl_scholar(self, scholar):
-        google_query = create_google_query(scholar)
-
+    def is_scholar_link(self, link):
+        out = "scholar.google" in link and 'citations?user' in link
+        return out
+    
+    def crawl_univ_scholar_ids(self, univ_name, stop=100):
         #Refine google scholar user id's
         matches = set()
-        for j in this.google.search(query, stop=5): 
-            if "scholar.google" in j and len(j) < 100:
-                scholar_id = parse_scholar_id(j)
-                if scholar_id != '':
-                    matches.add(scholar_id)
+        query = univ_name + ' google scholar'
+        for j in self.google.search(query, stop=stop): 
+            if self.is_scholar_link(j):
+                s_id = self.parse_scholar_id(j)
+                matches.add(s_id)
+        return matches
+    
+    def crawl_single_scholar_id(self, scholar):
+        google_query = self.create_google_query(scholar)
+        for j in self.google.search(google_query, stop=10):
+            if self.is_scholar_link(j):
+                return self.parse_scholar_id(j)
+        return None
+
+    def crawl_scholar(self, scholar):
+        crawl_dic = {}
+        scholar_id = self.crawl_single_scholar_id(scholar)
+        if scholar_id == None:
+            return crawl_dic
         
-        scholar_id = matches.pop()
-        link = create_link(scholar_id)
+        #Create the link
+        link = self.create_link(scholar_id)
 
         #Get the page
         page = requests.get(link)
         soup = BeautifulSoup(page.content, 'html.parser')
 
-
         #Start crawling
         name = soup.find_all('div', id='gsc_prf_in')
         name = list(name[0].children)[0]
+        crawl_dic['name'] = name
         #print(name, '\n')
 
         association = soup.find_all('a', class_='gsc_prf_ila')
         if not association == []:
             association = list(association[0].children)[0]
             if association.lower() == 'homepage':
-                association = []
-            #else:
-            #    print(association, '\n')
+                association = ''
+            else:
+                crawl_dic['association'] = association
+                #print(association, '\n')
 
-            title = soup.find_all('div', class_="gsc_prf_il")
-            if not title == []:
-                title = list(title[0].children)[0]
-            #    print(title, '\n')
+        title = soup.find_all('div', class_="gsc_prf_il")
+        if not title == []:
+            title = list(title[0].children)[0]
+            crawl_dic['title'] = title
+        #    print(title, '\n')
 
-            citations = soup.find_all('td', class_='gsc_rsb_std')
-            if not citations == []:
-                citations = [list(cite.children)[0] for cite in citations]
-            citation_str = ['All Citations', 'Citations since 2013',
-                        'All h-index', 'h-index since 2013',
-                        'All i10-index', 'i10 index since 2013']
+        citations = soup.find_all('td', class_='gsc_rsb_std')
+        if not citations == []:
+            citations = [list(cite.children)[0] for cite in citations]
+            crawl_dic['citations'] = citations
 
-            years_cite = soup.find_all('span', class_='gsc_g_t')
-            if not years_cite == []:
-                years_cite = [list(cite.children)[0] for cite in years_cite]
+        citation_str = ['All Citations', 'Citations since 2013',
+                    'All h-index', 'h-index since 2013',
+                    'All i10-index', 'i10 index since 2013']
+        crawl_dic['citation_str'] = citation_str
 
-            yearly_cite = soup.find_all('span', class_='gsc_g_al')
-            if not yearly_cite == []:
-                yearly_cite = [list(cite.children)[0] for cite in yearly_cite]
+        years_cite = soup.find_all('span', class_='gsc_g_t')
+        if not years_cite == []:
+            years_cite = [list(cite.children)[0] for cite in years_cite]
+            crawl_dic['years_cite'] = years_cite
 
-            #print(citation_str, '\n', citations, '\n', years_cite, '\n', yearly_cite)
+        yearly_cite = soup.find_all('span', class_='gsc_g_al')
+        if not yearly_cite == []:
+            yearly_cite = [list(cite.children)[0] for cite in yearly_cite]
+            crawl_dic['yearly_cite'] = yearly_cite
 
-            field_of_study = soup.find_all('a', class_="gsc_prf_inta gs_ibl")
-            if not field_of_study == []:
-                field_of_study = [list(cite.children)[0] for cite in field_of_study]
-            #    print(field_of_study)
+        #print(citation_str, '\n', citations, '\n', years_cite, '\n', yearly_cite)
 
-            co_auth_info = soup.find_all('span', class_='gsc_rsb_a_desc')
-            if not co_auth_info == []:
-                co_auth_info = [list(cite.children)[0] for cite in co_auth_info]
-                co_authors = [list(cite.children)[0] for cite in co_auth_info]
-                co_auth_id = [parse_scholar_id(cite.attrs['href']) for cite in co_auth_info]
-            #    print(co_authors, co_auth_id)
+        field_of_study = soup.find_all('a', class_="gsc_prf_inta gs_ibl")
+        if not field_of_study == []:
+            field_of_study = [list(cite.children)[0] for cite in field_of_study]
+            crawl_dic['field_of_study'] = field_of_study
+        #    print(field_of_study)
 
-            paper_names = soup.find_all('a', class_='gsc_a_at')
-            if not paper_names == []:
-                paper_names = [list(cite.children)[0] for cite in paper_names]
-            #    print(paper_names)
+        co_auth_info = soup.find_all('span', class_='gsc_rsb_a_desc')
+        if not co_auth_info == []:
+            co_auth_info = [list(cite.children)[0] for cite in co_auth_info]
+            co_authors = [list(cite.children)[0] for cite in co_auth_info]
+            crawl_dic['co_authors'] = co_authors
+            co_auth_id = [self.parse_scholar_id(cite.attrs['href']) for cite in co_auth_info]
+            crawl_dic['co_auth_id'] = co_auth_id
+        #    print(co_authors, co_auth_id)
 
-            cite_num = soup.find_all('a', class_='gsc_a_ac gs_ibl')
-            if not cite_num == []:
-                cite_num = [list(cite.children)[0] for cite in cite_num]
-            #    print(cite_num)
+        paper_names = soup.find_all('a', class_='gsc_a_at')
+        if not paper_names == []:
+            paper_names = [list(cite.children)[0] for cite in paper_names]
+            crawl_dic['paper_names'] = paper_names
+        #    print(paper_names)
 
-            paper_year = soup.find_all('span', class_='gs_oph')
-            if not paper_year == []:
-                paper_year = [list(cite.children)[0][2:] for cite in paper_year]
-            #    print(paper_year)
+        cite_num = soup.find_all('a', class_='gsc_a_ac gs_ibl')
+        if not cite_num == []:
+            cite_num = [list(cite.children)[0] for cite in cite_num]
+            crawl_dic['cite_num'] = cite_num
+        #    print(cite_num)
 
-            paper_info = soup.find_all('div', class_='gs_gray')
-            if not paper_info == []:
-                paper_info = [list(cite.children)[0] for cite in paper_info]
-                paper_authors = [paper_info[val] for val in range(0, len(paper_info), 2)]
-                paper_confs = [paper_info[val+1] for val in range(0, len(paper_info)-1, 2)]
-            #    print(paper_authors, paper_confs)
+        paper_year = soup.find_all('span', class_='gs_oph')
+        if not paper_year == []:
+            paper_year = [list(cite.children)[0][2:] for cite in paper_year]
+            crawl_dic['paper_year'] = paper_year
+            #print(paper_year)
+
+        paper_info = soup.find_all('div', class_='gs_gray')
+        if not paper_info == []:
+            paper_info = [list(cite.children)[0] for cite in paper_info]
+            paper_authors = [paper_info[val] for val in range(0, len(paper_info), 2)]
+            paper_authors = [authors.split(', ') for authors in paper_authors]
+            for authors in paper_authors:
+                if '...' in authors:
+                    authors.pop()
+            crawl_dic['paper_authors'] = paper_authors
+            paper_confs = [paper_info[val+1] for val in range(0, len(paper_info)-1, 2)]
+            crawl_dic['paper_confs'] = paper_confs
+            #print(paper_authors, paper_confs)
+        return crawl_dic
