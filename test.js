@@ -68,7 +68,7 @@ switch(API) {
                     "speaker": {
                         "name": "Steve",
                         "univ": "KAIST",
-                        "email": "Steve@email.com"
+                        "speakerEmail": "Steve@email.com"
                     },  
                     "poster_image": "imageimage" 
                 }       
@@ -140,10 +140,13 @@ switch(API) {
         url = "account/register"
         postData = JSON.stringify(
             {
+                "Request": "Sign_up",
                 "User": {
-                    "id": makeid(), 
-                    "email": makeid()+"@kaist.ac.kr", 
-                    "pw_hash": "password@"
+                    "id": "mustafa",
+                    "email": "myaldiz@kaist.ac.kr",
+                    "pw_hash": "XXA83jd3kljsdf",
+                    "type": "normal",	// or admin
+                    "ip": "143.248.143.29"
                 }
             }
         );

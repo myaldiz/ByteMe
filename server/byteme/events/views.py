@@ -170,29 +170,30 @@ def AddEvent(request):
         univ = json_speaker_univ
         )[0]
     
+    
     #This will create request for crawling, will take 5secs
     crawler.scholar_crawl_request(speaker)
 
     creater = login_userprofile
 
-    # get time and title to create a initial event
+    # # get time and title to create a initial event
     json_time  = request.data.get('Event').get("time")
     json_title = request.data.get('Event').get("title")
 
-    #create a new event
+    # #create a new event
     New_event = Event.objects.create(creater = creater, time = json_time, speaker = speaker, req = "add")
 
-    #make it becomes json and updatas the data
+    # #make it becomes json and updatas the data
     Event_json = EventSerializer(New_event, data = json_event)
 
-    #check if json valod
+    # #check if json valod
     if Event_json.is_valid():
         Event_json.save()
         Updated_Event_json = {"id": Event_json.data["identifier"], "title": json_title}
         return_json  = {"Response":"Add_Event", "Events":Updated_Event_json, "status": "processing"}
         return Response(return_json, status = status.HTTP_202_ACCEPTED)
     
-    return Response(Event_json.data, status = status.HTTP_400_BAD_REQUEST)
+    return Response("{}", status = status.HTTP_400_BAD_REQUEST)
 
 #API
 @api_view(['POST'])
