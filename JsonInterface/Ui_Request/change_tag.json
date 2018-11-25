@@ -1,0 +1,15 @@
+{
+    "Request": "change_tag",
+    "Tags":
+    [
+        {
+            "name":"abc",
+        },
+        {
+            "name":"def",
+        },
+        {
+            "name":"hij",
+        }
+    ]
+}
