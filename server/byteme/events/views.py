@@ -169,6 +169,9 @@ def AddEvent(request):
         speakerEmail = json_speaker_email, 
         univ = json_speaker_univ
         )[0]
+    
+    #This will create request for crawling, will take 5secs
+    crawler.scholar_crawl_request(speaker)
 
     creater = login_userprofile
 
