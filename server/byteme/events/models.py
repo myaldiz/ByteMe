@@ -30,12 +30,10 @@ class Event(models.Model):
 	tagsReq = models.ManyToManyField(Tag, related_name="tagsReq", default = None)
 	speakerReq = models.ForeignKey(Speaker, on_delete=models.CASCADE, related_name="speakerReq", default = None, null=True)
 
-	rankingVector = models.DecimalField(decimal_places=0, max_digits=5, null=True)
-
 	#TODO poster_image
 
-	def generateRankingVector():
-		pass
+	def generateRankingScore(self, user):
+		return 0
 	
 	def __str__(self):
 		return "%s %s"%(self.creater, self.title)

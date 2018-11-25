@@ -165,6 +165,40 @@ switch(API) {
             'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
         }
         break;
+    
+    case "tags":
+        http_method = "GET";
+        url = "event/tag/browse/"+ID
+        _headers = {
+            'Content-Type': 'application/json',
+            'Content-Length': postData.length,
+            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+        }
+        break;   
+
+    case "changetags":
+        http_method = "POST";
+        url = "event/tag/change/"+ID
+        postData = JSON.stringify(
+            {
+                "Request": "change_tag",
+                "Tags":
+                [
+                    {
+                        "name":"Visualization",
+                    },
+                    {
+                        "name":"Graphic",
+                    }
+                ]
+            }
+        )
+        _headers = {
+            'Content-Type': 'application/json',
+            'Content-Length': postData.length,
+            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+        }
+        break;  
 }
 
 var options = {

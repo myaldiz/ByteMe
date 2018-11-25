@@ -10,8 +10,7 @@ urlpatterns = [
     url(r'^attend/(?P<event_id>[^/]+)', views.MarkEvent),
     url(r'^unattend/(?P<event_id>[^/]+)', views.UnMarkEvent),
     url(r'^tag/browse', views.BrowseTag),
-    url(r'^tag/select/(?P<event_id>[^/]+)', views.SelectTag),
-    url(r'^tag/remove/(?P<event_id>[^/]+)', views.RemoveTag),
+    url(r'^tag/change/(?P<event_id>[^/]+)', views.ChangeTag),
     url(r'^request/approvel/(?P<event_id>[^/]+)', views.ApproveEvent),
 ]
 

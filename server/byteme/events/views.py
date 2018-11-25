@@ -289,7 +289,7 @@ def UnMarkEvent(request, event_id):
 
 
 #API
-@api_view(['POST'])
+@api_view(['GET'])
 @authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((IsAuthenticated,))
 def BrowseTag(request):
@@ -308,40 +308,19 @@ def BrowseTag(request):
 @api_view(['POST'])
 @authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((IsAuthenticated,))
-def SelectTag(request, event_id):
+def ChangeTag(request, event_id):
     login_user = request.user #get login user
     login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile 
 
     event = Event.objects.get(identifier = event_id) #get the event 
+    event.tags.clear()
 
-    #TODO json interface?
-    json_tag = "computer science"
+    json_tags_list = request.data.get('Tags')
 
-    add_tag = Tag.objects.get(name = json_tag)
+    for tag in json_tags_list:
+        json_tag = tag["name"]
+        tag_object = Tag.objects.get(name = json_tag)
+        event.tags.add(tag_object)
 
-    # #add tag to the event
-    event.tags.add(add_tag)
     event.save()
-    return Response({"Response":"AddTag_event", "status": "accetped"}, status = status.HTTP_202_ACCEPTED)
-
-#API
-@api_view(['POST'])
-@authentication_classes((SessionAuthentication, BasicAuthentication))
-@permission_classes((IsAuthenticated,))
-def RemoveTag(request, event_id):
-    login_user = request.user #get login user
-    login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile 
-
-    event = Event.objects.get(identifier = event_id) #get the event 
-
-    #TODO json interface?
-    json_tag = "computer science"
-
-    #create or update the tag
-    remove_tag = Tag.objects.get(name = json_tag)
-
-    #add tag to the event
-    event.tags.remove(remove_tag)
-    event.save()
-
-    return Response({"Response":"RemoveTag_event", "status": "accetped"}, status = status.HTTP_202_ACCEPTED)
+    return Response({"Response":"Change_tags", "status": "accetped"}, status = status.HTTP_202_ACCEPTED)

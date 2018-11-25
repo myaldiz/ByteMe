@@ -1,15 +1,4 @@
 {
-    "Request": "change_tag",
-    "Tags":
-    [
-        {
-            "name":"abc",
-        },
-        {
-            "name":"def",
-        },
-        {
-            "name":"hij",
-        }
-    ]
+    "Response":"Change_tags",
+    "status":"accetped"
 }
