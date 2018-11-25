@@ -21,14 +21,6 @@ class Speaker(Person):
 
 class UserProfile(Person):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)	# email not saved in here
-	# userEmail = models.EmailField(unique=True)
-	# isAdmin = models.BooleanField()
-
-	def addTags(self, tags):
-		pass
-
-	def addAttend(self, identifier):
-		pass
 
 	def __str__(self):
 		return "%s"%(self.user)

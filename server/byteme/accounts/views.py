@@ -1,12 +1,9 @@
 from .models import UserProfile
+from .serializers import *
 
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
-
-from rest_framework.decorators import api_view
-
-from .models import UserProfile
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -24,12 +21,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 def GetProfile(request):
     login_user = request.user #get login user
     login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
-
-    content = {
-        'name': str(login_user),
-        'userEmail': login_user.email,  
-    }
-    return Response(content, status=status.HTTP_200_OK)
+    return Response(UserProfileSerializer(login_userprofile).data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def CreateProfile(request):

@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from .models import *
 from events.tag import Tag
 from events.tag_serializers import TagSerializer
 from django.contrib.auth.models import User
