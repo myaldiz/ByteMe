@@ -47,51 +47,67 @@ run `python manage.py runserver`
 1. Browse API:
 - Name: http://127.0.0.1:8000/api/v1/event/browse?type=   
 - Method: GET   
-- Description: Browse the events by user or all events    
+- Description: Browse the events by user (created or attending) or all events    
 - Parameters: type(String/required) value: attending or created or all          
 - Example: http://127.0.0.1:8000/api/v1/event/browse?type=all                   
-- Response:     
+- Response:   
+HTTP/1.0 200 OK
 ```
 {
+    "Response": "List_events",
     "Events": [
         {
-            "abstract": "Test",
-            "attendant": [
-                "Wuharlem",
-                "User1"
-            ],
-            "creater": "Wuharlem",
-            "details": "details",
-            "identifier": "6207788a-3530-40da-be59-8bc41124c750",
-            "place": "KAIST",
-            "req": "non",
-            "speaker": "Zombie",
-            "tags": [
-                "AI  9.87",
-                "ML  10.00",
-                "SE  0.87"
-            ],
-            "time": "2018-11-03 03:01:00+00:00",
-            "title": "test"
+            "identifier":"aebb68f1-b66e-4019-bde3-e4b09825850c",
+            "creater":"Wuharlem",
+            "attendant":["Wuharlem","Sting"],
+            "abstract":"Superman is the best",
+            "place":"Kaist",
+            "time":"2018-11-03 03:01:00.914138+00:00",
+            "title":"Superman",
+            "details":"Blabla",
+            "tags":["computer science  5.00"],
+            "req":"mod",
+            "speaker":{
+                "univ":"KAIST",
+                "dept":null,
+                "tags":[],
+                "name":"Harlem",
+                "speakerEmail":"Harlem@email.com",
+                "bio":null
+            },
+            "Iscore":69
         },
         {
-            "abstract": "BlaBla",
-            "attendant": [],
-            "creater": "Wuharlem",
-            "details": "Blabla",
-            "identifier": "ec8ba317-2c50-4298-a2d3-086b47541758",
-            "place": "Kaist",
-            "req": "non",
-            "speaker": "Zombie",
-            "tags": [],
-            "time": "2018-11-03 03:01:00.914138+00:00",
-            "title": "Zombies"
+            "identifier":"517a089c-d8eb-4551-b087-b47765ea04c8",
+            "creater":"Wuharlem",
+            "attendant":[],
+            "abstract":"BlaBla",
+            "place":"Kaist",
+            "time":"2018-11-03 03:01:00.914138+00:00",
+            "title":"Zombies",
+            "details":"Blabla",
+            "tags":[],
+            "req":"non",
+            "speaker":{
+                "univ":"KAIST",
+                "dept":null,
+                "tags":[],
+                "name":"Harlem",
+                "speakerEmail":"Harlem@email.com",
+                "bio":null
+            },
+            "Iscore":0
         }
-    ],
-    "Response": "List_events"
+    ]
 }
 ```        
-
+HTTP/1.0 400 Bad Request                
+```
+{       
+    "Response": "Add_Event",        
+    "status": reason 
+}       
+```
 
 2. Add Event API:
 - Name: http://127.0.0.1:8000/api/v1/event/add
@@ -100,24 +116,21 @@ run `python manage.py runserver`
 - Request json interface:  
 ```
 {    
-    "Request": "Add_event",     
-    "User": {   
-        "email": "user1@gmail.com",      
-        "pw_hash": "XXA83jd3kljsdf",    
-        "ip": "143.248.143.29"  
-    },      
-    "speaker":{     
-        "name": "Zombie"   
-    },      
+    "Request": "Add_event",
     "Event": {      
         "abstract": "BlaBla",       
         "place": "Kaist",       
         "time": "2018-11-03 03:01:00.914138+00:00",         
         "title": "Zombies",         
         "details": "Blabla",
+        "speaker": {
+            "name": "Steve",
+            "univ": "KAIST",
+            "speakerEmail": "Steve@email.com"
+        },
         "poster_image": "imageimage" 
     }       
-}     
+}
 ```
 - Response json interface:   
 HTTP/1.0 202 Accepted  
@@ -168,20 +181,20 @@ HTTP/1.0 202 Accepted
 ```
 {
     "Request": "Modify_event",
-    "User": {   
-        "email": "user1@gmail.com",      
-        "pw_hash": "XXA83jd3kljsdf",    
-        "ip": "143.248.143.29"  
-    },   
     "Event": {
-        "abstract": "Superman is the best",
-        "place": "Kaist",
-        "time": "2018-11-03 03:01:00.914138+00:00",         
-        "title": "Superman",         
-        "details": "Blabla",
-        "poster_image": "imageimage",
+        "abstract": "Superman is the best (optional)",
+        "place": "Kaist (optional",
+        "time": "2018-11-03 03:01:00.914138+00:00 (optional",         
+        "title": "Superman (optional",         
+        "details": "Blabla (optional",
+        "poster_image": "imageimage (optional",
+        "speaker": {
+            "name": "Harlem",
+            "univ": "KAIST",
+            "speakerEmail": "Harlem@email.com"
+        }
     }
-}   
+}
 ```             
 - Response json interface:     
 HTTP/1.0 202 Accepted        
@@ -189,12 +202,8 @@ HTTP/1.0 202 Accepted
 {
     "Response":"Modify_Event",
     "Events":{
-        "abstract":"Superman is the best",
-        "place":"Kaist",
-        "time":"2018-11-03 03:01:00.914138+00:00",
-        "title":"Superman",
-        "details":"Blabla",
-        "poster_image":"imageimage"
+        "id":"1f1eb026-78a3-4bc8-af81-0f21709efdfe",
+        "title":"Zombies"
     },
     "status":"processing"
 }
@@ -204,8 +213,7 @@ HTTP/1.0 202 Accepted
 - Name: http://127.0.0.1:8000/api/v1/event/request/approvel/<event_id>
 - Method: POST
 - Description: Request to delete the event      
-- Parameters: event_id(UUID/required)  *need to use form to pass!!
-- Example: http://127.0.0.1:8000/api/v1/event/request/approvel/aa6634c6-b10c-4339-b2c4-3e4baf49880e               
+- Parameters: event_id(UUID/required)  *need to use form to pass!!          
 - Response json interface:        
 ```
 HTTP/1.0 205 Reset Content  
@@ -213,12 +221,104 @@ HTTP/1.0 205 Reset Content
     "Response": "Delete_event",        
     "Event": {      
         "id": aa6634c6-b10c-4339-b2c4-3e4baf49880e,      
-        "title": "Zombies",     
+        "title": "Zombies",    // title only present in add and modify (not delete)
         "status": "wait"             
     }                   
 }           
 ```
 
+6. Sign Up request:
+- Name: http://127.0.0.1:8000/api/v1/account/register
+- Method: POST
+- Description: Request to create an account
+- Example: http://127.0.0.1:8000/api/v1/event/request/approvel/aa6634c6-b10c-4339-b2c4-3e4baf49880e               
+- Request json interface:        
+```
+{
+    "Request": "Sign_up",
+    "User": {
+        "id": "mustafa",
+        "email": "myaldiz@kaist.ac.kr",
+        "pw_hash": "XXA83jd3kljsdf",
+        "type": "normal",   // or admin
+    }
+}
+```
+- Response json interface:        
+```
+{
+    "Example_responses": [
+        {
+            "Response": "Sign_up",
+            "id": "mustafa",
+            "result": "accepted"
+        }
+    ]
+}
+```
+
+7. Login request:
+- Name: http://127.0.0.1:8000/api/v1/account/login/
+- Name: http://127.0.0.1:8000/api/v1/account/logout/
+- Method: GET
+- Description: Request to login
+- Parameter: idk
+- Response json interface:        
+```
+idk
+```
+
+8. Modify profile request:
+- Name: http://127.0.0.1:8000/api/v1/account/modify
+- Method: POST
+- Description: Request to modify department and tags for users              
+- Request json interface:        
+```
+{
+    "Request": "Modify_profile",
+    "dept": "Computer Science",
+    "tags":
+    [
+        {
+            "name": "Visualization"
+        },
+        {
+            "name": "Graphics"
+        },
+    ]
+}
+```
+- Response json interface:        
+```
+{
+    "Response": "Modify_profile",
+    "status": "accepted"
+}
+```
+
+9. Mark attend request:
+- Name: http://127.0.0.1:8000/api/v1/event/attend/<event_id>
+- Method: POST
+- Description: Request to modify department and tags for users              
+- Response json interface:        
+```
+{
+    "Response":"Mark_event",
+    "status":"accepted"
+}
+```
+
+10. Unmark attend request:
+- Name: http://127.0.0.1:8000/api/v1/event/unattend/<event_id>
+- Method: POST
+- Description: Request to modify department and tags for users              
+- Response json interface:        
+```
+{
+    "Response":"Unmark_event",
+    "status":"accepted"
+}
+```
 
 -----
 ### Model
