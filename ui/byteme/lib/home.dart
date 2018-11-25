@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 import 'browse.dart';
 import 'manage.dart';
 import 'attending.dart';
-
-class Tag{
-  Tag(this.name);
-  final name;
-}
+import 'profile.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,15 +13,12 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  List<Tag> allTags;
-  List<Tag> selectedTags;
-
   List<Widget> _bodies = [
     ManagePage(),
     BrowsePage(),
     AttendingPage(),
+    ProfilePage(),
   ];
-
 
   int _currentIndex = 1;
   // Widget customBar;
@@ -34,13 +27,24 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.shifting,
           items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.assignment_turned_in), title: Text("Manage")),
+                backgroundColor: Theme.of(context).primaryColor,
+                icon: Icon(Icons.event_note),
+                title: Text("Manage")),
             BottomNavigationBarItem(
-                icon: Icon(Icons.search), title: Text("Events")),
+                backgroundColor: Theme.of(context).primaryColor,
+                icon: Icon(Icons.list),
+                title: Text("Events")),
             BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_today), title: Text("Attending"))
+                backgroundColor: Theme.of(context).primaryColor,
+                icon: Icon(Icons.calendar_today),
+                title: Text("Attending")),
+            BottomNavigationBarItem(
+                backgroundColor: Theme.of(context).primaryColor,
+                icon: Icon(Icons.person),
+                title: Text("Profile")),
           ],
           currentIndex: _currentIndex,
           onTap: (index) {

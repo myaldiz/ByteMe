@@ -39,8 +39,6 @@ class MyCustomFormState extends State<MyCustomForm> {
         child: Form(
           key: _formKey,
           child: ListView(
-            // crossAxisAlignment: CrossAxisAlignment.center,
-            // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
                 decoration: InputDecoration(hintText: "Title"),

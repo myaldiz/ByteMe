@@ -43,9 +43,7 @@ class MyCustomFormState extends State<MyCustomForm> {
         margin: EdgeInsets.all(15.0),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
             children: <Widget>[
               TextFormField(
                 decoration:
