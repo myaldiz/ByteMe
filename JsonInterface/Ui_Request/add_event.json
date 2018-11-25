@@ -11,7 +11,11 @@
         "time": "2018-11-03 03:01:00.914138+00:00",         
         "title": "Zombies",         
         "details": "Blabla",
-        "speaker": "Steve",   
+        "speaker": {
+            "name": "Steve",
+            "univ": "KAIST",
+            "speakerEmail": "Steve@email.com"
+        },
         "poster_image": "imageimage" 
     }       
 }
