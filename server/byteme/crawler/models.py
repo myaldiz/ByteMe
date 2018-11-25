@@ -299,10 +299,10 @@ class Crawler:
             cur_scholar = self.scholar_q.get()
             scholar_dic = self.crawl_scholar(cur_scholar)
             if scholar_dic != {}:
-                self.update_scholar_info(cur_scholar, scholar_dic)
                 if 'field_of_study' in scholar_dic.keys():
-                    self.update_tag_info(scholar_dic['field_of_study'])
-                print(scholar_dic)
+                    tag_objects = self.update_tag_info(scholar_dic['field_of_study'])
+                    scholar_dic['tags'] = tag_objects
+                self.update_scholar_info(cur_scholar, scholar_dic)
             time.sleep(self.scholar_sleep)
         print("Finished crawling :(")
 
@@ -317,12 +317,19 @@ class Crawler:
 
 
     def update_scholar_info(self, scholar, dic):
+        print('Entered Scholar Update')
         try:
             scholar.name = str(dic['name'])
             scholar.univ = str(dic['association'])
             scholar.h_index = int(dic['citations'][2])
             scholar.i_index = int(dic['citations'][4])
             scholar.citations = int(dic['citations'][0])
+            print('Will add keys')
+            if 'tags' in dic.keys():
+                for key in dic['tags']:
+                    #print(type(key))
+                    scholar.tags.add(key)
+            print('Added keys to scholar')
             scholar.save()
         except KeyError:
             print('There is key error')
@@ -332,10 +339,11 @@ class Crawler:
 
 
     def update_tag_info(self, tags):
-        print('Entered tag info addition', tags)
+        #print('Entered tag info addition', tags)
+        tag_objects = []
         for tag in tags:
-            Tag.objects.update_or_create(name=str(tag))
-        
+            tag_objects.append(Tag.objects.update_or_create(name=str(tag))[0])
+        return tag_objects
 
     def parse_scholar_id(self, in_str):
         idx1 = in_str.find('citations?user') + 14
@@ -512,5 +520,8 @@ class Crawler:
         except Exception:
             print('Failed finding paper author or confs')
             
+        ##Dont forget to remove this after
+        #crawl_dic['soup'] = soup
+
         return crawl_dic
 

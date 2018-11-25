@@ -4,16 +4,16 @@ from events.tag import Tag
 # TODO: import classes from events app
 
 class Person(models.Model):
-	univ = models.CharField(max_length=100, null=True)
-	dept = models.CharField(max_length=100, null=True)
+	univ = models.CharField(max_length=100, null=True, default='KAIST')
+	dept = models.CharField(max_length=100, null=True, default='Computer Science')
 	tags = models.ManyToManyField(Tag, default = None)
 
 	class Meta:
 		abstract = True
 
 class Speaker(Person): 
-	name = models.CharField(max_length=100)
-	speakerEmail = models.EmailField(unique=True, null=True)
+	name = models.CharField(max_length=100, blank=False)
+	speakerEmail = models.EmailField(unique=True, blank=False)
 	bio = models.TextField(null=True)
 	is_crawled = models.BooleanField(default=False)
 	h_index = models.IntegerField(default=0)
@@ -35,4 +35,4 @@ class UserProfile(Person):
 		pass
 
 	def __str__(self):
-		return "%s"%(self.user)
+		return "%s, %s"%(self.user, self.univ)
