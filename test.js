@@ -1,8 +1,8 @@
 var http     = require("http");
 var querystring = require('querystring');
 
-const username = process.argv[2]
-const password = process.argv[3]
+const username = process.argv[2] 
+const password = process.argv[3] 
 const API  = process.argv[4]; // API
 const ID   = process.argv[5]; // ID
 const _req = process.argv[6]; // req 
@@ -58,16 +58,14 @@ switch(API) {
                     "email": "user1@gmail.com",      
                     "pw_hash": "XXA83jd3kljsdf",    
                     "ip": "143.248.143.29"  
-                },      
-                "speaker":{     
-                    "name": "Zombie"   
-                },      
+                },        
                 "Event": {      
                     "abstract": "BlaBla",       
                     "place": "Kaist",       
                     "time": "2018-11-03 03:01:00.914138+00:00",         
                     "title": "Zombies",         
                     "details": "Blabla",
+                    "speaker": "Steve",   
                     "poster_image": "imageimage" 
                 }       
             }
@@ -99,7 +97,7 @@ switch(API) {
                     "email": "user1@gmail.com",      
                     "pw_hash": "XXA83jd3kljsdf",    
                     "ip": "143.248.143.29"  
-                },   
+                },    
                 "Event": {
                     "abstract": "Superman is the best",
                     "place": "Kaist",
@@ -107,6 +105,7 @@ switch(API) {
                     "title": "Superman",         
                     "details": "Blabla",
                     "poster_image": "imageimage",
+                    "speaker": "Harlem"
                 }
             }
         )
@@ -119,7 +118,7 @@ switch(API) {
 
     case "approve":
         http_method = "POST";
-        url = "request/approvel/"+ID;
+        url = "event/request/approvel/"+ID;
         postData = querystring.stringify({req: _req});
         _headers = {
             'Content-Type': 'application/x-www-form-urlencoded',

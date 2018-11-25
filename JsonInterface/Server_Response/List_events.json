@@ -1,41 +1,71 @@
 {
-    "Response": "List_events",
-    "Events": [
+    "Response":"List_events",
+    "Events":
+    [
         {
-            "Event": {
-                "id": 123,
-                "abstract": "BlaBla",
-                "place": "KAIST",
-                "time": "09:30 June 26th",
-                "title": "Zombies",
-                "poster_image": "imageimage",
-                "department": "CS",
-                "speaker": "Dr. Who"
-            }
+            "identifier":"aebb68f1-b66e-4019-bde3-e4b09825850c",
+            "creater":"Wuharlem",
+            "attendant":["Wuharlem","Sting"],
+            "abstract":"Superman is the best",
+            "place":"Kaist",
+            "time":"2018-11-03 03:01:00.914138+00:00",
+            "title":"Superman",
+            "details":"Blabla",
+            "tags":["computer science  5.00"],
+            "req":"mod",
+            "speaker":"Zombie"
         },
         {
-            "Event": {
-                "id": 123,
-                "abstract": "BlaBla",
-                "place": "KAIST",
-                "time": "09:30 June 26th",
-                "title": "Zombies",
-                "poster_image": "imageimage",
-                "department": "CS",
-                "speaker": "Dr. Who"
-            }
+            "identifier":"517a089c-d8eb-4551-b087-b47765ea04c8",
+            "creater":"Wuharlem",
+            "attendant":[],
+            "abstract":"BlaBla",
+            "place":"Kaist",
+            "time":"2018-11-03 03:01:00.914138+00:00",
+            "title":"Zombies",
+            "details":"Blabla",
+            "tags":[],
+            "req":"non",
+            "speaker":"Zombie"
         },
         {
-            "Event": {
-                "id": 123,
-                "abstract": "BlaBla",
-                "place": "KAIST",
-                "time": "09:30 June 26th",
-                "title": "Zombies",
-                "poster_image": "imageimage",
-                "department": "CS",
-                "speaker": "Dr. Who"
-            }
+            "identifier":"322d8419-d531-4a85-a13b-c5caeabd3c7a",
+            "creater":"Wuharlem",
+            "attendant":[],
+            "abstract":"BlaBla",
+            "place":"Kaist",
+            "time":"2018-11-03 03:01:00.914138+00:00",
+            "title":"Zombies",
+            "details":"Blabla",
+            "tags":[],
+            "req":"non",
+            "speaker":"Steve"
+        },
+        {
+            "identifier":"ac6b0aa1-715c-4399-9814-19399f44a10d",
+            "creater":"Wuharlem",
+            "attendant":[],
+            "abstract":"BlaBla",
+            "place":"Kaist",
+            "time":"2018-11-03 03:01:00.914138+00:00",
+            "title":"Zombies",
+            "details":"Blabla",
+            "tags":[],
+            "req":"non",
+            "speaker":"Steve"
+        },
+        {
+            "identifier":"1f1eb026-78a3-4bc8-af81-0f21709efdfe",
+            "creater":"Sting",
+            "attendant":[],
+            "abstract":"BlaBla",
+            "place":"Kaist",
+            "time":"2018-11-03 03:01:00.914138+00:00",
+            "title":"Zombies",
+            "details":"Blabla",
+            "tags":[],
+            "req":"non",
+            "speaker":"Steve"
         }
     ]
 }
