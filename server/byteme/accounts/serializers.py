@@ -22,4 +22,4 @@ class SpeakerSerializer(PersonSerializer):
 class UserProfileSerializer(PersonSerializer):
     user = UserSerializer(required =False, allow_null=True)
     # userEmail = serializers.EmailField(required=False, allow_blank=True, max_length=100)
-    isAdmin = serializers.BooleanField(required=False, allow_null=True)
+    # isAdmin = serializers.BooleanField(required=False, allow_null=True)

@@ -4,6 +4,7 @@
     	"id": "mustafa",
         "email": "myaldiz@kaist.ac.kr",
         "pw_hash": "XXA83jd3kljsdf",
+        "type": "normal",	// or admin
         "ip": "143.248.143.29"
     }
 }
