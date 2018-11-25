@@ -13,7 +13,7 @@ class Person(models.Model):
 
 class Speaker(Person):
 	name = models.CharField(max_length=50)
-	speakerEmail = models.EmailField(unique=True, null=True)
+	speakerEmail = models.EmailField(primary_key = True, unique=True)
 	bio = models.TextField(null=True)
 
 	def __str__(self):

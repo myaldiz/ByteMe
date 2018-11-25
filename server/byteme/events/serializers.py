@@ -15,7 +15,7 @@ class EventSerializer(serializers.Serializer):
     details    = serializers.CharField(required = False, allow_blank=True, max_length=100)
     tags       = serializers.StringRelatedField(required = False, allow_null = True, many = True)
     req        = serializers.CharField(required = False, allow_blank=True, max_length=100)
-    speaker    = serializers.CharField(required = False, allow_blank=True, max_length=100)
+    speaker    = SpeakerSerializer(required = False)
     #TODO poster_image
 
 
@@ -26,11 +26,9 @@ class EventSerializer(serializers.Serializer):
         instance.timeReq     = validated_data.get('time'    , instance.timeReq)
         instance.titleReq    = validated_data.get('title'   , instance.titleReq)
         instance.detailsReq  = validated_data.get('details' , instance.detailsReq)
-
-        json_speaker = str(validated_data.get('speaker' , instance.speakerReq))
-        if json_speaker:
-            Speaker.objects.update_or_create(name = json_speaker)
-            instance.speakerReq  = Speaker.objects.get(name = json_speaker) 
+        if "speaker" in validated_data:
+            speaker_data         = validated_data.pop('speaker')
+            instance.speakerReq  = Speaker.objects.update_or_create(**speaker_data)[0]
 
         if instance.req == "non":
             

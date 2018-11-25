@@ -65,7 +65,11 @@ switch(API) {
                     "time": "2018-11-03 03:01:00.914138+00:00",         
                     "title": "Zombies",         
                     "details": "Blabla",
-                    "speaker": "Steve",   
+                    "speaker": {
+                        "name": "Steve",
+                        "univ": "KAIST",
+                        "email": "Steve@email.com"
+                    },  
                     "poster_image": "imageimage" 
                 }       
             }
@@ -105,7 +109,11 @@ switch(API) {
                     "title": "Superman",         
                     "details": "Blabla",
                     "poster_image": "imageimage",
-                    "speaker": "Harlem"
+                    "speaker": {
+                        "name": "Harlem",
+                        "univ": "KAIST",
+                        "speakerEmail": "Harlem@email.com"
+                    },  
                 }
             }
         )
@@ -199,6 +207,23 @@ switch(API) {
             'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
         }
         break;  
+    
+    case "profile":
+        http_method = "GET";
+        url = "account/profile"
+        _headers = {
+            'Content-Type': 'application/json',
+            'Content-Length': postData.length,
+            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+        }
+        break;   
+        
+    case "signin":
+        break;  
+        
+    case "signout":
+        break;  
+
 }
 
 var options = {

@@ -103,6 +103,7 @@ def approveEventChange(ID, req):
             event.timeReq	  = None
             event.titleReq	  = None
             event.detailsReq  = None
+            event.speakerReq  = None
             event.save()
             return event
         else:
@@ -151,15 +152,21 @@ def AddEvent(request):
     try:
         json_event   = request.data.get('Event')
         json_speaker = request.data.get('Event').get('speaker')
+        json_speaker_email = json_speaker.get('speakerEmail')
+        json_speaker_name  = json_speaker.get('name')
+        json_speaker_univ  = json_speaker.get('univ')
+
 
     except : 
         return Response({"Response":"Add_Event", "status": "Please check the response json"}, status=status.HTTP_400_BAD_REQUEST)
 
-    # create or update a speaker
-    Speaker.objects.update_or_create(name = json_speaker)
-
     # get the speaker and creater
-    speaker = Speaker.objects.get(name = json_speaker)
+    speaker = Speaker.objects.update_or_create(
+        name = json_speaker_name, 
+        speakerEmail = json_speaker_email, 
+        univ = json_speaker_univ
+        )[0]
+
     creater = login_userprofile
 
     # get time and title to create a initial event

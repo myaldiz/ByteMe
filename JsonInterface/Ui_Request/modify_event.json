@@ -12,6 +12,10 @@
         "title": "Superman (optional",         
         "details": "Blabla (optional",
         "poster_image": "imageimage (optional",
-        "speaker": "Harlem (optional"
+        "speaker": {
+            "name": "Harlem",
+            "univ": "KAIST",
+            "speakerEmail": "Harlem@email.com"
+        }
     }
 }
