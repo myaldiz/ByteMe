@@ -11,10 +11,14 @@ class Person(models.Model):
 	class Meta:
 		abstract = True
 
-class Speaker(Person):
-	name = models.CharField(max_length=50)
+class Speaker(Person): 
+	name = models.CharField(max_length=100)
 	speakerEmail = models.EmailField(unique=True, null=True)
 	bio = models.TextField(null=True)
+	is_crawled = models.BooleanField(default=False)
+	h_index = models.IntegerField(defult=0)
+	i_index = models.IntegerField(defult=0)
+	citations = models.IntegerField(defult=0)
 
 	def __str__(self):
 		return "%s"%(self.name)

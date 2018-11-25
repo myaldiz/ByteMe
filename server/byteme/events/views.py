@@ -17,6 +17,9 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import TemplateHTMLRenderer
 
+from crawler.models import Crawler
+crawler = Crawler()
+
 # helper fuction
 def queryEvent(user, event_type):
     """
@@ -153,6 +156,7 @@ def AddEvent(request):
 
     # get the speaker and creater
     speaker = Speaker.objects.get(name = json_speaker)
+    crawler.scholar_crawl_request(speaker)
     creater = login_userprofile
 
     # get time and title to create a initial event
@@ -179,6 +183,10 @@ def AddEvent(request):
 @authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((IsAuthenticated,))
 def ModifyEvent(request, event_id):
+    """
+    Dont forget to call crawling method!
+    It will check if speaker crawled or not, dont worry :) ..
+    """
     login_user = request.user #get login user
     login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
 
@@ -187,6 +195,7 @@ def ModifyEvent(request, event_id):
     except : 
         return Response({"Response":"Modify_Event", "status": "Please check response json"}, status=status.HTTP_400_BAD_REQUEST)
 
+    
     # get the creater
     creater = login_userprofile
     
