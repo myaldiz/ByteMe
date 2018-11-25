@@ -325,14 +325,16 @@ class Crawler:
             scholar.citations = int(dic['citations'][0])
             scholar.save()
         except KeyError:
-            pass
+            print('There is key error')
         except Exception:
-            pass
+            print('There is another exception')
             
 
 
     def update_tag_info(self, tags):
         print('Entered tag info addition', tags)
+        for tag in tags:
+            
         return None
         
 
@@ -512,3 +514,4 @@ class Crawler:
             print('Failed finding paper author or confs')
             
         return crawl_dic
+
