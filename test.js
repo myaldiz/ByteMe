@@ -68,7 +68,7 @@ switch(API) {
                     "speaker": {
                         "name": "Steve",
                         "univ": "KAIST",
-                        "speakerEmail": "Steve@email.com"
+                        "speakerEmail": "Steveeee@email.com"
                     },  
                     "poster_image": "imageimage" 
                 }       
@@ -220,12 +220,53 @@ switch(API) {
             'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
         }
         break;   
+    
+    case "updateprofile":
+        http_method = "POST"
+        url = "account/modify"
+        postData = JSON.stringify(
+            {
+                "Request": "Modify_profile",
+                "dept": "Computer Science",
+                "tags":
+                [
+                    {
+                        "name": "Visualization"
+                    },
+                    {
+                        "name": "Graphics"
+                    },
+                ]
+            }
+        )
+        _headers = {
+            'Content-Type': 'application/json',
+            'Content-Length': postData.length,
+            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+        }
+        break;
         
     case "signin":
+        http_method = "POST"
+        url = "account/login"
+        _headers = {
+            'Content-Type': 'application/json',
+            'Content-Length': postData.length,
+            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+        }
         break;  
         
     case "signout":
+        http_method = "POST"
+        url = "account/logout"
+        _headers = {
+            'Content-Type': 'application/json',
+            'Content-Length': postData.length,
+            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+        }
         break;  
+    
+    
 
 }
 

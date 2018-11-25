@@ -84,7 +84,8 @@
                 "speakerEmail":"Harlem@email.com",
                 "bio":null
             },
-            "Iscore": 0
+            "Iscore": 0,
+            "attendingStatus":true
         },
         {
             "identifier":"1f1eb026-78a3-4bc8-af81-0f21709efdfe",

@@ -69,9 +69,11 @@ def CreateProfile(request):
 def ModifyProfile(request):
     login_user = request.user
     login_userprofile = UserProfile.objects.get(user=login_user)
+    login_userprofile.tags.clear()
 
     json_dept = request.data.get('dept')
     json_tags_list = request.data.get('tags')
+	
     login_userprofile.dept = json_dept
     for tag in json_tags_list:
         json_tag = tag["name"]

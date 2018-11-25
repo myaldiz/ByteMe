@@ -140,6 +140,10 @@ def BrowseEvent(request):
     Event_List = queryEvent(login_userprofile, event_type)
     Event_json = EventSerializer(Event_List, many = True)
 
+    for event in Event_json.data:
+        event['Iscore'] = 0
+        event['attendingStatus'] = str(login_userprofile) in event['attendant']
+
     # Event_json.data.
     return_json  = {"Response":"List_events", "Events":Event_json.data}
     return Response(return_json, status=status.HTTP_200_OK)
@@ -164,15 +168,18 @@ def AddEvent(request):
         return Response({"Response":"Add_Event", "status": "Please check the response json"}, status=status.HTTP_400_BAD_REQUEST)
 
     # get the speaker and creater
-    speaker = Speaker.objects.update_or_create(
-        name = json_speaker_name, 
-        speakerEmail = json_speaker_email, 
-        univ = json_speaker_univ
-        )[0]
+    try: 
+        speaker = Speaker.objects.update_or_create(
+            name = json_speaker_name, 
+            speakerEmail = json_speaker_email, 
+            univ = json_speaker_univ
+            )[0]
+    except:
+        return Response({"Response":"Add_Event", "status": "Email already used!"}, status=status.HTTP_400_BAD_REQUEST)
     
     
     #This will create request for crawling, will take 5secs
-    crawler.scholar_crawl_request(speaker)
+    # crawler.scholar_crawl_request(speaker) 
 
     creater = login_userprofile
 
