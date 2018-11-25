@@ -315,7 +315,7 @@ def ChangeTag(request, event_id):
     event = Event.objects.get(identifier = event_id) #get the event 
     event.tags.clear()
 
-    json_tags_list = request.data.get('Tags')
+    json_tags_list = request.data.get('tags')
 
     for tag in json_tags_list:
         json_tag = tag["name"]
@@ -324,3 +324,21 @@ def ChangeTag(request, event_id):
 
     event.save()
     return Response({"Response":"Change_tags", "status": "accetped"}, status = status.HTTP_202_ACCEPTED)
+
+@api_view(['POST'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
+def ModifyProfile(request):
+    login_user = request.user
+    login_userprofile = UserProfile.objects.get(user=login_user)
+
+    json_dept = request.data.get('dept')
+    json_tags_list = request.data.get('tags')
+    login_userprofile.dept = json_dept
+    for tag in json_tags_list:
+        json_tag = tag["name"]
+        tag_object = Tag.objects.get(name=json_tag)
+        login_userprofile.tags.add(tag_object)
+
+    login_userprofile.save()
+    return Response({"Response": "Modify_profile", "status": "accepted"}, status=status.HTTP_202_ACCEPTED)
