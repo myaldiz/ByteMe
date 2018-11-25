@@ -307,7 +307,7 @@ def BrowseTag(request):
 @api_view(['POST'])
 @authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((IsAuthenticated,))
-def AddTag(request, event_id):
+def SelectTag(request, event_id):
     login_user = request.user #get login user
     login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile 
 

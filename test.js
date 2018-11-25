@@ -145,6 +145,26 @@ switch(API) {
             'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
         }
         break;
+    
+    case "attend":
+        http_method = "POST";
+        url = "event/attend/"+ID
+        _headers = {
+            'Content-Type': 'application/json',
+            'Content-Length': postData.length,
+            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+        }
+        break;
+
+    case "unattend":
+        http_method = "POST";
+        url = "event/unattend/"+ID
+        _headers = {
+            'Content-Type': 'application/json',
+            'Content-Length': postData.length,
+            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+        }
+        break;
 }
 
 var options = {
