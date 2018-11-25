@@ -87,3 +87,4 @@ def ModifyProfile(request):
 
     login_userprofile.save()
     return Response({"Response": "Modify_profile", "status": "accepted"}, status=status.HTTP_202_ACCEPTED)
+    
