@@ -11,7 +11,7 @@ Future<List<Widget>> createCardListAttending(String url) async {
     Uri.encodeFull(url)
     );
   Map<String, dynamic> data = json.decode(response.body);
-  // if data["Events"].length == 0 { draft of code for solving infinite looping in attend.dart
+  // if data["Events"].length == 0 { draft of code for solving infinite looping in attend.dart. Add it to all "creates" for safety
   //   card = Card("No attending events")
   //   newCardsList.add(card);
   //   return newCardsList;
