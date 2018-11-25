@@ -15,6 +15,7 @@ class EventSerializer(serializers.Serializer):
     details    = serializers.CharField(required = False, allow_blank=True, max_length=100)
     tags       = serializers.StringRelatedField(required = False, allow_null = True, many = True)
     req        = serializers.CharField(required = False, allow_blank=True, max_length=100)
+    Iscore     = serializers.DecimalField(required = False, allow_null = True, max_digits = 3, decimal_places = 3)
     speaker    = SpeakerSerializer(required = False)
     #TODO poster_image
 

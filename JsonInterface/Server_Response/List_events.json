@@ -20,7 +20,8 @@
                 "name":"Harlem",
                 "speakerEmail":"Harlem@email.com",
                 "bio":null
-            }
+            },
+            "Iscore": 0
         },
         {
             "identifier":"517a089c-d8eb-4551-b087-b47765ea04c8",
@@ -40,7 +41,8 @@
                 "name":"Harlem",
                 "speakerEmail":"Harlem@email.com",
                 "bio":null
-            }
+            },
+            "Iscore": 0
         },
         {
             "identifier":"322d8419-d531-4a85-a13b-c5caeabd3c7a",
@@ -60,7 +62,8 @@
                 "name":"Harlem",
                 "speakerEmail":"Harlem@email.com",
                 "bio":null
-            }
+            },
+            "Iscore": 0
         },
         {
             "identifier":"ac6b0aa1-715c-4399-9814-19399f44a10d",
@@ -80,7 +83,8 @@
                 "name":"Harlem",
                 "speakerEmail":"Harlem@email.com",
                 "bio":null
-            }
+            },
+            "Iscore": 0
         },
         {
             "identifier":"1f1eb026-78a3-4bc8-af81-0f21709efdfe",
@@ -100,7 +104,8 @@
                 "name":"Harlem",
                 "speakerEmail":"Harlem@email.com",
                 "bio":null
-            }
+            },
+            "Iscore": 0
         }
     ]
 }

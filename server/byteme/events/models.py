@@ -33,6 +33,7 @@ class Event(models.Model):
 	#TODO poster_image
 
 	def generateRankingScore(self, user):
+		print(self)
 		return 0
 	
 	def __str__(self):
