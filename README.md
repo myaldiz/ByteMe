@@ -241,7 +241,6 @@ HTTP/1.0 205 Reset Content
         "email": "myaldiz@kaist.ac.kr",
         "pw_hash": "XXA83jd3kljsdf",
         "type": "normal",   // or admin
-        "ip": "143.248.143.29"
     }
 }
 ```
@@ -259,36 +258,14 @@ HTTP/1.0 205 Reset Content
 ```
 
 7. Login request:
-- Name: http://127.0.0.1:8000/api/v1/account/profile
+- Name: http://127.0.0.1:8000/api/v1/account/login/
+- Name: http://127.0.0.1:8000/api/v1/account/logout/
 - Method: GET
-- Description: Request to login              
-- Request json interface:        
-```
-{
-    "Request": "Login",
-    "User": {
-        "email": "myaldiz@kaist.ac.kr",
-        "pw_hash": "XXA83jd3kljsdf",
-        "ip": "143.248.143.29"
-    }
-}
-```
+- Description: Request to login
+- Parameter: idk
 - Response json interface:        
 ```
-{
-    "Example_responses": [
-        {
-            "Response": "Login",
-            "id": "mustafa",
-            "result": "denied"
-        },
-        {
-            "Response": "Login",
-            "id": "mustafa",
-            "result": "accepted" 
-        }
-    ]
-}
+idk
 ```
 
 8. Modify profile request:
