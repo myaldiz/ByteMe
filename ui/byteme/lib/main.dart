@@ -7,15 +7,17 @@ import 'home.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  final appTheme = ThemeData(
-    primaryColor: Colors.blue
-  );
+  // final appTheme = ThemeData(
+  //   primaryColor: Colors.blueGrey,
+  //   canvasColor: Colors.white,
+  //   secondaryHeaderColor: Colors.deepOrange,
+  // );
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ByteMe',
-      theme: appTheme,
+      // theme: appTheme,
       initialRoute: '/login',
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) => HomePage(),

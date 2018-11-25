@@ -1,44 +1,8 @@
 {
-    "Response": "Modify_event",
-    "Events": [
-        {
-            "Event": {
-                "id": 123,
-                "abstract": "BlaBla",
-                "place": "KAIST",
-                "time": "09:30 June 26th",
-                "title": "Zombies",
-                "poster_image": "imageimage",
-                "department": "CS",
-                "speaker": "Dr. Who",
-                "status": "Processing"
-            }
+    "Response":"Modify_Event",
+    "Events":{
+        "id":"1f1eb026-78a3-4bc8-af81-0f21709efdfe",
+        "title":"Zombies"
         },
-        {
-            "Event": {
-                "id": 123,
-                "abstract": "BlaBla",
-                "place": "KAIST",
-                "time": "09:30 June 26th",
-                "title": "Zombies",
-                "poster_image": "imageimage",
-                "department": "CS",
-                "speaker": "Dr. Who",
-                "status": "Accepted" 
-            }   
-        },
-        {
-            "Event": {
-                "id": 123,
-                "abstract": "BlaBla",
-                "place": "KAIST",
-                "time": "09:30 June 26th",
-                "title": "Zombies",
-                "poster_image": "imageimage",
-                "department": "CS",
-                "speaker": "Dr. Who",
-                "status": "Rejected" 
-            }   
-        }
-    ]
-}
+        "status":"processing"
+    }

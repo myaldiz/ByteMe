@@ -35,11 +35,12 @@ class MyCustomFormState extends State<MyCustomForm> {
     // Build a Form widget using the _formKey we created above
     return Container(
         margin: EdgeInsets.all(15.0),
+        // padding: EdgeInsets.symmetric(vertical: 50.0),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
                 decoration: InputDecoration(hintText: "Title"),

@@ -1,6 +1,8 @@
 from .models import Event
 from accounts.models import UserProfile
 from accounts.models import Speaker
+from .tag import Tag
+from .tag_serializers import TagSerializer
 from .serializers import EventSerializer
 
 from django.http import JsonResponse
@@ -15,6 +17,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser
 from rest_framework.renderers import TemplateHTMLRenderer
 
 from crawler.models import Crawler
@@ -77,6 +80,10 @@ def approveEventChange(ID, req):
             if event.detailsReq != None:
                 event.details = event.detailsReq
                 event.detailsReq  = None
+            
+            if event.speakerReq != None:
+                event.speaker = event.speakerReq
+                event.speakerReq  = None
 
             event.req = "non"
             event.save()
@@ -145,8 +152,8 @@ def AddEvent(request):
     login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
 
     try:
-        json_speaker = request.data.get('speaker').get('name')
         json_event   = request.data.get('Event')
+        json_speaker = request.data.get('Event').get('speaker')
 
     except : 
         return Response({"Response":"Add_Event", "status": "Please check the response json"}, status=status.HTTP_400_BAD_REQUEST)
@@ -172,8 +179,8 @@ def AddEvent(request):
     #check if json valod
     if Event_json.is_valid():
         Event_json.save()
-        Updated_Event_json = {"id": Event_json.data["identifier"], "title": json_title, "status": "processing"}
-        return_json  = {"Response":"Add_Event", "Events":Updated_Event_json}
+        Updated_Event_json = {"id": Event_json.data["identifier"], "title": json_title}
+        return_json  = {"Response":"Add_Event", "Events":Updated_Event_json, "status": "processing"}
         return Response(return_json, status = status.HTTP_202_ACCEPTED)
     
     return Response(Event_json.data, status = status.HTTP_400_BAD_REQUEST)
@@ -196,17 +203,15 @@ def ModifyEvent(request, event_id):
         return Response({"Response":"Modify_Event", "status": "Please check response json"}, status=status.HTTP_400_BAD_REQUEST)
 
     
-    # get the creater
-    creater = login_userprofile
-    
     # get the certain event
-    event = Event.objects.get(creater = creater)
+    event = Event.objects.get(identifier = event_id)
     Event_json = EventSerializer(event, data = json_event)
 
     #check if json valod
     if Event_json.is_valid():
         Event_json.save()
-        return_json  = {"Response":"Modify_Event", "Events": json_event, "status": "processing"}
+        Updated_Event_json = {"id": Event_json.data["identifier"], "title": Event_json.data["title"]}
+        return_json  = {"Response":"Modify_Event", "Events": Updated_Event_json, "status": "processing"}
         return Response(return_json, status = status.HTTP_202_ACCEPTED)
 
     return Response(Event_json.data, status = status.HTTP_400_BAD_REQUEST)
@@ -232,7 +237,7 @@ def DeleteEvent(request, event_id):
 #API
 @api_view(['POST'])
 @authentication_classes((SessionAuthentication, BasicAuthentication))
-@permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated, IsAdminUser))
 def ApproveEvent(request, event_id):
     login_user = request.user #get login user
     login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
@@ -290,3 +295,40 @@ def UnMarkEvent(request, event_id):
 
     return Response({"Response":"Unmark_event", "status": "accepted"}, status = status.HTTP_200_OK)
 
+
+#API
+@api_view(['GET'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
+def BrowseTag(request):
+    login_user = request.user #get login user
+    login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile 
+
+    tag_List = Tag.objects.all() #get all tags
+
+    tag_json = TagSerializer(tag_List, many = True)
+
+    return Response({"Response":"Browse_tags", "Tags": tag_json.data}, status = status.HTTP_200_OK)
+
+
+
+#API
+@api_view(['POST'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
+def ChangeTag(request, event_id):
+    login_user = request.user #get login user
+    login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile 
+
+    event = Event.objects.get(identifier = event_id) #get the event 
+    event.tags.clear()
+
+    json_tags_list = request.data.get('Tags')
+
+    for tag in json_tags_list:
+        json_tag = tag["name"]
+        tag_object = Tag.objects.get(name = json_tag)
+        event.tags.add(tag_object)
+
+    event.save()
+    return Response({"Response":"Change_tags", "status": "accetped"}, status = status.HTTP_202_ACCEPTED)

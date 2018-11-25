@@ -1,17 +1,17 @@
 {
     "Request": "Modify_event",
-    "User": {
-        "email": "myaldiz@kaist.ac.kr",
-        "pw_hash": "XXA83jd3kljsdf",
-        "ip": "143.248.143.29"
-    },
+    "User": {   
+        "email": "user1@gmail.com",      
+        "pw_hash": "XXA83jd3kljsdf",    
+        "ip": "143.248.143.29"  
+    },    
     "Event": {
-        "id": 123,
-        "abstract": "BlaBla",
-        "place": "Kaist",
-        "time": "26-JUN-02 09:39:16.78",
-        "title": "Zombies",
-        "details": "Blabla",
-        "poster_image": "imageimage"
+        "abstract": "Superman is the best (optional)",
+        "place": "Kaist (optional",
+        "time": "2018-11-03 03:01:00.914138+00:00 (optional",         
+        "title": "Superman (optional",         
+        "details": "Blabla (optional",
+        "poster_image": "imageimage (optional",
+        "speaker": "Harlem (optional"
     }
 }

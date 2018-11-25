@@ -1,28 +1,8 @@
 {
-    "Example_responses": [
-        {
-            "Response": "Add_event",
-            "Event": {
-                "id": 123,
-                "title": "Zombies",
-                "status": "wait" 
-            }
-        },
-        {
-            "Response": "Add_event",
-            "Event": {
-                "id": 123,
-                "title": "Zombies",
-                "status": "accepted" 
-            }   
-        },
-        {
-            "Response": "Add_event",
-            "Event": {
-                "id": 123,
-                "title": "Zombies",
-                "status": "denied" 
-            }   
+    "Response":"Add_Event",
+    "Events":{
+        "id":"1f1eb026-78a3-4bc8-af81-0f21709efdfe",
+        "title":"Zombies",
+        "status":"processing"
         }
-    ]
-}
+    }
