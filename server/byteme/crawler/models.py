@@ -1,10 +1,9 @@
 #from pytrends.request import TrendReq
-from django.db import models
+#from django.db import models
 import threading, time, queue
 
 import requests
 from bs4 import BeautifulSoup
-
 
 import os
 import random
@@ -14,6 +13,8 @@ import math
 from http.cookiejar import LWPCookieJar
 from urllib.request import Request, urlopen
 from urllib.parse import quote_plus, urlparse, parse_qs
+from events.tag import Tag
+
 try:
     from bs4 import BeautifulSoup
     is_bs4 = True
@@ -280,7 +281,7 @@ class GoogleSearch:
                 url = self.url_next_page_num % vars()
 
 class Crawler:
-    def __init__(self, trend_sleep=5, scholar_sleep=5):
+    def __init__(self, trend_sleep=2, scholar_sleep=2):
         self.scholar_sleep = scholar_sleep
         self.scholar_q = queue.Queue()
         self.scholar_thread = None
@@ -295,19 +296,54 @@ class Crawler:
 
     def scholar_worker(self):    
         while not self.scholar_q.empty():
-            cur_tag = self.scholar_q.get()
-            self.crawl_scholar(cur_tag)
+            cur_scholar = self.scholar_q.get()
+            scholar_dic = self.crawl_scholar(cur_scholar)
+            if scholar_dic != {}:
+                if 'field_of_study' in scholar_dic.keys():
+                    tag_objects = self.update_tag_info(scholar_dic['field_of_study'])
+                    scholar_dic['tags'] = tag_objects
+                self.update_scholar_info(cur_scholar, scholar_dic)
             time.sleep(self.scholar_sleep)
         print("Finished crawling :(")
 
             
-    def scholar_crawl_request(self, tag):
+    def scholar_crawl_request(self, scholar):
         if not self.is_workers_working(): #Tag worker is not working
-            self.scholar_q.put(tag)
+            self.scholar_q.put(scholar)
             self.scholar_thread = threading.Timer(self.scholar_sleep, self.scholar_worker)
             self.scholar_thread.start()
         else:
-            self.scholar_q.put(tag)
+            self.scholar_q.put(scholar)
+
+
+    def update_scholar_info(self, scholar, dic):
+        print('Entered Scholar Update')
+        try:
+            scholar.name = str(dic['name'])
+            scholar.univ = str(dic['association'])
+            scholar.h_index = int(dic['citations'][2])
+            scholar.i_index = int(dic['citations'][4])
+            scholar.citations = int(dic['citations'][0])
+            print('Will add keys')
+            if 'tags' in dic.keys():
+                for key in dic['tags']:
+                    #print(type(key))
+                    scholar.tags.add(key)
+            print('Added keys to scholar')
+            scholar.save()
+        except KeyError:
+            print('There is key error')
+        except Exception:
+            print('There is another exception')
+            
+
+
+    def update_tag_info(self, tags):
+        #print('Entered tag info addition', tags)
+        tag_objects = []
+        for tag in tags:
+            tag_objects.append(Tag.objects.update_or_create(name=str(tag))[0])
+        return tag_objects
 
     def parse_scholar_id(self, in_str):
         idx1 = in_str.find('citations?user') + 14
@@ -359,92 +395,133 @@ class Crawler:
         page = requests.get(link)
         soup = BeautifulSoup(page.content, 'html.parser')
 
-        #Start crawling
-        name = soup.find_all('div', id='gsc_prf_in')
-        name = list(name[0].children)[0]
-        crawl_dic['name'] = name
-        #print(name, '\n')
+        try:
+            #Start crawling
+            name = soup.find_all('div', id='gsc_prf_in')
+            name = list(name[0].children)[0]
+            crawl_dic['name'] = name
+            #print(name, '\n')
+        except Exception:
+            print('Failed finding name')
 
-        association = soup.find_all('a', class_='gsc_prf_ila')
-        if not association == []:
-            association = list(association[0].children)[0]
-            if association.lower() == 'homepage':
-                association = ''
-            else:
-                crawl_dic['association'] = association
-                #print(association, '\n')
+        try:
+            association = soup.find_all('a', class_='gsc_prf_ila')
+            if not association == []:
+                association = list(association[0].children)[0]
+                if association.lower() == 'homepage':
+                    association = ''
+                else:
+                    crawl_dic['association'] = association
+                    #print(association, '\n')
+        except Exception:
+            print('Failed finding association')
 
-        title = soup.find_all('div', class_="gsc_prf_il")
-        if not title == []:
-            title = list(title[0].children)[0]
-            crawl_dic['title'] = title
-        #    print(title, '\n')
+        try:
+            title = soup.find_all('div', class_="gsc_prf_il")
+            if not title == []:
+                title = list(title[0].children)[0]
+                crawl_dic['title'] = title
+            #    print(title, '\n')
+        except Exception:
+            print('Failed finding title')
 
-        citations = soup.find_all('td', class_='gsc_rsb_std')
-        if not citations == []:
-            citations = [list(cite.children)[0] for cite in citations]
-            crawl_dic['citations'] = citations
 
-        citation_str = ['All Citations', 'Citations since 2013',
+        try:
+            citations = soup.find_all('td', class_='gsc_rsb_std')
+            if not citations == []:
+                citations = [list(cite.children)[0] for cite in citations]
+                crawl_dic['citations'] = citations
+                citation_str = ['All Citations', 'Citations since 2013',
                     'All h-index', 'h-index since 2013',
                     'All i10-index', 'i10 index since 2013']
-        crawl_dic['citation_str'] = citation_str
-
-        years_cite = soup.find_all('span', class_='gsc_g_t')
-        if not years_cite == []:
-            years_cite = [list(cite.children)[0] for cite in years_cite]
-            crawl_dic['years_cite'] = years_cite
-
-        yearly_cite = soup.find_all('span', class_='gsc_g_al')
-        if not yearly_cite == []:
-            yearly_cite = [list(cite.children)[0] for cite in yearly_cite]
-            crawl_dic['yearly_cite'] = yearly_cite
+                crawl_dic['citation_str'] = citation_str
+        except Exception:
+            print('Failed finding citations')
+        
+        try:
+            years_cite = soup.find_all('span', class_='gsc_g_t')
+            if not years_cite == []:
+                years_cite = [list(cite.children)[0] for cite in years_cite]
+                crawl_dic['years_cite'] = years_cite
+        except Exception:
+            print('Failed finding citation year')
+            
+        try:
+            yearly_cite = soup.find_all('span', class_='gsc_g_al')
+            if not yearly_cite == []:
+                yearly_cite = [list(cite.children)[0] for cite in yearly_cite]
+                crawl_dic['yearly_cite'] = yearly_cite
+        except Exception:
+            print('Failed finding yearly citations')
 
         #print(citation_str, '\n', citations, '\n', years_cite, '\n', yearly_cite)
 
-        field_of_study = soup.find_all('a', class_="gsc_prf_inta gs_ibl")
-        if not field_of_study == []:
-            field_of_study = [list(cite.children)[0] for cite in field_of_study]
-            crawl_dic['field_of_study'] = field_of_study
-        #    print(field_of_study)
+        try:
+            field_of_study = soup.find_all('a', class_="gsc_prf_inta gs_ibl")
+            if not field_of_study == []:
+                field_of_study = [list(cite.children)[0] for cite in field_of_study]
+                crawl_dic['field_of_study'] = field_of_study
+            #    print(field_of_study)
+        except Exception:
+            print('Failed finding field of study')
 
-        co_auth_info = soup.find_all('span', class_='gsc_rsb_a_desc')
-        if not co_auth_info == []:
-            co_auth_info = [list(cite.children)[0] for cite in co_auth_info]
-            co_authors = [list(cite.children)[0] for cite in co_auth_info]
-            crawl_dic['co_authors'] = co_authors
-            co_auth_id = [self.parse_scholar_id(cite.attrs['href']) for cite in co_auth_info]
-            crawl_dic['co_auth_id'] = co_auth_id
-        #    print(co_authors, co_auth_id)
+        try:
+            co_auth_info = soup.find_all('span', class_='gsc_rsb_a_desc')
+            if not co_auth_info == []:
+                co_auth_info = [list(cite.children)[0] for cite in co_auth_info]
+                co_authors = [list(cite.children)[0] for cite in co_auth_info]
+                crawl_dic['co_authors'] = co_authors
+                co_auth_id = [self.parse_scholar_id(cite.attrs['href']) for cite in co_auth_info]
+                crawl_dic['co_auth_id'] = co_auth_id
+            #    print(co_authors, co_auth_id)
+        except Exception:
+            print('Failed finding co_authors')
 
-        paper_names = soup.find_all('a', class_='gsc_a_at')
-        if not paper_names == []:
-            paper_names = [list(cite.children)[0] for cite in paper_names]
-            crawl_dic['paper_names'] = paper_names
-        #    print(paper_names)
+        try:
+            paper_names = soup.find_all('a', class_='gsc_a_at')
+            if not paper_names == []:
+                paper_names = [list(cite.children)[0] for cite in paper_names]
+                crawl_dic['paper_names'] = paper_names
+            #    print(paper_names)
+        except Exception:
+            print('Failed finding paper_names')
+        
+        try:
+            cite_num = soup.find_all('a', class_='gsc_a_ac gs_ibl')
+            if not cite_num == []:
+                cite_num = [list(cite.children)[0] for cite in cite_num]
+                crawl_dic['cite_num'] = cite_num
+            #    print(cite_num)
+        except Exception:
+            print('Failed finding citation numbers')
 
-        cite_num = soup.find_all('a', class_='gsc_a_ac gs_ibl')
-        if not cite_num == []:
-            cite_num = [list(cite.children)[0] for cite in cite_num]
-            crawl_dic['cite_num'] = cite_num
-        #    print(cite_num)
+        try:
+            paper_year = soup.find_all('span', class_='gs_oph')
+            if not paper_year == []:
+                paper_year = [list(cite.children)[0][2:] for cite in paper_year]
+                crawl_dic['paper_year'] = paper_year
+                #print(paper_year)
+        except Exception:
+            print('Failed finding paper years')    
+        
+        try:
+            paper_info = soup.find_all('div', class_='gs_gray')
+            if not paper_info == []:
+                paper_info = [list(cite.children)[0] for cite in paper_info]
+                paper_authors = [paper_info[val] for val in range(0, len(paper_info), 2)]
+                paper_authors = [authors.split(', ') for authors in paper_authors]
+                for authors in paper_authors:
+                    if '...' in authors:
+                        authors.pop()
+                crawl_dic['paper_authors'] = paper_authors
+                paper_confs = [paper_info[val+1] for val in range(0, len(paper_info)-1, 2)]
+                crawl_dic['paper_confs'] = paper_confs
+                #print(paper_authors, paper_confs)
+        except Exception:
+            print('Failed finding paper author or confs')
+            
+        ##Dont forget to remove this after
+        #crawl_dic['soup'] = soup
 
-        paper_year = soup.find_all('span', class_='gs_oph')
-        if not paper_year == []:
-            paper_year = [list(cite.children)[0][2:] for cite in paper_year]
-            crawl_dic['paper_year'] = paper_year
-            #print(paper_year)
-
-        paper_info = soup.find_all('div', class_='gs_gray')
-        if not paper_info == []:
-            paper_info = [list(cite.children)[0] for cite in paper_info]
-            paper_authors = [paper_info[val] for val in range(0, len(paper_info), 2)]
-            paper_authors = [authors.split(', ') for authors in paper_authors]
-            for authors in paper_authors:
-                if '...' in authors:
-                    authors.pop()
-            crawl_dic['paper_authors'] = paper_authors
-            paper_confs = [paper_info[val+1] for val in range(0, len(paper_info)-1, 2)]
-            crawl_dic['paper_confs'] = paper_confs
-            #print(paper_authors, paper_confs)
         return crawl_dic
+
