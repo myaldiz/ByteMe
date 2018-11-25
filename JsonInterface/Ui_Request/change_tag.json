@@ -1,4 +1,13 @@
 {
-    "Response":"Change_tags",
-    "status":"accetped"
+    "Request":"Change_tags",
+    "tags":
+    [
+        {
+            "name":"Visualization"
+        },
+        
+        {
+            "name":"Graphic"
+        }
+    ]
 }

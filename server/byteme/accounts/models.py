@@ -22,7 +22,7 @@ class Speaker(Person):
 class UserProfile(Person):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)	# email not saved in here
 	# userEmail = models.EmailField(unique=True)
-	isAdmin = models.BooleanField()
+	# isAdmin = models.BooleanField()
 
 	def addTags(self, tags):
 		pass

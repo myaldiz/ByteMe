@@ -37,6 +37,7 @@ def CreateProfile(request):
 		json_username = request.data.get("User").get("id")
 		json_email = request.data.get("User").get("email")
 		json_password = request.data.get("User").get("pw_hash")
+		json_type = request.data.get("User").get("type")
 	except : 
 		return Response({"Response":"Sign_up", "status": "Please check the request json"}, status=status.HTTP_400_BAD_REQUEST)
 	
@@ -49,12 +50,18 @@ def CreateProfile(request):
 		return Response({"Response":"Sign_up", "status": "Not a KAIST email"}, status=status.HTTP_400_BAD_REQUEST)
 
 	try:
-		user = User.objects.create_user(json_username, password=json_password, email= json_email)
+		if json_type == "admin":
+			staff = True
+		elif json_type == "normal":
+			staff = False
+		else:
+			return Response({"Response":"Sign_up", "status": "Not a valid user type"}, status=status.HTTP_400_BAD_REQUEST)
+		user = User.objects.create_user(json_username, password=json_password, email= json_email, is_staff=staff)
 	except:
 		return Response({"Response":"Sign_up", "status": "Not a unique username"}, status=status.HTTP_400_BAD_REQUEST)
 
 	try:
-		person = UserProfile.objects.create(user=user, isAdmin=False)
+		person = UserProfile.objects.create(user=user''', isAdmin=False''')
 	except:
 		user.delete()
 		return Response({"Response":"Sign_up", "status": "Not a unique email"}, status=status.HTTP_400_BAD_REQUEST)
