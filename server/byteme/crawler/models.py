@@ -308,12 +308,16 @@ class Crawler:
 
             
     def scholar_crawl_request(self, scholar):
-        if not self.is_workers_working(): #Tag worker is not working
-            self.scholar_q.put(scholar)
-            self.scholar_thread = threading.Timer(self.scholar_sleep, self.scholar_worker)
-            self.scholar_thread.start()
+        if not scholar.is_crawled:
+            print('scholar is not crawled')
+            if not self.is_workers_working(): #Tag worker is not working
+                self.scholar_q.put(scholar)
+                self.scholar_thread = threading.Timer(self.scholar_sleep, self.scholar_worker)
+                self.scholar_thread.start()
+            else:
+                self.scholar_q.put(scholar)
         else:
-            self.scholar_q.put(scholar)
+            print('scholar is already crawled')
 
 
     def update_scholar_info(self, scholar, dic):
@@ -329,8 +333,9 @@ class Crawler:
                 for key in dic['tags']:
                     #print(type(key))
                     scholar.tags.add(key)
-            print('Added keys to scholar')
+            scholar.is_crawled = True
             scholar.save()
+            print('Succesfully added keys to scholar')
         except KeyError:
             print('There is key error')
         except Exception:
@@ -364,7 +369,8 @@ class Crawler:
     def is_scholar_link(self, link):
         out = "scholar.google" in link and 'citations?user' in link
         return out
-    
+
+
     def crawl_univ_scholar_ids(self, univ_name, stop=100):
         #Refine google scholar user id's
         matches = set()
@@ -374,13 +380,15 @@ class Crawler:
                 s_id = self.parse_scholar_id(j)
                 matches.add(s_id)
         return matches
-    
+
+
     def crawl_single_scholar_id(self, scholar):
         google_query = self.create_google_query(scholar)
         for j in self.google.search(google_query, stop=10):
             if self.is_scholar_link(j):
                 return self.parse_scholar_id(j)
         return None
+
 
     def crawl_scholar(self, scholar):
         crawl_dic = {}
