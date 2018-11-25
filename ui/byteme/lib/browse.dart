@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:byteme/createCardListBrowse.dart';
 import 'utils.dart';
 
 class BrowsePage extends StatefulWidget {
@@ -59,7 +59,7 @@ class BrowsePageState extends State<BrowsePage> {
 
   Future<void> updateList() async {
     List<Widget> newList =
-        await createCardList('JsonInterface/Server_Response/List_events.json');
+        await createCardListBrowse('http://@127.0.0.1:8000/api/v1/event/browse?type=all');
     setState(() {
       _cardsList = newList;
     });

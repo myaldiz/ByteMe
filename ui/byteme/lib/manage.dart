@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'createCardListModify.dart';
 import 'utils.dart';
 import './AddEventViewController.dart';
 
@@ -58,7 +58,7 @@ class ManagePageState extends State<ManagePage> {
 
   Future<void> updateList() async {
     List<Widget> newList =
-        await createCardList('JsonInterface/Server_Response/modify_event.json');
+        await createCardListModify('JsonInterface/Server_Response/modify_event.json');
     setState(() {
       _cardsList = newList;
     });
