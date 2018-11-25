@@ -334,8 +334,7 @@ class Crawler:
     def update_tag_info(self, tags):
         print('Entered tag info addition', tags)
         for tag in tags:
-            
-        return None
+            Tag.objects.update_or_create(name=str(tag))
         
 
     def parse_scholar_id(self, in_str):
