@@ -61,7 +61,7 @@ def CreateProfile(request):
 		return Response({"Response":"Sign_up", "status": "Not a unique username"}, status=status.HTTP_400_BAD_REQUEST)
 
 	try:
-		person = UserProfile.objects.create(user=user''', isAdmin=False''')
+		person = UserProfile.objects.create(user=user)
 	except:
 		user.delete()
 		return Response({"Response":"Sign_up", "status": "Not a unique email"}, status=status.HTTP_400_BAD_REQUEST)

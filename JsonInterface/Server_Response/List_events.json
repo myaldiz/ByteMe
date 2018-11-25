@@ -13,7 +13,14 @@
             "details":"Blabla",
             "tags":["computer science  5.00"],
             "req":"mod",
-            "speaker":"Zombie"
+            "speaker":{
+                "univ":"KAIST",
+                "dept":null,
+                "tags":[],
+                "name":"Harlem",
+                "speakerEmail":"Harlem@email.com",
+                "bio":null
+            }
         },
         {
             "identifier":"517a089c-d8eb-4551-b087-b47765ea04c8",
@@ -26,7 +33,14 @@
             "details":"Blabla",
             "tags":[],
             "req":"non",
-            "speaker":"Zombie"
+            "speaker":{
+                "univ":"KAIST",
+                "dept":null,
+                "tags":[],
+                "name":"Harlem",
+                "speakerEmail":"Harlem@email.com",
+                "bio":null
+            }
         },
         {
             "identifier":"322d8419-d531-4a85-a13b-c5caeabd3c7a",
@@ -39,7 +53,14 @@
             "details":"Blabla",
             "tags":[],
             "req":"non",
-            "speaker":"Steve"
+            "speaker":{
+                "univ":"KAIST",
+                "dept":null,
+                "tags":[],
+                "name":"Harlem",
+                "speakerEmail":"Harlem@email.com",
+                "bio":null
+            }
         },
         {
             "identifier":"ac6b0aa1-715c-4399-9814-19399f44a10d",
@@ -52,7 +73,14 @@
             "details":"Blabla",
             "tags":[],
             "req":"non",
-            "speaker":"Steve"
+            "speaker":{
+                "univ":"KAIST",
+                "dept":null,
+                "tags":[],
+                "name":"Harlem",
+                "speakerEmail":"Harlem@email.com",
+                "bio":null
+            }
         },
         {
             "identifier":"1f1eb026-78a3-4bc8-af81-0f21709efdfe",
@@ -65,7 +93,14 @@
             "details":"Blabla",
             "tags":[],
             "req":"non",
-            "speaker":"Steve"
+            "speaker":{
+                "univ":"KAIST",
+                "dept":null,
+                "tags":[],
+                "name":"Harlem",
+                "speakerEmail":"Harlem@email.com",
+                "bio":null
+            }
         }
     ]
 }
