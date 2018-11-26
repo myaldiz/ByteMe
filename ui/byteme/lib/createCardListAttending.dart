@@ -1,0 +1,24 @@
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:convert';
+import './CustomCard.dart';
+import 'package:http/http.dart' as http; 
+
+Future<List<Widget>> createCardListAttending(String url) async {
+  List<Widget> newCardsList = [];
+  Widget card;
+  http.Response response = await http.get(
+    Uri.encodeFull(url)
+    );
+  Map<String, dynamic> data = json.decode(response.body);
+  // if data["Events"].length == 0 { draft of code for solving infinite looping in attend.dart. Add it to all "creates" for safety
+  //   card = Card("No attending events")
+  //   newCardsList.add(card);
+  //   return newCardsList;
+  // }
+  data["Events"].forEach((event) {
+    card = CustomCard(event);
+    newCardsList.add(card);
+  });
+  return newCardsList;
+}
