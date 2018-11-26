@@ -46,7 +46,7 @@ class ReviewedCustomCard extends StatelessWidget {
             ])),
             Container(
               child: Column(children: <Widget>[
-                Text(event["status"]),
+                Text(event["type"]),
                 Row(children: <Widget>[
                   IconButton(
                     icon: Icon(Icons.edit),

@@ -22,7 +22,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.renderers import TemplateHTMLRenderer
 
 from crawler.models import Crawler
-crawler = Crawler()
+# crawler = Crawler()
 
 # helper fuction
 def queryEvent(user, event_type):
@@ -128,7 +128,7 @@ def approveEventChange(ID, req):
 #@permission_classes((IsAuthenticated,))
 def BrowseEvent(request):
     #login_user = request.user #get login user
-    login_user = User.objects.get(email="Wuharlem@kaist.ac.kr")
+    login_user = User.objects.get(email="myaldiz@kaist.ac.kr")
     login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
     
     try:

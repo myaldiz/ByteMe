@@ -16,11 +16,12 @@ from rest_framework.renderers import TemplateHTMLRenderer
 
 # Create your views here.
 @api_view(['GET'])
-@authentication_classes((SessionAuthentication, BasicAuthentication))
-@permission_classes((IsAuthenticated,))
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def GetProfile(request):
     login_user = request.user #get login user
-    login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
+    # login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
+    login_userprofile = UserProfile.objects.get(email = "myaldiz@kaist.ac.kr")
     return Response(UserProfileSerializer(login_userprofile).data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
