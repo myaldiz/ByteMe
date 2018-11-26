@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import './EventDetailsViewController.dart';
 
 class CustomCard extends StatelessWidget {
@@ -60,7 +61,7 @@ class CustomCard extends StatelessWidget {
                     Text(representScore(event["Iscore"]))
                   ],
                 ),
-                AttendingButton(event["attendingStatus"]),
+                AttendingButton(event["attendingStatus"], event["identifier"]),
               ]))
             ],
           )),
@@ -70,18 +71,20 @@ class CustomCard extends StatelessWidget {
 
 class AttendingButton extends StatefulWidget{
   final bool attendingStatus;
-  AttendingButton(this.attendingStatus);
+  final String id;
+  AttendingButton(this.attendingStatus, this.id);
 
   @override
     State<StatefulWidget> createState() {
       // TODO: implement createState
-      return AttendingButtonState(attendingStatus);
+      return AttendingButtonState(attendingStatus, id);
     }
 }
 
 class AttendingButtonState extends State<AttendingButton> {
   bool attendingStatus;
-  AttendingButtonState(this.attendingStatus);
+  final String id;
+  AttendingButtonState(this.attendingStatus, this.id);
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +93,7 @@ class AttendingButtonState extends State<AttendingButton> {
         child: Text("Attend"),
         color: Colors.greenAccent,
         onPressed: () {
+          http.post("http://127.0.0.1:8000/api/v1/event/attend/" + id);
           //TODO: Send request to attend and request updated event list
           setState((){
             attendingStatus = false;
@@ -102,6 +106,7 @@ class AttendingButtonState extends State<AttendingButton> {
         color: Colors.redAccent,
         onPressed: () {
           //TODO: Send request to unattend
+          http.post("http://myaldiz@kaist.ac.kr:XXA83jd3kljsdf@127.0.0.1:8000/api/v1/event/unattend/" + id);
           setState((){
           attendingStatus = true;
           });
