@@ -37,7 +37,7 @@ class ReviewedCustomCard extends StatelessWidget {
                 ),
               ),
               Text(
-                event["time"],
+                beautifyString(event["time"]),
                 style: TextStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.w100,
@@ -91,4 +91,13 @@ class ReviewedCustomCard extends StatelessWidget {
           ],
         ));
   }
+}
+
+String beautifyString(String date) {
+  var monthsAbbreviations = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var dt = DateTime.parse(date);
+  var hour = dt.hour.toString().length == 1 ? "0"+dt.hour.toString() : dt.hour.toString();
+  var minute = dt.minute.toString().length == 1 ? "0"+dt.minute.toString() : dt.minute.toString();
+  var str =  hour + ":" + minute + " " + dt.day.toString() + "-" + monthsAbbreviations[dt.month-1] + "-" + dt.year.toString();
+  return str;
 }
