@@ -57,7 +57,8 @@ class CustomCard extends StatelessWidget {
                     Icon(
                       Icons.star,
                     ),
-                    Text('8.7 / 10')
+                    // Text(representScore(event["Iscore"]))
+                    Text("8.2 / 10")
                   ],
                 ),
                 AttendingButton(true),
@@ -102,3 +103,8 @@ String beautifyString(String date) {
   var str =  hour + ":" + minute + " " + dt.day.toString() + "-" + monthsAbbreviations[dt.month-1] + "-" + dt.year.toString();
   return str;
 }
+
+// String representScore(double score) {
+//   // var scoreDouble = double.parse(score);
+//   return score.toStringAsFixed(1) +  "/ 10";
+// }

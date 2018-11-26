@@ -344,4 +344,6 @@ add modify delete browse and approve events
     mod [Event_ID]              Modift the event with Event_ID
     del [Event_ID]              Delete the event with Event_ID
     approve [Event_ID] [req]    Approve the event request with Event_ID (only Admin)
+
+
 <pre>

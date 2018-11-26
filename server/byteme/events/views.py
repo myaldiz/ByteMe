@@ -22,7 +22,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.renderers import TemplateHTMLRenderer
 
 from crawler.models import Crawler
-crawler = Crawler()
+# crawler = Crawler()
 
 # helper fuction
 def queryEvent(user, event_type):
