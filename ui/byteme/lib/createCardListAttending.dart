@@ -16,6 +16,21 @@ Future<List<Widget>> createCardListAttending(String url) async {
   //   newCardsList.add(card);
   //   return newCardsList;
   // }
+  if (data["Events"].isEmpty) {
+    card = Card(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [Text(
+        "No events found.",
+        style: TextStyle(
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+        ),
+      )]));
+      newCardsList.add(card);
+      return newCardsList;
+  }
   data["Events"].forEach((event) {
     card = CustomCard(event);
     newCardsList.add(card);
