@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'utils.dart';
+
 class ModifyEventViewController extends StatelessWidget {
   final Map<String, dynamic> event;
   ModifyEventViewController(this.event);
@@ -36,8 +38,39 @@ class MyCustomFormState extends State<MyCustomForm> {
   final Map<String, dynamic> event;
   MyCustomFormState(this.event);
 
+  DateTime dateTime;
+  String title, place, department, speakerName, speakerUni, speakerEmail;
+  String details, eventAbstract, imageURL;
+
   @override
   Widget build(BuildContext context) {
+    final _title = TextEditingController(
+      text: event["title"],
+    );
+    final _place = TextEditingController(
+      text: event["place"],
+    );
+    final _department = TextEditingController(
+      text: event["department"],
+    );
+    final _speakerName = TextEditingController(
+      text: event["speaker"]["name"],
+    );
+    final _speakerUni = TextEditingController(
+      text: event["speaker"]["univ"],
+    );
+    final _speakerEmail = TextEditingController(
+      text: event["speaker"]["speakerEmail"],
+    );
+    final _details = TextEditingController(
+      text: event["details"],
+    );
+    final _eventAbstract = TextEditingController(
+      text: event["poster_image"],
+    );
+    final _imageURL = TextEditingController(
+      text: event["abstract"],
+    );
     // Build a Form widget using the _formKey we created above
     return Container(
         margin: EdgeInsets.all(15.0),
@@ -46,29 +79,27 @@ class MyCustomFormState extends State<MyCustomForm> {
           child: ListView(
             children: <Widget>[
               TextFormField(
+                controller: _title,
                 decoration:
                     InputDecoration(hintText: "Title", labelText: "Title"),
-                initialValue: event["title"],
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
                   }
                 },
               ),
-              TextFormField(
-                decoration:
-                    InputDecoration(hintText: "Time", labelText: "Time"),
-                initialValue: event["time"],
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter information';
-                  }
+              DateTimeItem(
+                dateTime: DateTime.parse(event["time"]),
+                onChanged: (newTime) {
+                  setState(() {
+                    dateTime = newTime;
+                  });
                 },
               ),
               TextFormField(
+                controller: _place,
                 decoration:
                     InputDecoration(hintText: "Place", labelText: "Place"),
-                initialValue: event["place"],
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -76,9 +107,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
+                controller: _department,
                 decoration: InputDecoration(
                     hintText: "Department", labelText: "Department"),
-                initialValue: event["department"],
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -86,9 +117,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
+                controller: _speakerName,
                 decoration:
                     InputDecoration(hintText: "Speaker", labelText: "Speaker"),
-                initialValue: event["speaker"]["name"],
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -96,9 +127,40 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
+                controller: _speakerUni,
+                decoration: InputDecoration(
+                    hintText: "Speaker University",
+                    labelText: "Speaker University"),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter information';
+                  }
+                },
+              ),
+              TextFormField(
+                controller: _speakerEmail,
+                decoration: InputDecoration(
+                    hintText: "Speaker Email", labelText: "Speaker Email"),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter information';
+                  }
+                },
+              ),
+              TextFormField(
+                controller: _details,
+                decoration:
+                    InputDecoration(hintText: "Details", labelText: "Details"),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter information';
+                  }
+                },
+              ),
+              TextFormField(
+                controller: _imageURL,
                 decoration: InputDecoration(
                     hintText: "Image URL", labelText: "Image URL"),
-                initialValue: event["poster_image"],
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -106,9 +168,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
+                controller: _eventAbstract,
                 decoration: InputDecoration(
                     hintText: "Abstract", labelText: "Abstract"),
-                initialValue: event["abstract"],
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';

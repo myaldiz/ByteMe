@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import './EventDetailsViewController.dart';
+import 'package:intl/intl.dart';
+import 'token.dart';
+
 
 class CustomCard extends StatelessWidget {
   final Map<String, dynamic> event;
@@ -44,7 +47,8 @@ class CustomCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  beautifyString(event["time"]),
+                  // beautifyString(event["time"]),
+                  DateFormat('EEE, d-MMM-yy, hh:mm').format(DateTime.parse(event["time"])),
                   style: TextStyle(
                     fontSize: 14.0,
                     fontWeight: FontWeight.w100,
@@ -76,7 +80,6 @@ class AttendingButton extends StatefulWidget{
 
   @override
     State<StatefulWidget> createState() {
-      // TODO: implement createState
       return AttendingButtonState(attendingStatus, id);
     }
 }
@@ -93,8 +96,8 @@ class AttendingButtonState extends State<AttendingButton> {
         child: Text("Attend"),
         color: Colors.greenAccent,
         onPressed: () {
-          http.post("http://127.0.0.1:8000/api/v1/event/attend/" + id);
-          //TODO: Send request to attend and request updated event list
+          http.post("http://10.0.2.2:8000/api/v1/event/attend/" + id,
+          headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token " + token});
           setState((){
             attendingStatus = false;
          });
@@ -105,8 +108,8 @@ class AttendingButtonState extends State<AttendingButton> {
         child: Text("Un-Attend"),
         color: Colors.redAccent,
         onPressed: () {
-          //TODO: Send request to unattend
-          http.post("http://myaldiz@kaist.ac.kr:XXA83jd3kljsdf@127.0.0.1:8000/api/v1/event/unattend/" + id);
+          http.post("http://10.0.2.2:8000/api/v1/event/unattend/" + id,
+          headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token " + token});
           setState((){
           attendingStatus = true;
           });

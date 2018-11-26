@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'utils.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'token.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -23,10 +23,7 @@ class _LoginState extends State<LoginPage> {
           automaticallyImplyLeading: false,
           title: Text("Log In"),
         ),
-        body: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: mainWidgets(context))));
+        body: ListView(children: mainWidgets(context)));
   }
 
   Future<bool> authenticate() async {
@@ -40,7 +37,7 @@ class _LoginState extends State<LoginPage> {
     var tool = JsonEncoder();
     var json = tool.convert(data);
     // var json = JSON.encode(data);
-    await makeRequest(json);
+    bool acceptance = await makeRequest(json);
     // Map<String, dynamic> response =
     //     await getJson('JsonInterface/Server_Response/login.json');
     // String result = response["Example_responses"][1]["result"];
@@ -49,82 +46,101 @@ class _LoginState extends State<LoginPage> {
     // } else {
     //   return false;
     // }
-    return true;
+    return acceptance;
   }
 
-  Future<String> makeRequest(String json) async {
-    var response = await http.post(Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/api-token-auth/'), body: json, headers: {"content-type": "application/json", "accept": "application/json"});
-    print("=====================");
-    print(response.body);
-}
+  Future<bool> makeRequest(String postJson) async {
+    var response = await http.post(
+        Uri.encodeFull('http://10.0.2.2:8000/api/v1/account/api-token-auth/'),
+        body: postJson,
+        headers: {
+          "content-type": "application/json",
+          "accept": "application/json"
+        });
+    if (response.statusCode == 200) {
+      token = json.decode(response.body)["token"];
+    }
+    return response.statusCode == 200;
+  }
 
   mainWidgets(BuildContext context) {
     return <Widget>[
-      FlutterLogo(size: 50.0),
-      SizedBox(height: 50.0),
-      TextFormField(
-        controller: _email,
-        keyboardType: TextInputType.emailAddress,
-        autofocus: false,
-        decoration: InputDecoration(
-          hintText: 'Email',
-          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-        ),
-      ),
-      SizedBox(height: 20.0),
-      TextFormField(
-        controller: _password,
-        obscureText: true,
-        autofocus: false,
-        decoration: InputDecoration(
-          hintText: 'Password',
-          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-        ),
-      ),
-      SizedBox(height: 35.0),
-      RaisedButton(
-        color: Theme.of(context).primaryColor,
-        child: Text(
-          'Log In',
-          style: TextStyle(color: Colors.white),
-        ),
-        onPressed: () async {
-          if (await authenticate()) {
-            Navigator.of(context).popAndPushNamed('/');
-          } else {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                      content: Text("Login Failed!"),
-                      actions: <Widget>[
-                        RaisedButton(
-                            color: Theme.of(context).primaryColor,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'Try Again',
-                              style: TextStyle(color: Colors.white),
-                            ))
-                      ]);
-                });
-          }
-        },
-      ),
-      SizedBox(height: 7.0),
-      RaisedButton(
-        color: Theme.of(context).primaryColor,
-        child: Text(
-          'Sign Up',
-          style: TextStyle(color: Colors.white),
-        ),
-        onPressed: () async {
-          Navigator.of(context).pushNamed('/signup');
-        },
-      ),
+      SizedBox(height: 100.0),
+      FlutterLogo(size: 70.0),
+      Padding(
+          padding: EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 10.0),
+          child: TextFormField(
+            controller: _email,
+            keyboardType: TextInputType.emailAddress,
+            autofocus: false,
+            decoration: InputDecoration(
+              hintText: 'Email',
+              contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+            ),
+            onFieldSubmitted: (value){onSubmit();}
+          )),
+      Padding(
+          padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 40.0),
+          child: TextFormField(
+            controller: _password,
+            obscureText: true,
+            autofocus: false,
+            decoration: InputDecoration(
+              hintText: 'Password',
+              contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+            ),
+            onFieldSubmitted: (value){onSubmit();},
+          )),
+      Padding(
+          padding: EdgeInsets.symmetric(horizontal: 150.0),
+          child: RaisedButton(
+            color: Theme.of(context).primaryColor,
+            child: Text(
+              'Log In',
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: onSubmit,
+          )),
+      Padding(
+          padding: EdgeInsets.symmetric(horizontal: 150.0),
+          child: RaisedButton(
+            color: Theme.of(context).primaryColor,
+            child: Text(
+              'Sign Up',
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () async {
+              Navigator.of(context).pushNamed('/signup');
+            },
+          )),
     ];
+  }
+
+  void onSubmit() async{
+    if (await authenticate()) {
+      Navigator.of(context).popAndPushNamed('/');
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+                content: Text("Login Failed!"),
+                actions: <Widget>[
+                  RaisedButton(
+                      color: Theme.of(context).primaryColor,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'Try Again',
+                        style: TextStyle(color: Colors.white),
+                      ))
+                ]);
+          });
+    }
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:intl/intl.dart';
+
 // import './CustomCard.dart';
 // import './ReviewedCustomCard.dart';
 
@@ -46,13 +48,13 @@ class TagForm extends StatefulWidget {
 class _TagFormState extends State<TagForm> {
   List<Tag> selectedTags = [];
   List<Tag> allTags = [
-    Tag("1"),
-    Tag("2"),
-    Tag("3"),
-    Tag("4"),
-    Tag("5"),
-    Tag("6"),
-    Tag("7")
+    Tag("Tag1"),
+    Tag("Tag2"),
+    Tag("Tag3"),
+    Tag("Tag4"),
+    Tag("Tag5"),
+    Tag("Tag6"),
+    Tag("Tag7")
   ]; //TODO: Get list of tags from server
 
   @override
@@ -83,16 +85,19 @@ class _TagFormState extends State<TagForm> {
       ),
       actions: [
         RaisedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              widget.onSubmit(selectedTags);
-            },
-            child: Text("OK")),
+          child: Text("Apply"),
+          textColor: Theme.of(context).primaryTextTheme.button.color,
+          onPressed: () {
+            Navigator.of(context).pop();
+            widget.onSubmit(selectedTags);
+          },
+        ),
         RaisedButton(
+          textColor: Theme.of(context).primaryTextTheme.button.color,
+          child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("Cancel"),
         )
       ],
     );
@@ -113,13 +118,9 @@ class SortForm extends StatefulWidget {
 class _SortFormState extends State<SortForm> {
   Tag selectedSort;
   List<Tag> allTags = [
-    Tag("1"),
-    Tag("2"),
-    Tag("3"),
-    Tag("4"),
-    Tag("5"),
-    Tag("6"),
-    Tag("7")
+    Tag("By popularity"),
+    Tag("By Name"),
+    Tag("By Date"),
   ]; //TODO: Get list of tags from server
 
   @override
@@ -151,32 +152,35 @@ class _SortFormState extends State<SortForm> {
       ),
       actions: [
         RaisedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              widget.onSubmit(selectedSort);
-            },
-            child: Text("OK")),
+          textColor: Theme.of(context).primaryTextTheme.button.color,
+          child: Text("Apply"),
+          onPressed: () {
+            Navigator.of(context).pop();
+            widget.onSubmit(selectedSort);
+          },
+        ),
         RaisedButton(
+          textColor: Theme.of(context).primaryTextTheme.button.color,
+          child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("Cancel"),
         )
       ],
     );
   }
 }
 
-
 class DateTimeItem extends StatelessWidget {
   DateTimeItem({Key key, DateTime dateTime, @required this.onChanged})
       : assert(onChanged != null),
         date = dateTime == null
-            ? new DateTime.now()
-            : new DateTime(dateTime.year, dateTime.month, dateTime.day),
+            ? DateTime.now()
+            : DateTime(dateTime.year, dateTime.month, dateTime.day),
         time = dateTime == null
-            ? TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute)
-            : new TimeOfDay(hour: dateTime.hour, minute: dateTime.minute),
+            ? TimeOfDay(
+                hour: DateTime.now().hour, minute: DateTime.now().minute)
+            : TimeOfDay(hour: dateTime.hour, minute: dateTime.minute),
         super(key: key);
 
   final DateTime date;
@@ -185,21 +189,46 @@ class DateTimeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Row(
+    return Row(
       children: <Widget>[
-        new Expanded(
-          child: new InkWell(
+        Expanded(
+          child: InkWell(
             onTap: (() => _showDatePicker(context)),
-            child: new Padding(
-                padding: new EdgeInsets.symmetric(vertical: 8.0),
-                child: new Text(date.day.toString() + "-" + date.month.toString()+ "-" + date.year.toString()))),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 18.0),
+              child: Row(
+                children: [
+                  Text(
+                    DateFormat('EEEE, MMMM d').format(date),
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Icon(Icons.arrow_drop_down, color: Colors.black54),
+                ],
+              ),
+            ),
           ),
-        new InkWell(
-          onTap: (() => _showTimePicker(context)),
-          child: new Padding(
-              padding: new EdgeInsets.symmetric(vertical: 8.0),
-              child: new Text(time.hour.toString() + ":" + time.minute.toString())),
         ),
+        InkWell(
+          onTap: (() => _showTimePicker(context)),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 15.0),
+            child: Row(
+              children: <Widget>[
+                Text(
+                  '${time.format(context)}',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Icon(Icons.arrow_drop_down, color: Colors.black54),
+              ],
+            ),
+          ),
+        )
       ],
     );
   }
@@ -209,10 +238,10 @@ class DateTimeItem extends StatelessWidget {
         context: context,
         initialDate: date,
         firstDate: date.subtract(const Duration(days: 20000)),
-        lastDate: new DateTime.now());
+        lastDate: DateTime.now());
 
     if (dateTimePicked != null) {
-      onChanged(new DateTime(dateTimePicked.year, dateTimePicked.month,
+      onChanged(DateTime(dateTimePicked.year, dateTimePicked.month,
           dateTimePicked.day, time.hour, time.minute));
     }
   }
@@ -222,7 +251,7 @@ class DateTimeItem extends StatelessWidget {
         await showTimePicker(context: context, initialTime: time);
 
     if (timeOfDay != null) {
-      onChanged(new DateTime(
+      onChanged(DateTime(
           date.year, date.month, date.day, timeOfDay.hour, timeOfDay.minute));
     }
   }
