@@ -136,9 +136,9 @@ class MyCustomFormState extends State<MyCustomForm> {
   }
 
   void _sendData() {
-    String username = _usernameController.text;
-    String password = _passwordController.text;
+    // String username = _usernameController.text;
+    // String password = _passwordController.text;
 
-    print('login attempt: $username with $password');
+    // print('login attempt: $username with $password');
   }
 }

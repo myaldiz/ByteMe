@@ -192,7 +192,7 @@ class DateTimeItem extends StatelessWidget {
             child: new Padding(
                 padding: new EdgeInsets.symmetric(vertical: 8.0),
                 child: new Text("$date.day, $date.month $date.year"))),
-          ),
+          
         ),
         new InkWell(
           onTap: (() => _showTimePicker(context)),
