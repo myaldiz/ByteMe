@@ -18,7 +18,11 @@ class BrowsePageState extends State<BrowsePage> {
   Widget build(BuildContext context) {
     if (_cardsList.length == 0) {
       updateList();
-      return Scaffold(appBar: AppBar(), body: Container());
+      return Scaffold(appBar: AppBar(title: Text("Events")), 
+      body: Container(
+        alignment: Alignment.center,
+        child: CircularProgressIndicator()
+        ));
     }
     return Scaffold(
         appBar: AppBar(title: Text("Events"), actions: [
