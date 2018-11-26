@@ -248,21 +248,23 @@ switch(API) {
         
     case "signin":
         http_method = "POST"
-        url = "account/login"
+        url = "account/login/"
+        postData = querystring.stringify({username: username, password: password});
         _headers = {
-            'Content-Type': 'application/json',
-            'Content-Length': postData.length,
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength(postData),
+            // 'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
         }
         break;  
         
     case "signout":
         http_method = "POST"
-        url = "account/logout"
+        url = "account/logout/"
+        postData = querystring.stringify({username: username, password: password, _csrf: _csrf});
         _headers = {
-            'Content-Type': 'application/json',
-            'Content-Length': postData.length,
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength(postData),
+            // 'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
         }
         break;  
     

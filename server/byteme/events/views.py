@@ -10,6 +10,7 @@ from django.http import Http404
 from django.utils import timezone
 from django.db.models import Q
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_protect
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -143,6 +144,11 @@ def BrowseEvent(request):
     for event in Event_json.data:
         event['Iscore'] = 0
         event['attendingStatus'] = str(login_userprofile) in event['attendant']
+        if event['req'] == "non":
+            event_type = "accepted"
+        elif event['req']  == "mod" and event['req'] == "del":
+            event_type = "processing"
+        event['type'] = event_type
 
     # Event_json.data.
     return_json  = {"Response":"List_events", "Events":Event_json.data}
