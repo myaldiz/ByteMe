@@ -45,6 +45,7 @@ flutter:
     - JsonInterface/Server_Response/List_events.json
     - JsonInterface/Server_Response/modify_event.json
     - assets/img.jpg
+    - assets/img1.jpg
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
