@@ -27,11 +27,6 @@ Future<List<Widget>> createCardListModify(String url) async {
       return newCardsList;
   }
   data["Events"].forEach((event) {
-    print(event);
-    print(event["title"]);
-    print(event["abstract"]);
-    print(event["time"]);
-    print(event["status"]);
     card = ReviewedCustomCard(event);
     newCardsList.add(card);
   });

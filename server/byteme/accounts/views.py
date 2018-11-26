@@ -23,9 +23,10 @@ from rest_framework.authtoken.models import Token
 @authentication_classes((SessionAuthentication, TokenAuthentication)) 
 @permission_classes((IsAuthenticated,))
 def GetProfile(request):
-    login_user = request.user #get login user
-    login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
-    return Response(UserProfileSerializer(login_userprofile).data, status=status.HTTP_200_OK)
+	login_user = User.objects.get(email = "myaldiz@kaist.ac.kr")
+	# login_user = request.user #get login user
+	login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
+	return Response(UserProfileSerializer(login_userprofile).data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def CreateProfile(request):

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import './EventDetailsViewController.dart';
 
 class CustomCard extends StatelessWidget {
@@ -57,11 +58,10 @@ class CustomCard extends StatelessWidget {
                     Icon(
                       Icons.star,
                     ),
-                    // Text(representScore(event["Iscore"]))
-                    Text("8.2 / 10")
+                    Text(representScore(event["Iscore"]))
                   ],
                 ),
-                AttendingButton(true),
+                AttendingButton(event["attendingStatus"], event["identifier"]),
               ]))
             ],
           )),
@@ -69,9 +69,22 @@ class CustomCard extends StatelessWidget {
   }
 }
 
-class AttendingButton extends StatelessWidget {
+class AttendingButton extends StatefulWidget{
   final bool attendingStatus;
-  AttendingButton(this.attendingStatus);
+  final String id;
+  AttendingButton(this.attendingStatus, this.id);
+
+  @override
+    State<StatefulWidget> createState() {
+      // TODO: implement createState
+      return AttendingButtonState(attendingStatus, id);
+    }
+}
+
+class AttendingButtonState extends State<AttendingButton> {
+  bool attendingStatus;
+  final String id;
+  AttendingButtonState(this.attendingStatus, this.id);
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +93,11 @@ class AttendingButton extends StatelessWidget {
         child: Text("Attend"),
         color: Colors.greenAccent,
         onPressed: () {
+          http.post("http://127.0.0.1:8000/api/v1/event/attend/" + id);
           //TODO: Send request to attend and request updated event list
+          setState((){
+            attendingStatus = false;
+         });
         },
       );
     } else {
@@ -89,6 +106,10 @@ class AttendingButton extends StatelessWidget {
         color: Colors.redAccent,
         onPressed: () {
           //TODO: Send request to unattend
+          http.post("http://myaldiz@kaist.ac.kr:XXA83jd3kljsdf@127.0.0.1:8000/api/v1/event/unattend/" + id);
+          setState((){
+          attendingStatus = true;
+          });
         },
       );
     }
@@ -104,7 +125,7 @@ String beautifyString(String date) {
   return str;
 }
 
-// String representScore(double score) {
-//   // var scoreDouble = double.parse(score);
-//   return score.toStringAsFixed(1) +  "/ 10";
-// }
+String representScore(double score) {
+  // var scoreDouble = double.parse(score);
+  return score.toStringAsFixed(1) +  "/ 10";
+}

@@ -33,7 +33,7 @@ class ProfilePageState extends State<ProfilePage> {
         ),
         body: ListView(children: <Widget>[
           Image.asset(
-              'assets/img.jpg',
+              'assets/img1.jpg',
               height: 250.0,
               fit: BoxFit.cover,
             ),
