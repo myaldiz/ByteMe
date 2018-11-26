@@ -335,7 +335,7 @@ this is for modifying the table in sqlite
 
 
 commands:
-
+<pre>
 events related          
     browse?type=all     
     browse?type=attending       
@@ -344,4 +344,4 @@ events related
     mod     
     del     
     approve     
-
+<pre>
