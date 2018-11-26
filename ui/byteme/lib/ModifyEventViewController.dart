@@ -271,6 +271,11 @@ class MyCustomFormState extends State<MyCustomForm> {
     eventj["details"] = details;
     eventj["speaker"] = speaker;
     eventj["poster_image"] = imageURL;
+    List<Map<String,String>> tagsList = [];
+    for(Tag tag in selectedTags){
+      tagsList.add({"name": tag.name});
+    }
+    eventj["tags"] = tagsList;
     data["Event"] = eventj;
     var tool = JsonEncoder();
     var json = tool.convert(data);
