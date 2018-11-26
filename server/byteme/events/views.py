@@ -147,7 +147,7 @@ def BrowseEvent(request):
         if event['req'] == "non":
             event_type = "Accepted"
         elif event['req']  == "mod" and event['req'] == "del":
-            event_type = "processing"
+            event_type = "Processing"
         event['type'] = event_type
 
     # Event_json.data.
