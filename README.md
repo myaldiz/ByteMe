@@ -327,3 +327,21 @@ If you change the code in the model, you need to run:
 `python manage.py migrate`    
     
 this is for modifying the table in sqlite   
+
+
+-----
+### Node.js Test App        
+`node test [username] [password] [command] [Event_ID] [req]`        
+
+
+commands:
+
+events related          
+    browse?type=all     
+    browse?type=attending       
+    browse?type=created     
+    add     
+    mod     
+    del     
+    approve     
+
