@@ -127,5 +127,5 @@ String beautifyString(String date) {
 
 String representScore(double score) {
   // var scoreDouble = double.parse(score);
-  return score.toStringAsFixed(1) +  "/ 10";
+  return (score*10.0).toStringAsFixed(1) +  " / 10";
 }
