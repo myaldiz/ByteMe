@@ -29,6 +29,14 @@ class MyCustomFormState extends State<MyCustomForm> {
   //
   // Note: This is a GlobalKey<FormState>, not a GlobalKey<MyCustomFormState>!
   final _formKey = GlobalKey<FormState>();
+  final _title = TextEditingController();
+  final _time = TextEditingController();
+  final _place = TextEditingController();
+  final _department = TextEditingController();
+  final _speaker = TextEditingController();
+  final _image_url = TextEditingController();
+  final _abstract = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +49,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           child: ListView(
             children: <Widget>[
               TextFormField(
+                controller: _title,
                 decoration: InputDecoration(hintText: "Title"),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -49,6 +58,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
+                controller: _time,
                 decoration: InputDecoration(hintText: "Time"),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -57,6 +67,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
+                controller: _place,
                 decoration: InputDecoration(hintText: "Place"),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -65,6 +76,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
+                controller: _department,
                 decoration: InputDecoration(hintText: "Department"),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -73,6 +85,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
+                controller: _speaker,
                 decoration: InputDecoration(hintText: "Speaker"),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -81,6 +94,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
+                controller: _image_url,
                 decoration: InputDecoration(hintText: "Image URL"),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -89,6 +103,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
+                controller: _abstract,
                 decoration: InputDecoration(hintText: "Abstract"),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -107,6 +122,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                       // If the form is valid, we want to show a Snackbar
                       Navigator.pop(context);
                     }
+                    _sendData();
                   },
                   child: Text(
                     'Add',
@@ -117,5 +133,12 @@ class MyCustomFormState extends State<MyCustomForm> {
             ],
           ),
         ));
+  }
+
+  void _sendData() {
+    String username = _usernameController.text;
+    String password = _passwordController.text;
+
+    print('login attempt: $username with $password');
   }
 }

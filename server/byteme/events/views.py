@@ -124,10 +124,11 @@ def approveEventChange(ID, req):
  
 #API
 @api_view(['GET'])
-@authentication_classes((SessionAuthentication, BasicAuthentication))
-@permission_classes((IsAuthenticated,))
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def BrowseEvent(request):
-    login_user = request.user #get login user
+    login_user = User.objects.get(email = "myaldiz@kaist.ac.kr")
+    # login_user = request.user #get login user
     login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
     
     try:
