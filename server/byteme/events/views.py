@@ -16,7 +16,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import IsAdminUser
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -124,7 +124,7 @@ def approveEventChange(ID, req):
  
 #API
 @api_view(['GET'])
-@authentication_classes((SessionAuthentication, BasicAuthentication))
+@authentication_classes((SessionAuthentication, TokenAuthentication)) 
 @permission_classes((IsAuthenticated,))
 def BrowseEvent(request):
     login_user = request.user #get login user
@@ -156,7 +156,7 @@ def BrowseEvent(request):
 
 #API
 @api_view(['POST'])
-@authentication_classes((SessionAuthentication, BasicAuthentication))
+@authentication_classes((SessionAuthentication, TokenAuthentication)) 
 @permission_classes((IsAuthenticated,))
 def AddEvent(request):
     login_user = request.user #get login user
@@ -210,7 +210,7 @@ def AddEvent(request):
 
 #API
 @api_view(['POST'])
-@authentication_classes((SessionAuthentication, BasicAuthentication))
+@authentication_classes((SessionAuthentication, TokenAuthentication)) 
 @permission_classes((IsAuthenticated,))
 def ModifyEvent(request, event_id):
     """
@@ -241,7 +241,7 @@ def ModifyEvent(request, event_id):
 
 #API
 @api_view(['DELETE'])
-@authentication_classes((SessionAuthentication, BasicAuthentication))
+@authentication_classes((SessionAuthentication, TokenAuthentication)) 
 @permission_classes((IsAuthenticated,))
 def DeleteEvent(request, event_id):
     login_user = request.user #get login user
@@ -259,7 +259,7 @@ def DeleteEvent(request, event_id):
 
 #API
 @api_view(['POST'])
-@authentication_classes((SessionAuthentication, BasicAuthentication))
+@authentication_classes((SessionAuthentication, TokenAuthentication)) 
 @permission_classes((IsAuthenticated, IsAdminUser))
 def ApproveEvent(request, event_id):
     login_user = request.user #get login user
@@ -289,7 +289,7 @@ def ApproveEvent(request, event_id):
 
 #API
 @api_view(['POST'])
-@authentication_classes((SessionAuthentication, BasicAuthentication))
+@authentication_classes((SessionAuthentication, TokenAuthentication)) 
 @permission_classes((IsAuthenticated,))
 def MarkEvent(request, event_id):
     login_user = request.user #get login user
@@ -305,7 +305,7 @@ def MarkEvent(request, event_id):
 
 #API
 @api_view(['POST'])
-@authentication_classes((SessionAuthentication, BasicAuthentication))
+@authentication_classes((SessionAuthentication, TokenAuthentication)) 
 @permission_classes((IsAuthenticated,))
 def UnMarkEvent(request, event_id):
     login_user = request.user #get login user
@@ -321,7 +321,7 @@ def UnMarkEvent(request, event_id):
 
 #API
 @api_view(['GET'])
-@authentication_classes((SessionAuthentication, BasicAuthentication))
+@authentication_classes((SessionAuthentication, TokenAuthentication)) 
 @permission_classes((IsAuthenticated,))
 def BrowseTag(request):
     login_user = request.user #get login user
@@ -337,7 +337,7 @@ def BrowseTag(request):
 
 #API
 @api_view(['POST'])
-@authentication_classes((SessionAuthentication, BasicAuthentication))
+@authentication_classes((SessionAuthentication, TokenAuthentication)) 
 @permission_classes((IsAuthenticated,))
 def ChangeTag(request, event_id):
     login_user = request.user #get login user

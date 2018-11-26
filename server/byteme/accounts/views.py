@@ -4,19 +4,23 @@ from .serializers import *
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.authtoken.models import Token
 
 
 # Create your views here.
 @api_view(['GET'])
-@authentication_classes((SessionAuthentication, BasicAuthentication))
+@authentication_classes((SessionAuthentication, TokenAuthentication)) 
 @permission_classes((IsAuthenticated,))
 def GetProfile(request):
     login_user = request.user #get login user
@@ -53,7 +57,7 @@ def CreateProfile(request):
 		return Response({"Response":"Sign_up", "status": "Not a unique username"}, status=status.HTTP_400_BAD_REQUEST)
 
 	try:
-		person = UserProfile.objects.create(user=user)
+		person = UserProfile.objects.create(user = user)
 		#person = UserProfile.objects.create(user=user, isAdmin=False)
 	except Exception:
 		user.delete()
@@ -64,7 +68,7 @@ def CreateProfile(request):
 	return Response(return_json, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
-@authentication_classes((SessionAuthentication, BasicAuthentication))
+@authentication_classes((SessionAuthentication, TokenAuthentication)) 
 @permission_classes((IsAuthenticated,))
 def ModifyProfile(request):
     login_user = request.user
@@ -82,4 +86,9 @@ def ModifyProfile(request):
 
     login_userprofile.save()
     return Response({"Response": "Modify_profile", "status": "accepted"}, status=status.HTTP_202_ACCEPTED)
-    
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)

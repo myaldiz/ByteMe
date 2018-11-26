@@ -4,8 +4,10 @@ var querystring = require('querystring');
 const username = process.argv[2] 
 const password = process.argv[3] 
 const API  = process.argv[4]; // API
-const ID   = process.argv[5]; // ID
-const _req = process.argv[6]; // req 
+const token = process.argv[5]; // Token
+const ID   = process.argv[6]; // ID
+const _req = process.argv[7]; // req 
+
 
 let http_method = "GET";
 let url = "url"
@@ -28,7 +30,7 @@ switch(API) {
         url = "event/browse?type=all";
         _headers = {
             "Content-Type": "application/json",
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Authorization': 'Token '+token
         };
         break;
 
@@ -36,7 +38,7 @@ switch(API) {
         url = "event/browse?type=attending";
         _headers = {
             "Content-Type": "application/json",
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Authorization': 'Token '+token
         };
         break;    
 
@@ -44,7 +46,7 @@ switch(API) {
         url = "event/browse?type=created";
         _headers = {
             "Content-Type": "application/json",
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Authorization': 'Token '+token
         };
         break;
 
@@ -77,7 +79,7 @@ switch(API) {
         _headers = {
             "Content-Type": "application/json",
             'Content-Length': postData.length,
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Authorization': 'Token '+token
         };
         break;
 
@@ -87,7 +89,7 @@ switch(API) {
         _headers = {
             "Content-Type": "application/json",
             'Content-Length': postData.length,
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Authorization': 'Token '+token
         };
         break;
 
@@ -120,7 +122,7 @@ switch(API) {
         _headers = {
             "Content-Type": "application/json",
             'Content-Length': postData.length,
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Authorization': 'Token '+token
         };
         break;
 
@@ -131,7 +133,7 @@ switch(API) {
         _headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Content-Length': Buffer.byteLength(postData),
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Authorization': 'Token '+token
         }
         break;
 
@@ -142,9 +144,9 @@ switch(API) {
             {
                 "Request": "Sign_up",
                 "User": {
-                    "id": "mustafa",
-                    "email": "myaldiz@kaist.ac.kr",
-                    "pw_hash": "XXA83jd3kljsdf",
+                    "id": "Harlem",
+                    "email": "Harlem@kaist.ac.kr",
+                    "pw_hash": "password@",
                     "type": "normal",	// or admin
                     "ip": "143.248.143.29"
                 }
@@ -153,7 +155,7 @@ switch(API) {
         _headers = {
             'Content-Type': 'application/json',
             'Content-Length': postData.length,
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Authorization': 'Token '+token
         }
         break;
     
@@ -163,7 +165,7 @@ switch(API) {
         _headers = {
             'Content-Type': 'application/json',
             'Content-Length': postData.length,
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Authorization': 'Token '+token
         }
         break;
 
@@ -173,7 +175,7 @@ switch(API) {
         _headers = {
             'Content-Type': 'application/json',
             'Content-Length': postData.length,
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Authorization': 'Token '+token
         }
         break;
     
@@ -183,7 +185,7 @@ switch(API) {
         _headers = {
             'Content-Type': 'application/json',
             'Content-Length': postData.length,
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Authorization': 'Token '+token
         }
         break;   
 
@@ -207,7 +209,7 @@ switch(API) {
         _headers = {
             'Content-Type': 'application/json',
             'Content-Length': postData.length,
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Authorization': 'Token '+token
         }
         break;  
     
@@ -217,7 +219,7 @@ switch(API) {
         _headers = {
             'Content-Type': 'application/json',
             'Content-Length': postData.length,
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Authorization': 'Token '+token
         }
         break;   
     
@@ -242,29 +244,22 @@ switch(API) {
         _headers = {
             'Content-Type': 'application/json',
             'Content-Length': postData.length,
-            'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
+            'Authorization': 'Token '+token
         }
         break;
         
     case "signin":
         http_method = "POST"
-        url = "account/login/"
-        postData = querystring.stringify({username: username, password: password});
+        url = "account/api-token-auth/"
+        postData = JSON.stringify(
+            {
+                "username": username, 
+                "password": password
+            }
+        );
         _headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(postData),
-            // 'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
-        }
-        break;  
-        
-    case "signout":
-        http_method = "POST"
-        url = "account/logout/"
-        postData = querystring.stringify({username: username, password: password, _csrf: _csrf});
-        _headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': Buffer.byteLength(postData),
-            // 'Authorization': 'Basic ' + new Buffer(username + ':' + password).toString('base64')
         }
         break;  
     

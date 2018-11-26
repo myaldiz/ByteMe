@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
     'events.apps.EventsConfig',
-    'crawler.apps.CrawlerConfig'
+    'crawler.apps.CrawlerConfig',
+    'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
