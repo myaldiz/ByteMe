@@ -354,3 +354,5 @@ every operations related to the accounts
     profile                     get profile
     updateprofile               modigy profile
 <pre>
+
+you can also modify the json interface of each request in the javascript code
