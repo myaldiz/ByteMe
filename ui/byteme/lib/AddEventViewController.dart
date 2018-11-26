@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'utils.dart';
+
 class AddEventViewController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -29,14 +31,19 @@ class MyCustomFormState extends State<MyCustomForm> {
   //
   // Note: This is a GlobalKey<FormState>, not a GlobalKey<MyCustomFormState>!
   final _formKey = GlobalKey<FormState>();
-  final _title = TextEditingController();
-  final _time = TextEditingController();
-  final _place = TextEditingController();
-  final _department = TextEditingController();
-  final _speaker = TextEditingController();
-  final _image_url = TextEditingController();
-  final _abstract = TextEditingController();
 
+  DateTime dateTime;
+  String title, place, department, speakerName, speakerUni, speakerEmail;
+  String details, eventAbstract, imageURL;
+  static final _title = TextEditingController();
+  static final _place = TextEditingController();
+  static final _department = TextEditingController();
+  static final _speakerName = TextEditingController();
+  static final _speakerUni = TextEditingController();
+  static final _speakerEmail = TextEditingController();
+  static final _details = TextEditingController();
+  static final _eventAbstract = TextEditingController();
+  static final _imageURL = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +64,12 @@ class MyCustomFormState extends State<MyCustomForm> {
                   }
                 },
               ),
-              TextFormField(
-                controller: _time,
-                decoration: InputDecoration(hintText: "Time"),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter information';
-                  }
+              DateTimeItem(
+                dateTime: dateTime,
+                onChanged: (newTime) {
+                  setState(() {
+                    dateTime = newTime;
+                  });
                 },
               ),
               TextFormField(
@@ -85,8 +91,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
-                controller: _speaker,
-                decoration: InputDecoration(hintText: "Speaker"),
+                controller: _speakerName,
+                decoration: InputDecoration(hintText: "Speaker Name"),
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -94,7 +100,34 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
-                controller: _image_url,
+                controller: _speakerUni,
+                decoration: InputDecoration(hintText: "Speaker University"),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter information';
+                  }
+                },
+              ),
+              TextFormField(
+                controller: _speakerEmail,
+                decoration: InputDecoration(hintText: "Speaker Email"),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter information';
+                  }
+                },
+              ),
+              TextFormField(
+                controller: _details,
+                decoration: InputDecoration(hintText: "Details"),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter information';
+                  }
+                },
+              ),
+              TextFormField(
+                controller: _imageURL,
                 decoration: InputDecoration(hintText: "Image URL"),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -103,7 +136,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
-                controller: _abstract,
+                controller: _eventAbstract,
                 decoration: InputDecoration(hintText: "Abstract"),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -122,7 +155,6 @@ class MyCustomFormState extends State<MyCustomForm> {
                       // If the form is valid, we want to show a Snackbar
                       Navigator.pop(context);
                     }
-                    _sendData();
                   },
                   child: Text(
                     'Add',
@@ -133,12 +165,5 @@ class MyCustomFormState extends State<MyCustomForm> {
             ],
           ),
         ));
-  }
-
-  void _sendData() {
-    // String username = _usernameController.text;
-    // String password = _passwordController.text;
-
-    // print('login attempt: $username with $password');
   }
 }

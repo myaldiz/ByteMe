@@ -63,7 +63,7 @@ class BrowsePageState extends State<BrowsePage> {
 
   Future<void> updateList() async {
     List<Widget> newList =
-        await createCardListBrowse('http://@127.0.0.1:8000/api/v1/event/browse?type=all');
+        await createCardListBrowse('http://mustafa:XXA83jd3kljsdf@127.0.0.1:8000/api/v1/event/browse?type=all');
     setState(() {
       _cardsList = newList;
     });

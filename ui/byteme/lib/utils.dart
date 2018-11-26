@@ -167,6 +167,7 @@ class _SortFormState extends State<SortForm> {
   }
 }
 
+
 class DateTimeItem extends StatelessWidget {
   DateTimeItem({Key key, DateTime dateTime, @required this.onChanged})
       : assert(onChanged != null),
@@ -174,7 +175,7 @@ class DateTimeItem extends StatelessWidget {
             ? new DateTime.now()
             : new DateTime(dateTime.year, dateTime.month, dateTime.day),
         time = dateTime == null
-            ? new DateTime.now()
+            ? TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute)
             : new TimeOfDay(hour: dateTime.hour, minute: dateTime.minute),
         super(key: key);
 
@@ -191,14 +192,13 @@ class DateTimeItem extends StatelessWidget {
             onTap: (() => _showDatePicker(context)),
             child: new Padding(
                 padding: new EdgeInsets.symmetric(vertical: 8.0),
-                child: new Text("$date.day, $date.month $date.year"))),
-          
-        ),
+                child: new Text(date.day.toString() + "-" + date.month.toString()+ "-" + date.year.toString()))),
+          ),
         new InkWell(
           onTap: (() => _showTimePicker(context)),
           child: new Padding(
               padding: new EdgeInsets.symmetric(vertical: 8.0),
-              child: new Text('$time')),
+              child: new Text(time.hour.toString() + ":" + time.minute.toString())),
         ),
       ],
     );
