@@ -60,7 +60,7 @@ class CustomCard extends StatelessWidget {
                     Text(representScore(event["Iscore"]))
                   ],
                 ),
-                AttendingButton(true),
+                AttendingButton(event["attendingStatus"]),
               ]))
             ],
           )),
@@ -68,9 +68,20 @@ class CustomCard extends StatelessWidget {
   }
 }
 
-class AttendingButton extends StatelessWidget {
+class AttendingButton extends StatefulWidget{
   final bool attendingStatus;
   AttendingButton(this.attendingStatus);
+
+  @override
+    State<StatefulWidget> createState() {
+      // TODO: implement createState
+      return AttendingButtonState(attendingStatus);
+    }
+}
+
+class AttendingButtonState extends State<AttendingButton> {
+  bool attendingStatus;
+  AttendingButtonState(this.attendingStatus);
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +91,9 @@ class AttendingButton extends StatelessWidget {
         color: Colors.greenAccent,
         onPressed: () {
           //TODO: Send request to attend and request updated event list
+          setState((){
+            attendingStatus = false;
+         });
         },
       );
     } else {
@@ -88,6 +102,9 @@ class AttendingButton extends StatelessWidget {
         color: Colors.redAccent,
         onPressed: () {
           //TODO: Send request to unattend
+          setState((){
+          attendingStatus = true;
+          });
         },
       );
     }
