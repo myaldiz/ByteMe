@@ -46,7 +46,8 @@ class ReviewedCustomCard extends StatelessWidget {
             ])),
             Container(
               child: Column(children: <Widget>[
-                Text(event["type"]),
+                Text(event["type"],
+                style: TextStyle(color: typeColor(event["type"]))),
                 Row(children: <Widget>[
                   IconButton(
                     icon: Icon(Icons.edit),
@@ -100,4 +101,14 @@ String beautifyString(String date) {
   var minute = dt.minute.toString().length == 1 ? "0"+dt.minute.toString() : dt.minute.toString();
   var str =  hour + ":" + minute + " " + dt.day.toString() + "-" + monthsAbbreviations[dt.month-1] + "-" + dt.year.toString();
   return str;
+}
+
+Color typeColor(String type){
+  if(type=="Accepted"){
+    return Colors.green;
+  }else if(type=="Processing"){
+      return Colors.deepOrangeAccent;
+  }else{
+    return Colors.red;
+  }
 }

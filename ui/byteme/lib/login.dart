@@ -51,7 +51,7 @@ class _LoginState extends State<LoginPage> {
 
   Future<bool> makeRequest(String postJson) async {
     var response = await http.post(
-        Uri.encodeFull('http://10.0.2.2:8000/api/v1/account/api-token-auth/'),
+        Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/api-token-auth/'),
         body: postJson,
         headers: {
           "content-type": "application/json",

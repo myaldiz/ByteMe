@@ -96,7 +96,7 @@ class AttendingButtonState extends State<AttendingButton> {
         child: Text("Attend"),
         color: Colors.greenAccent,
         onPressed: () {
-          http.post("http://10.0.2.2:8000/api/v1/event/attend/" + id,
+          http.post("http://127.0.0.1:8000/api/v1/event/attend/" + id,
           headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token " + token});
           setState((){
             attendingStatus = false;
@@ -108,7 +108,7 @@ class AttendingButtonState extends State<AttendingButton> {
         child: Text("Un-Attend"),
         color: Colors.redAccent,
         onPressed: () {
-          http.post("http://10.0.2.2:8000/api/v1/event/unattend/" + id,
+          http.post("http://127.0.0.1:8000/api/v1/event/unattend/" + id,
           headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token " + token});
           setState((){
           attendingStatus = true;
