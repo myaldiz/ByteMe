@@ -336,12 +336,12 @@ this is for modifying the table in sqlite
 
 commands:
 <pre>
-events related          
-    browse?type=all     
-    browse?type=attending       
-    browse?type=created     
-    add     
-    mod     
-    del     
-    approve     
+add modify delete browse and approve events           
+    browse?type=all             Browse all events
+    browse?type=attending       Browse the events login user attending
+    browse?type=created         Browse the events login user created
+    add                         Add the event
+    mod [Event_ID]              Modift the event with Event_ID
+    del [Event_ID]              Delete the event with Event_ID
+    approve [Event_ID] [req]    Approve the event request with Event_ID (only Admin)
 <pre>
