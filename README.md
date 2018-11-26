@@ -333,10 +333,9 @@ this is for modifying the table in sqlite
 ### Node.js Test App        
 `node test [username] [password] [command] [Event_ID] [req]`        
 
-
 commands:
 <pre>
-add modify delete browse and approve events           
+every operations related to the events           
     browse?type=all             Browse all events
     browse?type=attending       Browse the events login user attending
     browse?type=created         Browse the events login user created
@@ -344,6 +343,14 @@ add modify delete browse and approve events
     mod [Event_ID]              Modift the event with Event_ID
     del [Event_ID]              Delete the event with Event_ID
     approve [Event_ID] [req]    Approve the event request with Event_ID (only Admin)
+    changetags [Event_ID]       change tags of event
+    attend [Event_ID]           attend the event
+    unattend [[Event_ID]]       unattend the event
 
 
+
+every operations related to the accounts
+    register                    add a new user 
+    profile                     get profile
+    updateprofile               modigy profile
 <pre>

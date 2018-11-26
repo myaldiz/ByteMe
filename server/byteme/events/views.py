@@ -142,10 +142,10 @@ def BrowseEvent(request):
     Event_json = EventSerializer(Event_List, many = True)
 
     for event in Event_json.data:
-        event['Iscore'] = 0
+        event['Iscore'] = 0.5
         event['attendingStatus'] = str(login_userprofile) in event['attendant']
         if event['req'] == "non":
-            event_type = "accepted"
+            event_type = "Accepted"
         elif event['req']  == "mod" and event['req'] == "del":
             event_type = "processing"
         event['type'] = event_type
