@@ -35,13 +35,8 @@ class _LoginState extends State<LoginPage> {
       password = _password.text;
     });
     Map<String, dynamic> data = {};
-    Map<String, dynamic> user = {};
-    print(email);
-    print(password);
-    user["email"] = email;
-    user["password"] = password;
-    data["Request"] = "Login";
-    data["User"] = user;
+    data["username"] = email;
+    data["password"] = password;
     var tool = JsonEncoder();
     var json = tool.convert(data);
     // var json = JSON.encode(data);
@@ -59,6 +54,7 @@ class _LoginState extends State<LoginPage> {
 
   Future<String> makeRequest(String json) async {
     var response = await http.post(Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/api-token-auth/'), body: json, headers: {"content-type": "application/json", "accept": "application/json"});
+    print("=====================");
     print(response.body);
 }
 
