@@ -31,10 +31,25 @@ class Event(models.Model):
 	speakerReq = models.ForeignKey(Speaker, on_delete=models.CASCADE, related_name="speakerReq", default = None, null=True)
 
 	#TODO poster_image
+	intersection_max = 5
+	citation_max = 50000
+	h_index_max = 100
+	i_index_max = 1000
 
 	def generateRankingScore(self, user):
-		print(self)
-		return 0
+		speaker = self.speaker
+		user_tags = set(user.tags.all())
+		event_tags = set(self.tags.all())
+		speaker_tags = set(speaker.tags.all())
+		inters_event_num = min(self.intersection_max, len(user_tags.intersection(event_tags)))
+		inters_speaker_num = min(self.intersection_max, len(user_tags.intersection(speaker_tags)))
+		
+		i_score = inters_event_num * 0.2 + inters_speaker_num * 0.2
+		i_score += (speaker.citations / self.citation_max) * 0.2
+		i_score += (speaker.h_index / self.h_index_max) * 0.2
+		i_score += (speaker.i_index / self.i_index_max) * 0.2
+		i_score = min(i_score, 1.0)
+		return i_score
 	
 	def __str__(self):
 		return "%s %s"%(self.creater, self.title)
