@@ -34,30 +34,33 @@ class _LoginState extends State<LoginPage> {
       email = _email.text;
       password = _password.text;
     });
-    // Map<String, dynamic> data;
-    // Map<String, dynamic> user;
-    // user["email"] = email;
-    // user["pw_hash"] = password;
-    // data["Request"] = "Login";
-    // data["User"] = user;
-    // var tool = JsonEncoder();
-    // var json = tool.convert(data);
+    Map<String, dynamic> data = {};
+    Map<String, dynamic> user = {};
+    print(email);
+    print(password);
+    user["email"] = email;
+    user["password"] = password;
+    data["Request"] = "Login";
+    data["User"] = user;
+    var tool = JsonEncoder();
+    var json = tool.convert(data);
     // var json = JSON.encode(data);
-    // makeRequest(json);
-    Map<String, dynamic> response =
-        await getJson('JsonInterface/Server_Response/login.json');
-    String result = response["Example_responses"][1]["result"];
-    if (result == "accepted") {
-      return true;
-    } else {
-      return false;
-    }
+    await makeRequest(json);
+    // Map<String, dynamic> response =
+    //     await getJson('JsonInterface/Server_Response/login.json');
+    // String result = response["Example_responses"][1]["result"];
+    // if (result == "accepted") {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
+    return true;
   }
 
-//   Future<String> makeRequest(String json) async {
-//     var response = await http.post(Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/login/'), body: json, headers: {"content-type": "application/json", "accept": "application/json"});
-//     print(response.body);
-// }
+  Future<String> makeRequest(String json) async {
+    var response = await http.post(Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/api-token-auth/'), body: json, headers: {"content-type": "application/json", "accept": "application/json"});
+    print(response.body);
+}
 
   mainWidgets(BuildContext context) {
     return <Widget>[

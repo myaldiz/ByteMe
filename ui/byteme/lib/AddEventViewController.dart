@@ -149,6 +149,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 child: RaisedButton(
                   color: Theme.of(context).primaryColor,
                   onPressed: () {
+
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
                     if (_formKey.currentState.validate()) {
@@ -167,3 +168,4 @@ class MyCustomFormState extends State<MyCustomForm> {
         ));
   }
 }
+
