@@ -31,8 +31,9 @@ class Event(models.Model):
 	speakerReq = models.ForeignKey(Speaker, on_delete=models.CASCADE, related_name="speakerReq", default = None, null=True)
 
 	#TODO poster_image
-
+	intersection_max = 5
 	def generateRankingScore(self, user):
+
 		return 0
 	
 	def __str__(self):
