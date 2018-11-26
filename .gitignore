@@ -1,4 +1,6 @@
 *.pyc
 **/build
-.DS_Store
+**.DS_Store
+**/.DS_Store
+DS_Store
 server/byteme/db.sqlite3.zip
