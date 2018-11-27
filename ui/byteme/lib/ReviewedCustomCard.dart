@@ -59,7 +59,7 @@ class ReviewedCustomCard extends StatelessWidget {
                   ),
                   IconButton(
                     icon: Icon(Icons.delete),
-                    onPressed: () {
+                    onPressed: ()  {
                       showDialog(
                           context: context,
                           builder: (context) {
