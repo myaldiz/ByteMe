@@ -331,7 +331,7 @@ this is for modifying the table in sqlite
 
 -----
 ### Node.js Test App        
-`node test [username] [password] [Token] [command] [Event_ID] [req]`        
+`node test [username] [password] [command] [Token] [Event_ID] [req]`        
 
 commands:
 <pre>
