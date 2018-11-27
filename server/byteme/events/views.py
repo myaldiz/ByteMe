@@ -141,8 +141,8 @@ def BrowseEvent(request):
     Event_List = queryEvent(login_userprofile, event_type)
     Event_json = EventSerializer(Event_List, many = True)
 
-    for event in Event_json.data:
-        event['Iscore'] = 0.5
+    for event, event_obj in zip(Event_json.data, Event_List):
+        event['Iscore'] = event_obj.generateRankingScore(login_userprofile)
         event['attendingStatus'] = str(login_userprofile) in event['attendant']
         if event['req'] == "non":
             event_type = "Accepted"
