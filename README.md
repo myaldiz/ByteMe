@@ -331,7 +331,7 @@ this is for modifying the table in sqlite
 
 -----
 ### Node.js Test App        
-`node test [username] [password] [command] [Event_ID] [req]`        
+`node test [username] [password] [command] [Token] [Event_ID] [req]`        
 
 commands:
 <pre>
@@ -353,6 +353,7 @@ every operations related to the accounts
     register                    add a new user 
     profile                     get profile
     updateprofile               modigy profile
+    login                       get token
 <pre>
 
 you can also modify the json interface of each request in the javascript code
