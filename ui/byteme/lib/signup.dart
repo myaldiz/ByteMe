@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'utils.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class SignupPage extends StatefulWidget {
   @override
@@ -11,9 +11,10 @@ class SignupPage extends StatefulWidget {
 
 class _SignupState extends State<SignupPage> {
   static final _email = TextEditingController();
+  static final _username = TextEditingController();
   static final _password = TextEditingController();
   static final _passwordRepeat = TextEditingController();
-  String email, password, passwordRepeat;
+  String username, email, password, passwordRepeat;
 
   @override
   Widget build(BuildContext context) {
@@ -23,35 +24,68 @@ class _SignupState extends State<SignupPage> {
           title: Text("Sign Up"),
         ),
         body: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+            child: ListView(
                 children: mainWidgets(context))));
   }
 
   Future<bool> authenticate() async {
     setState(() {
       email = _email.text;
-      password = _password.text;
-      passwordRepeat = _passwordRepeat.text;
+      username = _username.text;
+      password = _password.text.hashCode.toString();
+      passwordRepeat = _passwordRepeat.text.hashCode.toString();
     });
 
     if (password != passwordRepeat) {
       return false;
     }
-    Map<String, dynamic> response =
-        await getJson('JsonInterface/Server_Response/login.json');
-    String result = response["Example_responses"][1]["result"];
-    if (result == "accepted") {
+    bool result = await makeRequest(username, email, password);
+    if (result) {
       return true;
     } else {
       return false;
     }
   }
 
+  Future<bool> makeRequest(
+      String username, String email, String password) async {
+    Map<String, dynamic> data = {};
+    Map<String, dynamic> user = {};
+    data["Request"] = "Sign_up";
+    user["id"] = username;
+    user["email"] = email;
+    user["pw_hash"] = password;
+    user["type"] = "normal";
+    data["User"] = user;
+    var tool = JsonEncoder();
+    var postJson = tool.convert(data);
+
+    var response = await http.post(
+        Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/register'),
+        body: postJson,
+        headers: {
+          "content-type": "application/json",
+          "accept": "application/json"
+        });
+    Map<String,dynamic> responseMap = json.decode(response.body);
+    return responseMap["result"] == "accepted";
+  }
+
   mainWidgets(BuildContext context) {
     return <Widget>[
+      SizedBox(height: 100.0),
       FlutterLogo(size: 50.0),
       SizedBox(height: 50.0),
+      TextFormField(
+        controller: _username,
+        autofocus: false,
+        decoration: InputDecoration(
+          hintText: 'Username',
+          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+        ),
+      ),
+      SizedBox(height: 20.0),
       TextFormField(
         controller: _email,
         keyboardType: TextInputType.emailAddress,
@@ -85,7 +119,9 @@ class _SignupState extends State<SignupPage> {
         ),
       ),
       SizedBox(height: 7.0),
-      RaisedButton(
+      Padding(
+          padding: EdgeInsets.symmetric(horizontal: 150.0),
+          child: RaisedButton(
           color: Theme.of(context).primaryColor,
           child: Text(
             'Sign Up',
@@ -130,7 +166,7 @@ class _SignupState extends State<SignupPage> {
                         ]);
                   });
             }
-          }),
+          })),
     ];
   }
 }
