@@ -62,7 +62,7 @@ class ManagePageState extends State<ManagePage> {
 
   Future<void> updateList() async {
     List<Widget> newList =
-        await createCardListModify('http://@10.0.2.2:8000/api/v1/event/browse?type=created');
+        await createCardListModify('http://admin:asdfghjkl@127.0.0.1:8000/api/v1/event/browse?type=created');
     setState(() {
       _cardsList = newList;
     });

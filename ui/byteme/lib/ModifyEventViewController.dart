@@ -88,7 +88,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               TextFormField(
                 decoration:
                     InputDecoration(hintText: "Speaker", labelText: "Speaker"),
-                initialValue: event["speaker"],
+                initialValue: event["speaker"]["name"],
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
