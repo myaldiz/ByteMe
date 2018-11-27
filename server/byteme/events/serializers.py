@@ -18,7 +18,7 @@ class EventSerializer(serializers.Serializer):
     Iscore     = serializers.DecimalField(required = False, allow_null = True, max_digits = 3, decimal_places = 3)
     speaker    = SpeakerSerializer(required = False)
     tags       = TagSerializer(required = False, many = True)
-    #TODO poster_image
+    poster_image = serializers.CharField(required = False, allow_blank=True, max_length=100)
 
 
 
@@ -28,6 +28,7 @@ class EventSerializer(serializers.Serializer):
         instance.timeReq     = validated_data.get('time'    , instance.timeReq)
         instance.titleReq    = validated_data.get('title'   , instance.titleReq)
         instance.detailsReq  = validated_data.get('details' , instance.detailsReq)
+        instance.imgurLReq   = validated_data.get('poster_image' , instance.imgurLReq)
         if "speaker" in validated_data:
             speaker_data         = validated_data.pop('speaker')
             instance.speakerReq  = Speaker.objects.update_or_create(**speaker_data)[0]
