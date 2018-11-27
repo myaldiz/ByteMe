@@ -146,7 +146,7 @@ def BrowseEvent(request):
         event['attendingStatus'] = str(login_userprofile) in event['attendant']
         if event['req'] == "non":
             event_type = "Accepted"
-        elif event['req']  == "mod" and event['req'] == "del":
+        elif event['req']  == "mod" or event['req'] == "del":
             event_type = "Processing"
         event['type'] = event_type
 
