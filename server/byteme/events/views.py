@@ -206,7 +206,7 @@ def AddEvent(request):
         return_json  = {"Response":"Add_Event", "Events":Updated_Event_json, "status": "processing"}
         return Response(return_json, status = status.HTTP_202_ACCEPTED)
     
-    return Response("{}", status = status.HTTP_400_BAD_REQUEST)
+    return Response("Event json is not valid", status = status.HTTP_400_BAD_REQUEST)
 
 #API
 @api_view(['POST'])
@@ -237,7 +237,7 @@ def ModifyEvent(request, event_id):
         return_json  = {"Response":"Modify_Event", "Events": Updated_Event_json, "status": "processing"}
         return Response(return_json, status = status.HTTP_202_ACCEPTED)
 
-    return Response(Event_json.data, status = status.HTTP_400_BAD_REQUEST)
+    return Response("Event json is not valid", status = status.HTTP_400_BAD_REQUEST)
 
 #API
 @api_view(['DELETE'])
