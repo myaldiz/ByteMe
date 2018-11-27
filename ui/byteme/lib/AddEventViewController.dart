@@ -170,10 +170,12 @@ class MyCustomFormState extends State<MyCustomForm> {
                           });
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
-                    if (_formKey.currentState.validate()) {
-                      // If the form is valid, we want to show a Snackbar
-                      Navigator.pop(context);
-                    }
+                    print("===========");
+                    Navigator.of(context).pop();
+                    // if (_formKey.currentState.validate()) {
+                    //   // If the form is valid, we want to show a Snackbar
+                    //   Navigator.of(context).pop();
+                    // }
                   },
                   child: Text(
                     'Add',
@@ -215,7 +217,6 @@ class MyCustomFormState extends State<MyCustomForm> {
     data["Event"] = event;
     var tool = JsonEncoder();
     var json = tool.convert(data);
-    print(json);
     var response = await http.post(
         Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/add'),
         body: json,
@@ -224,7 +225,6 @@ class MyCustomFormState extends State<MyCustomForm> {
           "accept": "application/json",
           "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"
         });
-    print(response.body);
     return;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './ModifyEventViewController.dart';
+import 'package:http/http.dart' as http;
 
 class ReviewedCustomCard extends StatelessWidget {
   final Map<String, dynamic> event;
@@ -69,7 +70,12 @@ class ReviewedCustomCard extends StatelessWidget {
                                 actions: <Widget>[
                                   RaisedButton(
                                       onPressed: () {
-                                        //TODO: Send delete request
+                                        http.delete("http://127.0.0.1:8000/api/v1/event/delete/" + event["identifier"],
+                                          headers: {
+                                            "content-type": "application/json",
+                                            "accept": "application/json",
+                                            "Authorization": "Token " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"
+                                          });
                                         Navigator.of(context).pop();
                                       },
                                       child: Text(
