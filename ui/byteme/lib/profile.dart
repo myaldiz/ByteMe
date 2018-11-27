@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'modifyProfile.dart';
 import 'utils.dart';
+import 'token.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -11,8 +13,92 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfilePageState extends State<ProfilePage> {
-  List<Tag> selectedTags = [];
-  Tag selectedSort;
+  List<Widget> contetList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    initContent();
+  }
+
+  void initContent() async {
+    List<Widget> newContent = [
+      Image.asset(
+        'assets/img1.jpg',
+        height: 250.0,
+        fit: BoxFit.cover,
+      ),
+      Text(
+        "Department",
+        style: TextStyle(
+          fontSize: 25.0,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ];
+    http.Response response = await http.get(
+        Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/profile'),
+        headers: {
+          "content-type": "application/json",
+          "accept": "application/json",
+          "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"
+        });
+    Map<String, dynamic> data = json.decode(response.body);
+    newContent.add(
+      Text(
+        data["dept"],
+        style: TextStyle(
+          fontSize: 18.0,
+          fontWeight: FontWeight.normal,
+        ),
+      ),
+    );
+    newContent.add(Padding(
+      padding: EdgeInsets.only(bottom: 20.0),
+    ));
+    newContent.add(Text(
+      "Tags",
+      style: TextStyle(
+        fontSize: 25.0,
+        fontWeight: FontWeight.bold,
+      ),
+    ));
+    for (String tag in data["tags"]) {
+      newContent.add(
+        Text(
+          tag,
+          style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+      );
+    }
+    newContent.add(Padding(
+      padding: EdgeInsets.only(bottom: 20.0),
+    ));
+    newContent.add(
+      Text(
+        "Username",
+        style: TextStyle(
+          fontSize: 25.0,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+    newContent.add(
+      Text(
+        data["user"]["username"],
+        style: TextStyle(
+          fontSize: 18.0,
+          fontWeight: FontWeight.normal,
+        ),
+      ),
+    );
+    setState(() {
+      contetList = newContent;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,62 +110,12 @@ class ProfilePageState extends State<ProfilePage> {
               icon: Icon(Icons.edit),
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => ModifyProfile()),
+                  MaterialPageRoute(builder: (context) => ModifyProfile()),
                 );
               },
             )
           ],
         ),
-        body: ListView(children: <Widget>[
-          Image.asset(
-              'assets/img1.jpg',
-              height: 250.0,
-              fit: BoxFit.cover,
-            ),
-          Text(
-            "Department",
-            style: TextStyle(
-              fontSize: 25.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            "Computer Science",
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-          Padding(padding: EdgeInsets.only(bottom: 20.0),),
-          Text(
-            "Tags",
-            style: TextStyle(
-              fontSize: 25.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            "Sports",
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-          Text(
-            "Food",
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-          Text(
-            "Science",
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-        ],));
+        body: ListView(children: contetList));
   }
 }

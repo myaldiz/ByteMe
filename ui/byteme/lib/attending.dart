@@ -12,7 +12,7 @@ class AttendingPage extends StatefulWidget {
 class AttendingPageState extends State<AttendingPage> {
   List<Widget> _cardsList = [];
   List<Tag> selectedTags = [];
-  Tag selectedSort;
+  String selectedSort;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class AttendingPageState extends State<AttendingPage> {
               showDialog(
                   context: context,
                   builder: (context) {
-                    return SortForm(onSubmit: (Tag newSort) {
+                    return SortForm(onSubmit: (String newSort) {
                       setState(() {
                         selectedSort = newSort;
                       });

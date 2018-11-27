@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './ModifyEventViewController.dart';
+import 'package:http/http.dart' as http;
 
 class ReviewedCustomCard extends StatelessWidget {
   final Map<String, dynamic> event;
@@ -46,7 +47,8 @@ class ReviewedCustomCard extends StatelessWidget {
             ])),
             Container(
               child: Column(children: <Widget>[
-                Text(event["type"]),
+                Text(event["type"],
+                style: TextStyle(color: typeColor(event["type"]))),
                 Row(children: <Widget>[
                   IconButton(
                     icon: Icon(Icons.edit),
@@ -58,7 +60,7 @@ class ReviewedCustomCard extends StatelessWidget {
                   ),
                   IconButton(
                     icon: Icon(Icons.delete),
-                    onPressed: () {
+                    onPressed: ()  {
                       showDialog(
                           context: context,
                           builder: (context) {
@@ -68,9 +70,15 @@ class ReviewedCustomCard extends StatelessWidget {
                                 actions: <Widget>[
                                   RaisedButton(
                                       onPressed: () {
-                                        //TODO: Send delete request
+                                        http.delete("http://127.0.0.1:8000/api/v1/event/delete/" + event["identifier"],
+                                          headers: {
+                                            "content-type": "application/json",
+                                            "accept": "application/json",
+                                            "Authorization": "Token " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"
+                                          });
                                         Navigator.of(context).pop();
                                       },
+                                      textColor: Theme.of(context).primaryTextTheme.button.color,
                                       child: Text(
                                         'Yes',
                                       )),
@@ -78,6 +86,7 @@ class ReviewedCustomCard extends StatelessWidget {
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
+                                      textColor: Theme.of(context).primaryTextTheme.button.color,
                                       child: Text(
                                         'Cancel',
                                       )),
@@ -100,4 +109,14 @@ String beautifyString(String date) {
   var minute = dt.minute.toString().length == 1 ? "0"+dt.minute.toString() : dt.minute.toString();
   var str =  hour + ":" + minute + " " + dt.day.toString() + "-" + monthsAbbreviations[dt.month-1] + "-" + dt.year.toString();
   return str;
+}
+
+Color typeColor(String type){
+  if(type=="Accepted"){
+    return Colors.green;
+  }else if(type=="Processing"){
+      return Colors.deepOrangeAccent;
+  }else{
+    return Colors.red;
+  }
 }

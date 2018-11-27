@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'token.dart';
+
 // import './CustomCard.dart';
 // import './ReviewedCustomCard.dart';
 
@@ -36,8 +40,9 @@ typedef void TagFormCallback(List<Tag> selectedTags);
 
 class TagForm extends StatefulWidget {
   final TagFormCallback onSubmit;
+  final List<Tag> initialValue;
 
-  TagForm({this.onSubmit});
+  TagForm({this.onSubmit, this.initialValue});
 
   @override
   _TagFormState createState() => new _TagFormState();
@@ -45,18 +50,35 @@ class TagForm extends StatefulWidget {
 
 class _TagFormState extends State<TagForm> {
   List<Tag> selectedTags = [];
-  List<Tag> allTags = [
-    Tag("1"),
-    Tag("2"),
-    Tag("3"),
-    Tag("4"),
-    Tag("5"),
-    Tag("6"),
-    Tag("7")
-  ]; //TODO: Get list of tags from server
+  List<Tag> allTags;
+
+  @override
+  void initState() {
+    super.initState();
+    initTags();
+    if(widget.initialValue.length > 0){
+      selectedTags = widget.initialValue;
+    }
+  }
+
+  initTags() async{
+    List<Tag> newTags = [];
+    http.Response response = await http.get(
+    Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/tag/browse'), 
+    headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"}
+    );
+    Map<String, dynamic> data = json.decode(response.body);
+    for (Map<String,dynamic> tag in data["Tags"]) {
+      newTags.add(Tag(tag["name"]));
+    }
+    setState((){
+      allTags = newTags;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    print(selectedTags);
     List<CheckboxListTile> allCheckBoxes = [];
     for (Tag tag in allTags) {
       allCheckBoxes.add(
@@ -75,7 +97,6 @@ class _TagFormState extends State<TagForm> {
         ),
       );
     }
-
     return AlertDialog(
       title: Text("Please select tags"),
       content: Column(
@@ -83,23 +104,26 @@ class _TagFormState extends State<TagForm> {
       ),
       actions: [
         RaisedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              widget.onSubmit(selectedTags);
-            },
-            child: Text("OK")),
-        RaisedButton(
+          textColor: Theme.of(context).primaryTextTheme.button.color,
+          child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("Cancel"),
+        ),
+        RaisedButton(
+          child: Text("Apply"),
+          textColor: Theme.of(context).primaryTextTheme.button.color,
+          onPressed: () {
+            Navigator.of(context).pop();
+            widget.onSubmit(selectedTags);
+          },
         )
       ],
     );
   }
 }
 
-typedef void SortFormCallback(Tag selectedSort);
+typedef void SortFormCallback(String selectedSort);
 
 class SortForm extends StatefulWidget {
   final SortFormCallback onSubmit;
@@ -111,33 +135,29 @@ class SortForm extends StatefulWidget {
 }
 
 class _SortFormState extends State<SortForm> {
-  Tag selectedSort;
-  List<Tag> allTags = [
-    Tag("1"),
-    Tag("2"),
-    Tag("3"),
-    Tag("4"),
-    Tag("5"),
-    Tag("6"),
-    Tag("7")
-  ]; //TODO: Get list of tags from server
+  String selectedSort;
+  List<String> allSortings = [
+    "By popularity",
+    "By Name",
+    "By Date",
+  ];
 
   @override
   Widget build(BuildContext context) {
     List<Row> allRadios = [];
-    for (Tag tag in allTags) {
+    for (String sorting in allSortings) {
       allRadios.add(
         Row(
           children: [
-            Text(tag.name),
+            Text(sorting),
             Radio(
               groupValue: selectedSort,
-              onChanged: (dynamic tag) {
+              onChanged: (dynamic sorting) {
                 setState(() {
-                  selectedSort = tag;
+                  selectedSort = sorting;
                 });
               },
-              value: tag,
+              value: sorting,
             ),
           ],
         ),
@@ -151,32 +171,36 @@ class _SortFormState extends State<SortForm> {
       ),
       actions: [
         RaisedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              widget.onSubmit(selectedSort);
-            },
-            child: Text("OK")),
-        RaisedButton(
+          textColor: Theme.of(context).primaryTextTheme.button.color,
+          child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("Cancel"),
         )
+        ,RaisedButton(
+          textColor: Theme.of(context).primaryTextTheme.button.color,
+          child: Text("Apply"),
+          onPressed: () {
+            Navigator.of(context).pop();
+            widget.onSubmit(selectedSort);
+          },
+        )
+        
       ],
     );
   }
 }
 
-
 class DateTimeItem extends StatelessWidget {
   DateTimeItem({Key key, DateTime dateTime, @required this.onChanged})
       : assert(onChanged != null),
         date = dateTime == null
-            ? new DateTime.now()
-            : new DateTime(dateTime.year, dateTime.month, dateTime.day),
+            ? DateTime.now()
+            : DateTime(dateTime.year, dateTime.month, dateTime.day),
         time = dateTime == null
-            ? TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute)
-            : new TimeOfDay(hour: dateTime.hour, minute: dateTime.minute),
+            ? TimeOfDay(
+                hour: DateTime.now().hour, minute: DateTime.now().minute)
+            : TimeOfDay(hour: dateTime.hour, minute: dateTime.minute),
         super(key: key);
 
   final DateTime date;
@@ -185,21 +209,46 @@ class DateTimeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Row(
+    return Row(
       children: <Widget>[
-        new Expanded(
-          child: new InkWell(
+        Expanded(
+          child: InkWell(
             onTap: (() => _showDatePicker(context)),
-            child: new Padding(
-                padding: new EdgeInsets.symmetric(vertical: 8.0),
-                child: new Text(date.day.toString() + "-" + date.month.toString()+ "-" + date.year.toString()))),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 18.0),
+              child: Row(
+                children: [
+                  Text(
+                    DateFormat('EEEE, MMMM d').format(date),
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Icon(Icons.arrow_drop_down, color: Colors.black54),
+                ],
+              ),
+            ),
           ),
-        new InkWell(
-          onTap: (() => _showTimePicker(context)),
-          child: new Padding(
-              padding: new EdgeInsets.symmetric(vertical: 8.0),
-              child: new Text(time.hour.toString() + ":" + time.minute.toString())),
         ),
+        InkWell(
+          onTap: (() => _showTimePicker(context)),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 15.0),
+            child: Row(
+              children: <Widget>[
+                Text(
+                  '${time.format(context)}',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Icon(Icons.arrow_drop_down, color: Colors.black54),
+              ],
+            ),
+          ),
+        )
       ],
     );
   }
@@ -207,12 +256,12 @@ class DateTimeItem extends StatelessWidget {
   Future _showDatePicker(BuildContext context) async {
     DateTime dateTimePicked = await showDatePicker(
         context: context,
-        initialDate: date,
-        firstDate: date.subtract(const Duration(days: 20000)),
-        lastDate: new DateTime.now());
+        initialDate: DateTime.now(),
+        firstDate: date.subtract(const Duration(days: 1)),
+        lastDate: date.add(const Duration(days: 20000)));
 
     if (dateTimePicked != null) {
-      onChanged(new DateTime(dateTimePicked.year, dateTimePicked.month,
+      onChanged(DateTime(dateTimePicked.year, dateTimePicked.month,
           dateTimePicked.day, time.hour, time.minute));
     }
   }
@@ -222,8 +271,16 @@ class DateTimeItem extends StatelessWidget {
         await showTimePicker(context: context, initialTime: time);
 
     if (timeOfDay != null) {
-      onChanged(new DateTime(
+      onChanged(DateTime(
           date.year, date.month, date.day, timeOfDay.hour, timeOfDay.minute));
     }
   }
+}
+
+List<Widget> filterCards(List<Widget> cards, List<Tag> selectedTags){
+  
+}
+
+List<Widget> sortCards(List<Widget> cards, String sorting){
+
 }
