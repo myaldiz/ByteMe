@@ -14,6 +14,7 @@ class Event(models.Model):
 	details = models.TextField(max_length = 3000)
 	tags = models.ManyToManyField(Tag, default = None, related_name="tags")
 	speaker = models.ForeignKey(Speaker, on_delete = models.CASCADE, related_name="events", default = None)
+	imgurl  =  models.CharField(max_length = 100, default=None, null=True)
 
 	REQUEST = (
 		('non', 'No Request'),
@@ -29,8 +30,8 @@ class Event(models.Model):
 	detailsReq = models.TextField(default=None, null=True)
 	tagsReq = models.ManyToManyField(Tag, related_name="tagsReq", default = None)
 	speakerReq = models.ForeignKey(Speaker, on_delete=models.CASCADE, related_name="speakerReq", default = None, null=True)
+	imgurLReq  = models.CharField(max_length = 100, default=None, null=True)
 
-	#TODO poster_image
 	intersection_max = 5
 	citation_max = 50000
 	h_index_max = 100

@@ -86,6 +86,10 @@ def approveEventChange(ID, req):
                 event.speaker = event.speakerReq
                 event.speakerReq  = None
             
+            if event.imgurLReq != None:
+                event.imgurl = event.imgurLReq
+                event.imgurLReq  = None
+            
             if event.tagsReq.all().exists() == True:
                 for tag in event.tagsReq.all():
                     event.tags.add(tag)
@@ -106,6 +110,7 @@ def approveEventChange(ID, req):
             event.time        = event.timeReq
             event.title       = event.titleReq
             event.details     = event.detailsReq
+            event.imgurl      = event.imgurLReq
             for tag in event.tagsReq.all():
                 event.tags.add(tag)
                 event.tagsReq.remove(tag)
@@ -116,6 +121,7 @@ def approveEventChange(ID, req):
             event.titleReq	  = None
             event.detailsReq  = None
             event.speakerReq  = None
+            event.imgurLReq   = None
             event.save()
             return event
         else:
