@@ -75,7 +75,7 @@ class _TagFormState extends State<TagForm> {
 
   @override
   Widget build(BuildContext context) {
-    initTags();
+    print(selectedTags);
     List<CheckboxListTile> allCheckBoxes = [];
     for (Tag tag in allTags) {
       allCheckBoxes.add(
@@ -137,7 +137,7 @@ class _SortFormState extends State<SortForm> {
     Tag("By popularity"),
     Tag("By Name"),
     Tag("By Date"),
-  ]; //TODO: Get list of tags from server
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +163,7 @@ class _SortFormState extends State<SortForm> {
 
     return AlertDialog(
       title: Text("Please select sorting method"),
-      content: ListView(
+      content: Column(
         children: allRadios,
       ),
       actions: [
