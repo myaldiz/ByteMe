@@ -4,14 +4,14 @@ import 'dart:convert';
 import './CustomCard.dart';
 import 'package:http/http.dart' as http; 
 
-Future<List<Widget>> createCardListBrowse(String url) async {
+List<Widget> createCardListBrowse(List events) {
   List<Widget> newCardsList = [];
   Widget card;
-  http.Response response = await http.get(
-    Uri.encodeFull(url), headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"}
-    );
-  Map<String, dynamic> data = json.decode(response.body);
-  if (data["Events"].isEmpty) {
+  // http.Response response = await http.get(
+  //   Uri.encodeFull(url), headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"}
+  //   );
+  // Map<String, dynamic> data = json.decode(response.body);
+  if (events.isEmpty) {
     card = Card(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -26,7 +26,7 @@ Future<List<Widget>> createCardListBrowse(String url) async {
       newCardsList.add(card);
       return newCardsList;
   }
-  data["Events"].forEach((event) {
+  events.forEach((event) {
     card = CustomCard(event);
     newCardsList.add(card);
   });

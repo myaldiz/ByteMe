@@ -256,6 +256,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       speakerEmail = _speakerEmail.text;
       details = _details.text;
       eventAbstract = _eventAbstract.text;
+      imageURL = _imageURL.text;
     });
     Map<String, dynamic> data = {};
     Map<String, dynamic> speaker = {};
@@ -274,9 +275,6 @@ class MyCustomFormState extends State<MyCustomForm> {
     data["Event"] = eventj;
     var tool = JsonEncoder();
     var json = tool.convert(data);
-    print("++++++++");
-    print(event);
-    print(event["identifier"]);
     var response = await http.post(
         Uri.encodeFull(
             'http://127.0.0.1:8000/api/v1/event/modify/' + event["identifier"]),

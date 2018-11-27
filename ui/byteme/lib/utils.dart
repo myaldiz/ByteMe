@@ -56,7 +56,7 @@ class _TagFormState extends State<TagForm> {
   void initState() {
     super.initState();
     initTags();
-    if(widget.initialValue.length > 0){
+    if(widget.initialValue != null && widget.initialValue.length > 0){
       selectedTags = widget.initialValue;
     }
   }
@@ -137,7 +137,7 @@ class SortForm extends StatefulWidget {
 class _SortFormState extends State<SortForm> {
   String selectedSort;
   List<String> allSortings = [
-    "By popularity",
+    "By Ranking",
     "By Name",
     "By Date",
   ];
@@ -281,6 +281,32 @@ List<Widget> filterCards(List<Widget> cards, List<Tag> selectedTags){
   
 }
 
-List<Widget> sortCards(List<Widget> cards, String sorting){
-
+List sortCards(List events, String criteria){
+  print(criteria);
+  print("_----------------");
+  print(events);
+  if (criteria == "By Ranking") {
+    print(events[0]["Iscore"]);
+    events.sort((m1, m2) {
+        if(m1["Iscore"] == null || m2["Iscore"] == null){
+          print("NOoooooooo");
+        }
+        var r = m1["Iscore"].compareTo(m2["Iscore"]);
+        if (r != 0) return r;
+      });
+    return events;
+  } else if (criteria == "By Name") {
+    events.sort((m1, m2) {
+        var r = m1["title"].compareTo(m2["title"]);
+        if (r != 0) return r;
+      });
+    return events;
+  } else if (criteria == "By Date"){
+    events.sort((m1, m2) {
+        var r = m1["time"].compareTo(m2["time"]);
+        if (r != 0) return r;
+      });
+    return events;
+  }
+  return events;
 }
