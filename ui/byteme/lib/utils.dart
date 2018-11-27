@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'token.dart';
 
 // import './CustomCard.dart';
 // import './ReviewedCustomCard.dart';
@@ -47,18 +49,33 @@ class TagForm extends StatefulWidget {
 
 class _TagFormState extends State<TagForm> {
   List<Tag> selectedTags = [];
-  List<Tag> allTags = [
-    Tag("Tag1"),
-    Tag("Tag2"),
-    Tag("Tag3"),
-    Tag("Tag4"),
-    Tag("Tag5"),
-    Tag("Tag6"),
-    Tag("Tag7")
-  ]; //TODO: Get list of tags from server
+  List<Tag> allTags;
+
+  @override
+  void initState() {
+    super.initState();
+    initTags();
+    
+  }
+
+  initTags() async{
+    List<Tag> newTags = [];
+    http.Response response = await http.get(
+    Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/tag/browse'), 
+    headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token  " + token}
+    );
+    Map<String, dynamic> data = json.decode(response.body);
+    for (Map<String,dynamic> tag in data["Tags"]) {
+      newTags.add(Tag(tag["name"]));
+    }
+    setState((){
+      allTags = newTags;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    initTags();
     List<CheckboxListTile> allCheckBoxes = [];
     for (Tag tag in allTags) {
       allCheckBoxes.add(
@@ -77,7 +94,6 @@ class _TagFormState extends State<TagForm> {
         ),
       );
     }
-
     return AlertDialog(
       title: Text("Please select tags"),
       content: Column(
@@ -147,7 +163,7 @@ class _SortFormState extends State<SortForm> {
 
     return AlertDialog(
       title: Text("Please select sorting method"),
-      content: Column(
+      content: ListView(
         children: allRadios,
       ),
       actions: [
