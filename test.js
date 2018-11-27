@@ -54,7 +54,34 @@ switch(API) {
         http_method = "POST";
         url = "event/add";
         postData = JSON.stringify(
-            {"Request":"Add_event","Event":{"abstract":"qwr","place":"sdfg","time":"2018-11-14 07:07:00.000Z","title":"asdasf","details":"zxceg","speaker":{"name":"fdg","univ":"wer","speakerEmail":"asssf@gmail.com"},"poster_image":"rhtr"}}
+            {
+                "Request":"Add_event",
+                "Event":{
+                    "abstract":"qwr",
+                    "place":"sdfg",
+                    "time":"2018-11-14 07:07:00.000Z",
+                    "title":"asdasf",
+                    "details":"zxceg",
+                    "speaker":{
+                        "name":"Steve",
+                        "univ":"KAIST",
+                        "speakerEmail": "Steveeee@email.com"
+                    },
+                    "poster_image":"rhtr",
+                    "tags": [
+                        {
+                            "name":"Anaerobic Digestion"
+                        },
+                        {
+                            "name":"Microalgae"
+                        },
+                        {
+                            "name":"Computational Fluid Dynamics"
+                        }
+                    ]
+
+                }
+            }
         );
         _headers = {
             "Content-Type": "application/json",
@@ -78,12 +105,7 @@ switch(API) {
         url = "event/modify/"+ID;
         postData = JSON.stringify(
             {
-                "Request": "Modify_event",
-                "User": {   
-                    "email": "user1@gmail.com",      
-                    "pw_hash": "XXA83jd3kljsdf",    
-                    "ip": "143.248.143.29"  
-                },    
+                "Request": "Modify_event", 
                 "Event": {
                     "abstract": "Superman is the best",
                     "place": "Kaist",
@@ -96,7 +118,19 @@ switch(API) {
                         "univ": "KAIST",
                         "speakerEmail": "Harlem@email.com"
                     },  
+                    "tags": [
+                        {
+                            "name":"Anaerobic Digestion"
+                        },
+                        {
+                            "name":"Microalgae"
+                        },
+                        {
+                            "name":"Computational Fluid Dynamics"
+                        }
+                    ]
                 }
+
             }
         )
         _headers = {

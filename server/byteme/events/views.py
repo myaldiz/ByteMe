@@ -85,6 +85,11 @@ def approveEventChange(ID, req):
             if event.speakerReq != None:
                 event.speaker = event.speakerReq
                 event.speakerReq  = None
+            
+            if event.tagsReq.all().exists() == True:
+                for tag in event.tagsReq.all():
+                    event.tags.add(tag)
+                    event.tagsReq.remove(tag)
 
             event.req = "non"
             event.save()
@@ -101,6 +106,9 @@ def approveEventChange(ID, req):
             event.time        = event.timeReq
             event.title       = event.titleReq
             event.details     = event.detailsReq
+            for tag in event.tagsReq.all():
+                event.tags.add(tag)
+                event.tagsReq.remove(tag)
             event.req         = "non"
             event.abstractReq = None
             event.placeReq	  = None

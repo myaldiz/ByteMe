@@ -17,6 +17,7 @@ class EventSerializer(serializers.Serializer):
     req        = serializers.CharField(required = False, allow_blank=True, max_length=100)
     Iscore     = serializers.DecimalField(required = False, allow_null = True, max_digits = 3, decimal_places = 3)
     speaker    = SpeakerSerializer(required = False)
+    tags       = TagSerializer(required = False, many = True)
     #TODO poster_image
 
 
@@ -30,9 +31,14 @@ class EventSerializer(serializers.Serializer):
         if "speaker" in validated_data:
             speaker_data         = validated_data.pop('speaker')
             instance.speakerReq  = Speaker.objects.update_or_create(**speaker_data)[0]
+        
+        if "tags" in validated_data:
+            tags_data = validated_data.pop('tags')
+            for tag in tags_data:
+                tag_get = Tag.objects.get(name = tag.get('name'))
+                instance.tagsReq.add(tag_get) 
 
         if instance.req == "non":
-            
             instance.req = "mod"
             
         instance.save()
