@@ -82,16 +82,6 @@ class MyCustomFormState extends State<MyCustomForm> {
                   }
                 },
               ),
-              TextFormField(
-<<<<<<< HEAD
-                controller: _department,
-                decoration: InputDecoration(hintText: "Department"),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter information';
-                  }
-                },
-              ),
               Padding(
                   padding: EdgeInsets.only(top: 10.0),
                   child: RaisedButton(
@@ -109,8 +99,6 @@ class MyCustomFormState extends State<MyCustomForm> {
                     },
                   )),
               TextFormField(
-=======
->>>>>>> 2880ca6fe33c47883b9bfef0b9bb91e46f3e593a
                 controller: _speakerName,
                 decoration: InputDecoration(hintText: "Speaker Name"),
                 validator: (value) {
