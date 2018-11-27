@@ -12,18 +12,19 @@ class BrowsePage extends StatefulWidget {
 class BrowsePageState extends State<BrowsePage> {
   List<Widget> _cardsList = [];
   List<Tag> selectedTags = [];
-  Tag selectedSort;
+  String selectedSort;
 
   @override
   Widget build(BuildContext context) {
     if (_cardsList.length == 0) {
       updateList();
-      return Scaffold(appBar: AppBar(title: Text("Events")), 
-      body: Container(
-        alignment: Alignment.center,
-        child: CircularProgressIndicator()
-        ));
+      return Scaffold(
+          appBar: AppBar(title: Text("Events")),
+          body: Container(
+              alignment: Alignment.center, child: CircularProgressIndicator()));
     }
+    // _cardsList = filterCards(_cardsList, selectedTags);
+    // _cardsList = sortCards(_cardsList, selectedSort);
     return Scaffold(
         appBar: AppBar(title: Text("Events"), actions: [
           IconButton(
@@ -32,7 +33,7 @@ class BrowsePageState extends State<BrowsePage> {
               showDialog(
                   context: context,
                   builder: (context) {
-                    return SortForm(onSubmit: (Tag newSort) {
+                    return SortForm(onSubmit: (String newSort) {
                       setState(() {
                         selectedSort = newSort;
                       });
@@ -62,8 +63,8 @@ class BrowsePageState extends State<BrowsePage> {
   }
 
   Future<void> updateList() async {
-    List<Widget> newList =
-        await createCardListBrowse('http://admin:asdfghjkl@127.0.0.1:8000/api/v1/event/browse?type=all');
+    List<Widget> newList = await createCardListBrowse(
+        'http://127.0.0.1:8000/api/v1/event/browse?type=all');
     setState(() {
       _cardsList = newList;
     });
