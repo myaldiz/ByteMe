@@ -33,7 +33,7 @@ class _LoginState extends State<LoginPage> {
     });
     Map<String, dynamic> data = {};
     data["username"] = email;
-    data["password"] = password;
+    data["password"] = password.hashCode.toString();
     var tool = JsonEncoder();
     var json = tool.convert(data);
     // var json = JSON.encode(data);
@@ -74,10 +74,10 @@ class _LoginState extends State<LoginPage> {
           padding: EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 10.0),
           child: TextFormField(
             controller: _email,
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.text,
             autofocus: false,
             decoration: InputDecoration(
-              hintText: 'Email',
+              hintText: 'Username',
               contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),

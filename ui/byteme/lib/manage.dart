@@ -13,7 +13,7 @@ class ManagePage extends StatefulWidget {
 class ManagePageState extends State<ManagePage> {
   List<Widget> _cardsList = [];
   List<Tag> selectedTags = [];
-  Tag selectedSort;
+  String selectedSort;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class ManagePageState extends State<ManagePage> {
                 showDialog(
                     context: context,
                     builder: (context) {
-                      return SortForm(onSubmit: (Tag newSort) {
+                      return SortForm(onSubmit: (String newSort) {
                         setState(() {
                           selectedSort = newSort;
                         });

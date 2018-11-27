@@ -79,7 +79,7 @@ class ProfilePageState extends State<ProfilePage> {
     ));
     newContent.add(
       Text(
-        "Usernammme",
+        "Username",
         style: TextStyle(
           fontSize: 25.0,
           fontWeight: FontWeight.bold,
