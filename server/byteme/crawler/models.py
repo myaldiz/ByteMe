@@ -295,6 +295,7 @@ class Crawler:
 
 
     def scholar_worker(self):    
+        print("Scholar Worker Back!")
         while not self.scholar_q.empty():
             cur_scholar = self.scholar_q.get()
             scholar_dic = self.crawl_scholar(cur_scholar)
@@ -304,7 +305,7 @@ class Crawler:
                     scholar_dic['tags'] = tag_objects
                 self.update_scholar_info(cur_scholar, scholar_dic)
             time.sleep(self.scholar_sleep)
-        print("Finished crawling :(")
+        print("Scholar Worker Stopped")
 
             
     def scholar_crawl_request(self, scholar):
@@ -392,7 +393,12 @@ class Crawler:
 
     def crawl_scholar(self, scholar):
         crawl_dic = {}
-        scholar_id = self.crawl_single_scholar_id(scholar)
+        try:
+            scholar_id = self.crawl_single_scholar_id(scholar)
+        except:
+            print('Google Search blocked crawling :(')
+            return crawl_dic
+        
         if scholar_id == None:
             return crawl_dic
         
@@ -400,7 +406,12 @@ class Crawler:
         link = self.create_link(scholar_id)
 
         #Get the page
-        page = requests.get(link)
+        try:
+            page = requests.get(link)
+        except Exception:
+            print('Google Scholar blocked crawling :(')
+            return crawl_dic
+
         soup = BeautifulSoup(page.content, 'html.parser')
 
         try:
