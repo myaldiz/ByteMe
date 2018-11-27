@@ -33,7 +33,7 @@ class _LoginState extends State<LoginPage> {
     });
     Map<String, dynamic> data = {};
     data["username"] = email;
-    data["password"] = password.hashCode.toString();
+    data["password"] = password;
     var tool = JsonEncoder();
     var json = tool.convert(data);
     // var json = JSON.encode(data);
