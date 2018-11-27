@@ -243,7 +243,7 @@ switch(API) {
         }
         break;
         
-    case "signin":
+    case "login":
         http_method = "POST"
         url = "account/api-token-auth/"
         postData = JSON.stringify(

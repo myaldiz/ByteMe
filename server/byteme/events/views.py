@@ -127,7 +127,6 @@ def approveEventChange(ID, req):
 @authentication_classes((SessionAuthentication, TokenAuthentication)) 
 @permission_classes((IsAuthenticated,))
 def BrowseEvent(request):
-    # login_user = User.objects.get(email = "myaldiz@kaist.ac.kr")
     login_user = request.user #get login user
     login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
     
@@ -147,7 +146,7 @@ def BrowseEvent(request):
         event['attendingStatus'] = str(login_userprofile) in event['attendant']
         if event['req'] == "non":
             event_type = "Accepted"
-        elif event['req']  == "mod" and event['req'] == "del":
+        elif event['req']  == "mod" or event['req'] == "del":
             event_type = "Processing"
         event['type'] = event_type
 
