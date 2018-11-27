@@ -35,10 +35,9 @@ class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
 
   DateTime dateTime;
-  String title, place, department, speakerName, speakerUni, speakerEmail , details, eventAbstract, imageURL;
+  String title, place, speakerName, speakerUni, speakerEmail , details, eventAbstract, imageURL;
   static final _title = TextEditingController();
   static final _place = TextEditingController();
-  static final _department = TextEditingController();
   static final _speakerName = TextEditingController();
   static final _speakerUni = TextEditingController();
   static final _speakerEmail = TextEditingController();
@@ -76,15 +75,6 @@ class MyCustomFormState extends State<MyCustomForm> {
               TextFormField(
                 controller: _place,
                 decoration: InputDecoration(hintText: "Place"),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter information';
-                  }
-                },
-              ),
-              TextFormField(
-                controller: _department,
-                decoration: InputDecoration(hintText: "Department"),
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -150,6 +140,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 child: RaisedButton(
                   color: Theme.of(context).primaryColor,
                   onPressed: () {
+                    Navigator.of(context).pop();
                     makeRequest();
                     showDialog(
                           context: context,
@@ -170,8 +161,6 @@ class MyCustomFormState extends State<MyCustomForm> {
                           });
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
-                    print("===========");
-                    Navigator.of(context).pop();
                     // if (_formKey.currentState.validate()) {
                     //   // If the form is valid, we want to show a Snackbar
                     //   Navigator.of(context).pop();
@@ -192,7 +181,6 @@ class MyCustomFormState extends State<MyCustomForm> {
     setState(() {
       title = _title.text;
       place = _place.text;
-      department = _department.text;
       speakerName = _speakerName.text;
       speakerUni =  _speakerUni.text;
       speakerEmail = _speakerEmail.text;

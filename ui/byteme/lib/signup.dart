@@ -32,8 +32,8 @@ class _SignupState extends State<SignupPage> {
     setState(() {
       email = _email.text;
       username = _username.text;
-      password = _password.text.hashCode.toString();
-      passwordRepeat = _passwordRepeat.text.hashCode.toString();
+      password = _password.text;
+      passwordRepeat = _passwordRepeat.text;
     });
 
     if (password != passwordRepeat) {
