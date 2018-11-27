@@ -191,8 +191,6 @@ class MyCustomFormState extends State<MyCustomForm> {
     event["abstract"] = eventAbstract;
     event["place"] = place;
     event["time"] = dateTime.toUtc().toString();
-    print("-------------");
-    print(event["time"]);
     event["title"] = title;
     event["details"] = details;
     event["speaker"] = speaker;
@@ -200,14 +198,14 @@ class MyCustomFormState extends State<MyCustomForm> {
     data["Event"] = event;
     var tool = JsonEncoder();
     var json = tool.convert(data);
+    print(json);
     var response = await http.post(
         Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/add'),
         body: json,
         headers: {
           "content-type": "application/json",
           "accept": "application/json",
-          "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2",
-          'Content-Length': json.length.toString()
+          "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"
         });
     print(response.body);
   }

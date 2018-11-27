@@ -55,12 +55,7 @@ switch(API) {
         url = "event/add";
         postData = JSON.stringify(
             {    
-                "Request": "Add_event",     
-                "User": {   
-                    "email": "user1@gmail.com",      
-                    "pw_hash": "XXA83jd3kljsdf",    
-                    "ip": "143.248.143.29"  
-                },        
+                "Request": "Add_event",        
                 "Event": {      
                     "abstract": "BlaBla",       
                     "place": "Kaist",       

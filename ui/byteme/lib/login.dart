@@ -59,6 +59,9 @@ class _LoginState extends State<LoginPage> {
         });
     if (response.statusCode == 200) {
       token = json.decode(response.body)["token"];
+      print(token);
+    } else {
+      print("UUUU");
     }
     return response.statusCode == 200;
   }
