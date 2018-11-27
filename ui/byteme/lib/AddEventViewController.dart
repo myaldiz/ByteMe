@@ -36,6 +36,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   DateTime dateTime;
   String title, place, department, speakerName, speakerUni, speakerEmail , details, eventAbstract, imageURL;
+  List<Tag> selectedTags;
   static final _title = TextEditingController();
   static final _place = TextEditingController();
   static final _department = TextEditingController();
@@ -91,6 +92,22 @@ class MyCustomFormState extends State<MyCustomForm> {
                   }
                 },
               ),
+              Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: RaisedButton(
+                    child: Text("Select Tags"),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return TagForm(onSubmit: (List<Tag> newList) {
+                              setState(() {
+                                selectedTags = newList;
+                              });
+                            });
+                          });
+                    },
+                  )),
               TextFormField(
                 controller: _speakerName,
                 decoration: InputDecoration(hintText: "Speaker Name"),

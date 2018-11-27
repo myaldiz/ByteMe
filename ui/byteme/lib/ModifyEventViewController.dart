@@ -42,6 +42,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   DateTime dateTime;
   String title, place, department, speakerName, speakerUni, speakerEmail;
   String details, eventAbstract, imageURL;
+  List<Tag> selectedTags;
   static final _title = TextEditingController();
   static final _place = TextEditingController();
   static final _department = TextEditingController();
@@ -63,6 +64,10 @@ class MyCustomFormState extends State<MyCustomForm> {
     _details.text = event["details"];
     _eventAbstract.text = event["abstract"];
     _imageURL.text = event["poster_image"];
+    List<Tag> initialTags = [];
+    for(Map<String,String> tag in event["tags"]){
+      initialTags.add(Tag(tag["name"]));
+    }
     // final _title = TextEditingController(
     //   text: event["title"],
     // );
@@ -135,6 +140,23 @@ class MyCustomFormState extends State<MyCustomForm> {
                   }
                 },
               ),
+              Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: RaisedButton(
+                    child: Text("Select Tags"),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return TagForm(onSubmit: (List<Tag> newList) {
+                              setState(() {
+                                selectedTags = newList;
+                              });
+                            },
+                            initialValue: initialTags,);
+                          });
+                    },
+                  )),
               TextFormField(
                 controller: _speakerName,
                 decoration:
@@ -202,22 +224,22 @@ class MyCustomFormState extends State<MyCustomForm> {
                   onPressed: () {
                     makeRequest();
                     showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                                content: Text(
-                                    "Your modifications were submitted for review. Changes will be applied after administrator's review."),
-                                actions: <Widget>[
-                                  RaisedButton(
-                                      onPressed: () {
-                                        //TODO: Send delete request
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text(
-                                        'OK',
-                                      )),
-                                ]);
-                          });
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                              content: Text(
+                                  "Your modifications were submitted for review. Changes will be applied after administrator's review."),
+                              actions: <Widget>[
+                                RaisedButton(
+                                    onPressed: () {
+                                      //TODO: Send delete request
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      'OK',
+                                    )),
+                              ]);
+                        });
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
                     print("===========");
@@ -244,7 +266,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       place = _place.text;
       department = _department.text;
       speakerName = _speakerName.text;
-      speakerUni =  _speakerUni.text;
+      speakerUni = _speakerUni.text;
       speakerEmail = _speakerEmail.text;
       details = _details.text;
       eventAbstract = _eventAbstract.text;
@@ -271,12 +293,14 @@ class MyCustomFormState extends State<MyCustomForm> {
     print(event);
     print(event["identifier"]);
     var response = await http.post(
-        Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/modify/' + event["identifier"]),
+        Uri.encodeFull(
+            'http://127.0.0.1:8000/api/v1/event/modify/' + event["identifier"]),
         body: json,
         headers: {
           "content-type": "application/json",
           "accept": "application/json",
-          "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"
+          "Authorization":
+              "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"
         });
     return;
   }

@@ -40,8 +40,9 @@ typedef void TagFormCallback(List<Tag> selectedTags);
 
 class TagForm extends StatefulWidget {
   final TagFormCallback onSubmit;
+  final List<Tag> initialValue;
 
-  TagForm({this.onSubmit});
+  TagForm({this.onSubmit, this.initialValue});
 
   @override
   _TagFormState createState() => new _TagFormState();
@@ -55,7 +56,9 @@ class _TagFormState extends State<TagForm> {
   void initState() {
     super.initState();
     initTags();
-    
+    if(widget.initialValue.length > 0){
+      selectedTags = widget.initialValue;
+    }
   }
 
   initTags() async{
