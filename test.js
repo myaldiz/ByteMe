@@ -54,22 +54,7 @@ switch(API) {
         http_method = "POST";
         url = "event/add";
         postData = JSON.stringify(
-            {    
-                "Request": "Add_event",        
-                "Event": {      
-                    "abstract": "BlaBla",       
-                    "place": "Kaist",       
-                    "time": "2018-11-03 03:01:00.914138+00:00",         
-                    "title": "Zombies",         
-                    "details": "Blabla",
-                    "speaker": {
-                        "name": "Steve",
-                        "univ": "KAIST",
-                        "speakerEmail": "Steveeee@email.com"
-                    },  
-                    "poster_image": "imageimage" 
-                }       
-            }
+            {"Request":"Add_event","Event":{"abstract":"qwr","place":"sdfg","time":"2018-11-14 07:07:00.000Z","title":"asdasf","details":"zxceg","speaker":{"name":"fdg","univ":"wer","speakerEmail":"asssf@gmail.com"},"poster_image":"rhtr"}}
         );
         _headers = {
             "Content-Type": "application/json",
