@@ -127,7 +127,6 @@ def approveEventChange(ID, req):
 @authentication_classes((SessionAuthentication, TokenAuthentication)) 
 @permission_classes((IsAuthenticated,))
 def BrowseEvent(request):
-    # login_user = User.objects.get(email = "myaldiz@kaist.ac.kr")
     login_user = request.user #get login user
     login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
     
