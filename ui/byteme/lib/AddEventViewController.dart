@@ -151,6 +151,23 @@ class MyCustomFormState extends State<MyCustomForm> {
                   color: Theme.of(context).primaryColor,
                   onPressed: () {
                     makeRequest();
+                    showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                                content: Text(
+                                    "Your event was submitted for review. It will be posted after administrator's review."),
+                                actions: <Widget>[
+                                  RaisedButton(
+                                      onPressed: () {
+                                        //TODO: Send delete request
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        'OK',
+                                      )),
+                                ]);
+                          });
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
                     if (_formKey.currentState.validate()) {
@@ -208,6 +225,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"
         });
     print(response.body);
+    return;
   }
 }
 
