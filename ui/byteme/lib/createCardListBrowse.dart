@@ -8,11 +8,11 @@ import './token.dart';
 List<Widget> createCardListBrowse(List events) {
   List<Widget> newCardsList = [];
   Widget card;
-  http.Response response = await http.get(
-    Uri.encodeFull(url), headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token " + token}
-    );
-  Map<String, dynamic> data = json.decode(response.body);
-  if (data["Events"].isEmpty) {
+  // http.Response response = await http.get(
+  //   Uri.encodeFull(url), headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"}
+  //   );
+  // Map<String, dynamic> data = json.decode(response.body);
+  if (events.isEmpty) {
     card = Card(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
