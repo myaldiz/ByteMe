@@ -72,6 +72,7 @@ class ReviewedCustomCard extends StatelessWidget {
                                         //TODO: Send delete request
                                         Navigator.of(context).pop();
                                       },
+                                      textColor: Theme.of(context).primaryTextTheme.button.color,
                                       child: Text(
                                         'Yes',
                                       )),
@@ -79,6 +80,7 @@ class ReviewedCustomCard extends StatelessWidget {
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
+                                      textColor: Theme.of(context).primaryTextTheme.button.color,
                                       child: Text(
                                         'Cancel',
                                       )),

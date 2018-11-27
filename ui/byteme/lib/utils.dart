@@ -101,18 +101,18 @@ class _TagFormState extends State<TagForm> {
       ),
       actions: [
         RaisedButton(
+          textColor: Theme.of(context).primaryTextTheme.button.color,
+          child: Text("Cancel"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        RaisedButton(
           child: Text("Apply"),
           textColor: Theme.of(context).primaryTextTheme.button.color,
           onPressed: () {
             Navigator.of(context).pop();
             widget.onSubmit(selectedTags);
-          },
-        ),
-        RaisedButton(
-          textColor: Theme.of(context).primaryTextTheme.button.color,
-          child: Text("Cancel"),
-          onPressed: () {
-            Navigator.of(context).pop();
           },
         )
       ],
@@ -120,7 +120,7 @@ class _TagFormState extends State<TagForm> {
   }
 }
 
-typedef void SortFormCallback(Tag selectedSort);
+typedef void SortFormCallback(String selectedSort);
 
 class SortForm extends StatefulWidget {
   final SortFormCallback onSubmit;
@@ -132,29 +132,29 @@ class SortForm extends StatefulWidget {
 }
 
 class _SortFormState extends State<SortForm> {
-  Tag selectedSort;
-  List<Tag> allTags = [
-    Tag("By popularity"),
-    Tag("By Name"),
-    Tag("By Date"),
+  String selectedSort;
+  List<String> allSortings = [
+    "By popularity",
+    "By Name",
+    "By Date",
   ];
 
   @override
   Widget build(BuildContext context) {
     List<Row> allRadios = [];
-    for (Tag tag in allTags) {
+    for (String sorting in allSortings) {
       allRadios.add(
         Row(
           children: [
-            Text(tag.name),
+            Text(sorting),
             Radio(
               groupValue: selectedSort,
-              onChanged: (dynamic tag) {
+              onChanged: (dynamic sorting) {
                 setState(() {
-                  selectedSort = tag;
+                  selectedSort = sorting;
                 });
               },
-              value: tag,
+              value: sorting,
             ),
           ],
         ),
@@ -169,19 +169,20 @@ class _SortFormState extends State<SortForm> {
       actions: [
         RaisedButton(
           textColor: Theme.of(context).primaryTextTheme.button.color,
-          child: Text("Apply"),
-          onPressed: () {
-            Navigator.of(context).pop();
-            widget.onSubmit(selectedSort);
-          },
-        ),
-        RaisedButton(
-          textColor: Theme.of(context).primaryTextTheme.button.color,
           child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop();
           },
         )
+        ,RaisedButton(
+          textColor: Theme.of(context).primaryTextTheme.button.color,
+          child: Text("Apply"),
+          onPressed: () {
+            Navigator.of(context).pop();
+            widget.onSubmit(selectedSort);
+          },
+        )
+        
       ],
     );
   }
@@ -252,9 +253,9 @@ class DateTimeItem extends StatelessWidget {
   Future _showDatePicker(BuildContext context) async {
     DateTime dateTimePicked = await showDatePicker(
         context: context,
-        initialDate: date,
-        firstDate: date.subtract(const Duration(days: 20000)),
-        lastDate: DateTime.now());
+        initialDate: DateTime.now(),
+        firstDate: date.subtract(const Duration(days: 1)),
+        lastDate: date.add(const Duration(days: 20000)));
 
     if (dateTimePicked != null) {
       onChanged(DateTime(dateTimePicked.year, dateTimePicked.month,
@@ -271,4 +272,12 @@ class DateTimeItem extends StatelessWidget {
           date.year, date.month, date.day, timeOfDay.hour, timeOfDay.minute));
     }
   }
+}
+
+List<Widget> filterCards(List<Widget> cards, List<Tag> selectedTags){
+  
+}
+
+List<Widget> sortCards(List<Widget> cards, String sorting){
+
 }
