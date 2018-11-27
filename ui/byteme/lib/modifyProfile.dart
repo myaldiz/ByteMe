@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'utils.dart';
 import 'package:http/http.dart' as http;
-import 'token.dart';
+import './token.dart';
 import 'dart:convert';
 
 class ModifyProfile extends StatelessWidget {
@@ -112,7 +112,7 @@ class MyCustomFormState extends State<MyCustomForm> {
         headers: {
           "content-type": "application/json",
           "accept": "application/json",
-          "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"
+          "Authorization": "Token " + token
         });
   }
 }

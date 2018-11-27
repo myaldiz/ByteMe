@@ -3,14 +3,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'ReviewedCustomCard.dart';
 import 'package:http/http.dart' as http; 
-import 'token.dart';
+import './token.dart';
 
 Future<List<Widget>> createCardListModify(String url) async {
   List<Widget> newCardsList = [];
   Widget card;
   http.Response response = await http.get(
     Uri.encodeFull(url),
-    headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"}
+    headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token " + token}
     );
   Map<String, dynamic> data = json.decode(response.body);
   print(data);

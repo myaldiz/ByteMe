@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'utils.dart';
+import './token.dart';
 
 class AddEventViewController extends StatelessWidget {
   @override
@@ -233,7 +234,7 @@ class MyCustomFormState extends State<MyCustomForm> {
         headers: {
           "content-type": "application/json",
           "accept": "application/json",
-          "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"
+          "Authorization": "Token " + token
         });
     return;
   }

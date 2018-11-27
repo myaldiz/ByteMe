@@ -22,7 +22,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.renderers import TemplateHTMLRenderer
 
 from crawler.models import Crawler
-# crawler = Crawler()
+crawler = Crawler()
 
 # helper fuction
 def queryEvent(user, event_type):
@@ -199,7 +199,7 @@ def AddEvent(request):
     
     
     #This will create request for crawling, will take 5secs
-    # crawler.scholar_crawl_request(speaker) 
+    crawler.scholar_crawl_request(speaker) 
 
     creater = login_userprofile
 

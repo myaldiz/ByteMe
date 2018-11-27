@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import './EventDetailsViewController.dart';
 import 'package:intl/intl.dart';
-import 'token.dart';
+import './token.dart';
+
 
 class CustomCard extends StatelessWidget {
   final Map<String, dynamic> event;
@@ -102,7 +103,7 @@ class AttendingButtonState extends State<AttendingButton> {
                 headers: {
                   "content-type": "application/json",
                   "accept": "application/json",
-                  "Authorization": "Token " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"
+                  "Authorization": "Token " + token
                 });
             setState(() {
               attendingStatus = false;
@@ -120,7 +121,7 @@ class AttendingButtonState extends State<AttendingButton> {
                 headers: {
                   "content-type": "application/json",
                   "accept": "application/json",
-                  "Authorization": "Token " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"
+                  "Authorization": "Token " + token
                 });
             setState(() {
               attendingStatus = true;

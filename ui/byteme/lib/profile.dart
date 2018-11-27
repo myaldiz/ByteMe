@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'modifyProfile.dart';
 import 'utils.dart';
-import 'token.dart';
+import './token.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -41,7 +41,7 @@ class ProfilePageState extends State<ProfilePage> {
         headers: {
           "content-type": "application/json",
           "accept": "application/json",
-          "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"
+          "Authorization": "Token " + token
         });
     Map<String, dynamic> data = json.decode(response.body);
     newContent.add(

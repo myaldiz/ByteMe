@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'utils.dart';
+import './token.dart';
 
 class ModifyEventViewController extends StatelessWidget {
   final Map<String, dynamic> event;
@@ -290,7 +291,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           "content-type": "application/json",
           "accept": "application/json",
           "Authorization":
-              "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"
+              "Token " + token
         });
     return;
   }

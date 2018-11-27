@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-import 'token.dart';
+import './token.dart';
 
 // import './CustomCard.dart';
 // import './ReviewedCustomCard.dart';
@@ -56,7 +56,7 @@ class _TagFormState extends State<TagForm> {
   void initState() {
     super.initState();
     initTags();
-    if(widget.initialValue.length > 0){
+    if(widget.initialValue != null && widget.initialValue.length > 0){
       selectedTags = widget.initialValue;
     }
   }
@@ -65,7 +65,7 @@ class _TagFormState extends State<TagForm> {
     List<Tag> newTags = [];
     http.Response response = await http.get(
     Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/tag/browse'), 
-    headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"}
+    headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token " + token}
     );
     Map<String, dynamic> data = json.decode(response.body);
     for (Map<String,dynamic> tag in data["Tags"]) {
