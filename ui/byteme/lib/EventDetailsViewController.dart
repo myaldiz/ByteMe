@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 
 class EventDetailsViewController extends StatelessWidget {
   final Map<String, dynamic> event;
   EventDetailsViewController(this.event);
   @override
   Widget build(BuildContext context) {
+    print(event);
     return Scaffold(
       appBar: new AppBar(
         title: new Text(
@@ -29,19 +32,19 @@ class EventDetailsViewController extends StatelessWidget {
             ),
           ),
           Text(
-            event["time"],
+            DateFormat('EEEE, MMMM d - hh:mm').format(DateTime.parse(event["time"])),
             style: TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.w100,
             ),
           ),
-          Text(
-            event["department"],
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w100,
-            ),
-          ),
+          // Text(
+          //   event["department"],
+          //   style: TextStyle(
+          //     fontSize: 18.0,
+          //     fontWeight: FontWeight.w100,
+          //   ),
+          // ),
           Text(
             event["place"],
             style: TextStyle(
@@ -50,7 +53,7 @@ class EventDetailsViewController extends StatelessWidget {
             ),
           ),
           Text(
-            event["speaker"],
+            event["speaker"]["name"],
             style: TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.w100,

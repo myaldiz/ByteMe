@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'login.dart';
-import 'signup.dart';
-import 'home.dart';
+import 'package:byteme/login.dart';
+import 'package:byteme/signup.dart';
+import 'package:byteme/home.dart';
 
 void main() => runApp(MyApp());
 

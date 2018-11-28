@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'utils.dart';
+import 'package:http/http.dart' as http;
+import './token.dart';
+import 'dart:convert';
 
 class ModifyProfile extends StatelessWidget {
   @override
@@ -33,6 +36,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
 
   List<Tag> selectedTags = [];
+  TextEditingController _dept = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +48,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           child: Column(
             children: <Widget>[
               TextFormField(
+                controller: _dept,
                 decoration: InputDecoration(
                     hintText: "Department", labelText: "Department"),
                 validator: (value) {
@@ -77,6 +82,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                     // the form is invalid.
                     if (_formKey.currentState.validate()) {
                       // If the form is valid, we want to show a Snackbar
+                      sendRequest();
                       Navigator.pop(context);
                     }
                   },
@@ -86,5 +92,27 @@ class MyCustomFormState extends State<MyCustomForm> {
             ],
           ),
         ));
+  }
+
+  sendRequest() async{
+    Map<String, dynamic> data = {};
+    data["Request"] = "Modify_profile";
+    data["dept"] = _dept.text;
+    List<Map<String,String>> tagsList = [];
+    for(Tag tag in selectedTags){
+      tagsList.add({"name": tag.name});
+    }
+    data["tags"] = tagsList;
+    var tool = JsonEncoder();
+    var postJson = tool.convert(data);
+
+    await http.post(
+        Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/modify'),
+        body: postJson,
+        headers: {
+          "content-type": "application/json",
+          "accept": "application/json",
+          "Authorization": "Token " + token
+        });
   }
 }

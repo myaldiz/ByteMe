@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'utils.dart';
+import './token.dart';
 
 class ModifyEventViewController extends StatelessWidget {
   final Map<String, dynamic> event;
@@ -36,8 +40,60 @@ class MyCustomFormState extends State<MyCustomForm> {
   final Map<String, dynamic> event;
   MyCustomFormState(this.event);
 
+  DateTime dateTime;
+  String title, place, speakerName, speakerUni, speakerEmail;
+  String details, eventAbstract, imageURL;
+  List<Tag> selectedTags;
+  static final _title = TextEditingController();
+  static final _place = TextEditingController();
+  static final _speakerName = TextEditingController();
+  static final _speakerUni = TextEditingController();
+  static final _speakerEmail = TextEditingController();
+  static final _details = TextEditingController();
+  static final _eventAbstract = TextEditingController();
+  static final _imageURL = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    _title.text = event["title"];
+    _place.text = event["place"];
+    _speakerName.text = event["speaker"]["name"];
+    _speakerUni.text = event["speaker"]["univ"];
+    _speakerEmail.text = event["speaker"]["speakerEmail"];
+    _details.text = event["details"];
+    _eventAbstract.text = event["abstract"];
+    _imageURL.text = event["poster_image"];
+    List<Tag> initialTags = [];
+    for(Map<String,String> tag in event["tags"]){
+      initialTags.add(Tag(tag["name"]));
+    }
+    // final _title = TextEditingController(
+    //   text: event["title"],
+    // );
+    // final _place = TextEditingController(
+    //   text: event["place"],
+    // );
+    // final _department = TextEditingController(
+    //   text: event["department"],
+    // );
+    // final _speakerName = TextEditingController(
+    //   text: event["speaker"]["name"],
+    // );
+    // final _speakerUni = TextEditingController(
+    //   text: event["speaker"]["univ"],
+    // );
+    // final _speakerEmail = TextEditingController(
+    //   text: event["speaker"]["speakerEmail"],
+    // );
+    // final _details = TextEditingController(
+    //   text: event["details"],
+    // );
+    // final _eventAbstract = TextEditingController(
+    //   text: event["poster_image"],
+    // );
+    // final _imageURL = TextEditingController(
+    //   text: event["abstract"],
+    // );
     // Build a Form widget using the _formKey we created above
     return Container(
         margin: EdgeInsets.all(15.0),
@@ -46,49 +102,54 @@ class MyCustomFormState extends State<MyCustomForm> {
           child: ListView(
             children: <Widget>[
               TextFormField(
+                controller: _title,
                 decoration:
                     InputDecoration(hintText: "Title", labelText: "Title"),
-                initialValue: event["title"],
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
                   }
                 },
               ),
-              TextFormField(
-                decoration:
-                    InputDecoration(hintText: "Time", labelText: "Time"),
-                initialValue: event["time"],
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter information';
-                  }
+              DateTimeItem(
+                dateTime: DateTime.parse(event["time"]),
+                onChanged: (newTime) {
+                  setState(() {
+                    dateTime = newTime;
+                  });
                 },
               ),
               TextFormField(
+                controller: _place,
                 decoration:
                     InputDecoration(hintText: "Place", labelText: "Place"),
-                initialValue: event["place"],
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
                   }
                 },
               ),
+              Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: RaisedButton(
+                    child: Text("Select Tags"),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return TagForm(onSubmit: (List<Tag> newList) {
+                              setState(() {
+                                selectedTags = newList;
+                              });
+                            },
+                            initialValue: initialTags,);
+                          });
+                    },
+                  )),
               TextFormField(
-                decoration: InputDecoration(
-                    hintText: "Department", labelText: "Department"),
-                initialValue: event["department"],
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter information';
-                  }
-                },
-              ),
-              TextFormField(
+                controller: _speakerName,
                 decoration:
                     InputDecoration(hintText: "Speaker", labelText: "Speaker"),
-                initialValue: event["speaker"]["name"],
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -96,9 +157,40 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
+                controller: _speakerUni,
+                decoration: InputDecoration(
+                    hintText: "Speaker University",
+                    labelText: "Speaker University"),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter information';
+                  }
+                },
+              ),
+              TextFormField(
+                controller: _speakerEmail,
+                decoration: InputDecoration(
+                    hintText: "Speaker Email", labelText: "Speaker Email"),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter information';
+                  }
+                },
+              ),
+              TextFormField(
+                controller: _details,
+                decoration:
+                    InputDecoration(hintText: "Details", labelText: "Details"),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter information';
+                  }
+                },
+              ),
+              TextFormField(
+                controller: _imageURL,
                 decoration: InputDecoration(
                     hintText: "Image URL", labelText: "Image URL"),
-                initialValue: event["poster_image"],
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -106,9 +198,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
+                controller: _eventAbstract,
                 decoration: InputDecoration(
                     hintText: "Abstract", labelText: "Abstract"),
-                initialValue: event["abstract"],
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter information';
@@ -119,12 +211,31 @@ class MyCustomFormState extends State<MyCustomForm> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: RaisedButton(
                   onPressed: () {
+                    Navigator.of(context).pop();
+                    makeRequest();
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                              content: Text(
+                                  "Your modifications were submitted for review. Changes will be applied after administrator's review."),
+                              actions: <Widget>[
+                                RaisedButton(
+                                    onPressed: () {
+                                      //TODO: Send delete request
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      'OK',
+                                    )),
+                              ]);
+                        });
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
-                    if (_formKey.currentState.validate()) {
-                      // If the form is valid, we want to show a Snackbar
-                      Navigator.pop(context);
-                    }
+                    // if (_formKey.currentState.validate()) {
+                    //   // If the form is valid, we want to show a Snackbar
+                    //   Navigator.of(context).pop();
+                    // }
                   },
                   child: Text(
                     'Edit',
@@ -135,5 +246,51 @@ class MyCustomFormState extends State<MyCustomForm> {
             ],
           ),
         ));
+  }
+
+  Future<void> makeRequest() async {
+    setState(() {
+      title = _title.text;
+      place = _place.text;
+      speakerName = _speakerName.text;
+      speakerUni = _speakerUni.text;
+      speakerEmail = _speakerEmail.text;
+      details = _details.text;
+      eventAbstract = _eventAbstract.text;
+      imageURL = _imageURL.text;
+    });
+    Map<String, dynamic> data = {};
+    Map<String, dynamic> speaker = {};
+    Map<String, dynamic> eventj = {};
+    data["Request"] = "Modify_event";
+    speaker["name"] = speakerName;
+    speaker["univ"] = speakerUni;
+    speaker["speakerEmail"] = speakerEmail;
+    eventj["abstract"] = eventAbstract;
+    eventj["place"] = place;
+    eventj["time"] = dateTime.toUtc().toString();
+    eventj["title"] = title;
+    eventj["details"] = details;
+    eventj["speaker"] = speaker;
+    eventj["poster_image"] = imageURL;
+    List<Map<String,String>> tagsList = [];
+    for(Tag tag in selectedTags){
+      tagsList.add({"name": tag.name});
+    }
+    eventj["tags"] = tagsList;
+    data["Event"] = eventj;
+    var tool = JsonEncoder();
+    var json = tool.convert(data);
+    var response = await http.post(
+        Uri.encodeFull(
+            'http://127.0.0.1:8000/api/v1/event/modify/' + event["identifier"]),
+        body: json,
+        headers: {
+          "content-type": "application/json",
+          "accept": "application/json",
+          "Authorization":
+              "Token " + token
+        });
+    return;
   }
 }

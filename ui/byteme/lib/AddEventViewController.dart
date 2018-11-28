@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'dart:convert';
+import 'dart:async';
+import 'package:http/http.dart' as http;
 import 'utils.dart';
+import './token.dart';
 
 class AddEventViewController extends StatelessWidget {
   @override
@@ -33,11 +36,10 @@ class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
 
   DateTime dateTime;
-  String title, place, department, speakerName, speakerUni, speakerEmail;
-  String details, eventAbstract, imageURL;
+  List<Tag> selectedTags;
+  String title, place, speakerName, speakerUni, speakerEmail , details, eventAbstract, imageURL;
   static final _title = TextEditingController();
   static final _place = TextEditingController();
-  static final _department = TextEditingController();
   static final _speakerName = TextEditingController();
   static final _speakerUni = TextEditingController();
   static final _speakerEmail = TextEditingController();
@@ -81,15 +83,22 @@ class MyCustomFormState extends State<MyCustomForm> {
                   }
                 },
               ),
-              TextFormField(
-                controller: _department,
-                decoration: InputDecoration(hintText: "Department"),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter information';
-                  }
-                },
-              ),
+              Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: RaisedButton(
+                    child: Text("Select Tags"),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return TagForm(onSubmit: (List<Tag> newList) {
+                              setState(() {
+                                selectedTags = newList;
+                              });
+                            });
+                          });
+                    },
+                  )),
               TextFormField(
                 controller: _speakerName,
                 decoration: InputDecoration(hintText: "Speaker Name"),
@@ -149,13 +158,31 @@ class MyCustomFormState extends State<MyCustomForm> {
                 child: RaisedButton(
                   color: Theme.of(context).primaryColor,
                   onPressed: () {
-
+                    Navigator.of(context).pop();
+                    makeRequest();
+                    showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                                content: Text(
+                                    "Your event was submitted for review. It will be posted after administrator's review."),
+                                actions: <Widget>[
+                                  RaisedButton(
+                                      onPressed: () {
+                                        //TODO: Send delete request
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        'OK',
+                                      )),
+                                ]);
+                          });
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
-                    if (_formKey.currentState.validate()) {
-                      // If the form is valid, we want to show a Snackbar
-                      Navigator.pop(context);
-                    }
+                    // if (_formKey.currentState.validate()) {
+                    //   // If the form is valid, we want to show a Snackbar
+                    //   Navigator.of(context).pop();
+                    // }
                   },
                   child: Text(
                     'Add',
@@ -167,5 +194,51 @@ class MyCustomFormState extends State<MyCustomForm> {
           ),
         ));
   }
+
+  Future<void> makeRequest() async {
+    setState(() {
+      title = _title.text;
+      place = _place.text;
+      speakerName = _speakerName.text;
+      speakerUni =  _speakerUni.text;
+      speakerEmail = _speakerEmail.text;
+      details = _details.text;
+      eventAbstract = _eventAbstract.text;
+      imageURL = _imageURL.text;
+    });
+    Map<String, dynamic> data = {};
+    Map<String, dynamic> speaker = {};
+    Map<String, dynamic> event = {};
+    data["Request"] = "Add_event";
+    speaker["name"] = speakerName;
+    speaker["univ"] = speakerUni;
+    speaker["speakerEmail"] = speakerEmail;
+    event["abstract"] = eventAbstract;
+    event["place"] = place;
+    event["time"] = dateTime.toUtc().toString();
+    event["title"] = title;
+    event["details"] = details;
+    event["speaker"] = speaker;
+    event["poster_image"] = imageURL;
+    List<Map<String,String>> tagsList = [];
+    for(Tag tag in selectedTags){
+      tagsList.add({"name": tag.name});
+    }
+    event["tags"] = tagsList;
+    data["Event"] = event;
+    var tool = JsonEncoder();
+    var json = tool.convert(data);
+    var response = await http.post(
+        Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/add'),
+        body: json,
+        headers: {
+          "content-type": "application/json",
+          "accept": "application/json",
+          "Authorization": "Token " + token
+        });
+    return;
+  }
 }
+
+
 
