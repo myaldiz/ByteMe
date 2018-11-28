@@ -112,6 +112,7 @@ class _TagFormState extends State<TagForm> {
         RaisedButton(
           child: Text("Apply"),
           textColor: Theme.of(context).primaryTextTheme.button.color,
+          color: Theme.of(context).primaryColor,
           onPressed: () {
             Navigator.of(context).pop();
             widget.onSubmit(selectedTags);
@@ -178,6 +179,7 @@ class _SortFormState extends State<SortForm> {
         )
         ,RaisedButton(
           textColor: Theme.of(context).primaryTextTheme.button.color,
+          color: Theme.of(context).primaryColor,
           child: Text("Apply"),
           onPressed: () {
             Navigator.of(context).pop();
