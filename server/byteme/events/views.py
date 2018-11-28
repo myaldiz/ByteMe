@@ -40,7 +40,7 @@ def queryEvent(user, event_type):
         if event_type == "attending":
             return Event.objects.filter(~Q(req="add")).filter(attendant__user__username = user.user.username)
         elif event_type == "created":
-            return Event.objects.filter(~Q(req="add")).filter(creater=user)
+            return Event.objects.filter(creater=user)
         else:
             return Event.objects.all().filter(~Q(req="add"))
     except Event.DoesNotExist:
@@ -160,7 +160,8 @@ def BrowseEvent(request):
         event['attendingStatus'] = str(login_userprofile) in event['attendant']
         if event['req'] == "non":
             event_type = "Accepted"
-        elif event['req']  == "mod" or event['req'] == "del" or event['req'] == "add":
+        # elif event['req']  == "mod" or event['req'] == "del" or event['req'] == "add":
+        else:
             event_type = "Processing"
         event['type'] = event_type
 
