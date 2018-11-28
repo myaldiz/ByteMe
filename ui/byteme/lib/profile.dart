@@ -14,6 +14,7 @@ class ProfilePage extends StatefulWidget {
 
 class ProfilePageState extends State<ProfilePage> {
   List<Widget> contetList = [];
+  Map<String, dynamic> data;
 
   @override
   void initState() {
@@ -36,14 +37,15 @@ class ProfilePageState extends State<ProfilePage> {
         ),
       ),
     ];
-    http.Response response = await http.get(
-        Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/profile'),
-        headers: {
-          "content-type": "application/json",
-          "accept": "application/json",
-          "Authorization": "Token " + token
-        });
-    Map<String, dynamic> data = json.decode(response.body);
+    await getData();
+    // http.Response response = await http.get(
+    //     Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/profile'),
+    //     headers: {
+    //       "content-type": "application/json",
+    //       "accept": "application/json",
+    //       "Authorization": "Token " + token
+    //     });
+    // Map<String, dynamic> data = json.decode(response.body);
     newContent.add(
       Text(
         data["dept"],
@@ -111,11 +113,28 @@ class ProfilePageState extends State<ProfilePage> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => ModifyProfile()),
-                );
+                )
+                .then((value) {
+                  initContent();
+                });
               },
             )
           ],
         ),
         body: ListView(children: contetList));
+  }
+
+  Future<void> getData() async {
+    http.Response response = await http.get(
+        Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/profile'),
+        headers: {
+          "content-type": "application/json",
+          "accept": "application/json",
+          "Authorization": "Token " + token
+        });
+    var newData = json.decode(response.body);
+    setState(() {
+      data = newData;
+    });
   }
 }
