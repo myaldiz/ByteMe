@@ -29,20 +29,20 @@ class ManagePageState extends State<ManagePage> {
         appBar: AppBar(
           title: Text("Manage"),
           actions: [
-            IconButton(
-              icon: Icon(Icons.sort),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return SortForm(onSubmit: (String newSort) {
-                        setState(() {
-                          selectedSort = newSort;
-                        });
-                      });
-                    });
-              },
-            ),
+            // IconButton(
+            //   icon: Icon(Icons.sort),
+            //   onPressed: () {
+            //     showDialog(
+            //         context: context,
+            //         builder: (context) {
+            //           return SortForm(onSubmit: (String newSort) {
+            //             setState(() {
+            //               selectedSort = newSort;
+            //             });
+            //           });
+            //         });
+            //   },
+            // ),
             IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () {
@@ -50,7 +50,9 @@ class ManagePageState extends State<ManagePage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => AddEventViewController()),
-                  );
+                  ).then((value){
+                    updateList();
+                  });
                 })
           ],
         ),

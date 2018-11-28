@@ -27,36 +27,36 @@ class AttendingPageState extends State<AttendingPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Attending"),
-        actions: [
-        IconButton(
-            icon: Icon(Icons.sort),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return SortForm(onSubmit: (String newSort) {
-                      setState(() {
-                        selectedSort = newSort;
-                      });
-                    });
-                  });
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.filter_list),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return TagForm(onSubmit: (List<Tag> newList) {
-                      setState(() {
-                        selectedTags = newList;
-                      });
-                    });
-                  });
-            },
-          ),
-      ],
+      //   actions: [
+      //   IconButton(
+      //       icon: Icon(Icons.sort),
+      //       onPressed: () {
+      //         showDialog(
+      //             context: context,
+      //             builder: (context) {
+      //               return SortForm(onSubmit: (String newSort) {
+      //                 setState(() {
+      //                   selectedSort = newSort;
+      //                 });
+      //               });
+      //             });
+      //       },
+      //     ),
+      //     IconButton(
+      //       icon: Icon(Icons.filter_list),
+      //       onPressed: () {
+      //         showDialog(
+      //             context: context,
+      //             builder: (context) {
+      //               return TagForm(onSubmit: (List<Tag> newList) {
+      //                 setState(() {
+      //                   selectedTags = newList;
+      //                 });
+      //               });
+      //             });
+      //       },
+      //     ),
+      // ],
       ),
       body: Container(
         child: ListView(
