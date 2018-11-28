@@ -50,7 +50,7 @@ class TagForm extends StatefulWidget {
 
 class _TagFormState extends State<TagForm> {
   List<Tag> selectedTags = [];
-  List<Tag> allTags;
+  List<Tag> allTags = [];
 
   @override
   void initState() {
@@ -99,9 +99,7 @@ class _TagFormState extends State<TagForm> {
     return AlertDialog(
       title: Text("Please select tags"),
       content: Column(
-        children: allCheckBoxes.isEmpty ?
-        CircularProgressIndicator() : 
-        allCheckBoxes,
+        children: allCheckBoxes,
       ),
       actions: [
         RaisedButton(
