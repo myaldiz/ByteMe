@@ -10,6 +10,7 @@ import random
 import sys
 import time
 import math
+import pickle
 from http.cookiejar import LWPCookieJar
 from urllib.request import Request, urlopen
 from urllib.parse import quote_plus, urlparse, parse_qs
@@ -282,8 +283,10 @@ class GoogleSearch:
 
 class Crawler:
 
-    def __init__(self, trend_sleep=2, scholar_sleep=2):
+    def __init__(self, trend_sleep=2, scholar_sleep=2, scholar_block_sleep=180):
+        sys.setrecursionlimit(100000)
         self.scholar_sleep = scholar_sleep
+        self.scholar_block_sleep = scholar_block_sleep
         self.scholar_q = queue.Queue()
         self.scholar_thread = None
         self.google = GoogleSearch()
@@ -293,7 +296,15 @@ class Crawler:
 
         #self.pytrend = TrendReq(hl='en-US', tz=360)
 
+    def load_from_pickle(self, filename='scholar_crawled.pickle'):
+        with open(filename, 'rb') as handle:
+            scholar_dic_all = pickle.load(handle)
         
+        for scholar_dic in scholar_dic_all:
+            tags = scholar_dic['field_of_study']
+            self.update_tag_info(tags)
+
+
     def is_workers_working(self):
         is_trends_working = self.scholar_thread != None and self.scholar_thread.is_alive()
         return is_trends_working
@@ -304,15 +315,22 @@ class Crawler:
             print("Scholar Worker Back!")
         while not self.scholar_q.empty():
             cur_scholar = self.scholar_q.get()
-            scholar_dic = self.crawl_scholar(cur_scholar)
+            try:
+                scholar_id = self.crawl_single_scholar_id(cur_scholar)
+            except:
+                if self.verbose:
+                    print('Google Search blocked crawling :(')
+                return
+            
+            scholar_dic = self.crawl_scholar(scholar_id)
             if scholar_dic != {}:
                 if 'field_of_study' in scholar_dic.keys():
                     tag_objects = self.update_tag_info(scholar_dic['field_of_study'])
                     scholar_dic['tags'] = tag_objects
                 self.update_scholar_info(cur_scholar, scholar_dic)
-            time.sleep(self.scholar_sleep)
         if self.verbose:
             print("Scholar Worker Stopped")
+        return
 
             
     def scholar_crawl_request(self, scholar):
@@ -362,6 +380,7 @@ class Crawler:
             tag_objects.append(Tag.objects.update_or_create(name=str(tag))[0])
         return tag_objects
 
+
     def parse_scholar_id(self, in_str):
         idx1 = in_str.find('citations?user') + 14
         if(in_str[idx1] == '='):
@@ -402,15 +421,8 @@ class Crawler:
         return None
 
 
-    def crawl_scholar(self, scholar):
+    def crawl_scholar(self, scholar_id):
         crawl_dic = {}
-        try:
-            scholar_id = self.crawl_single_scholar_id(scholar)
-        except:
-            if self.verbose:
-                print('Google Search blocked crawling :(')
-            return crawl_dic
-        
         if scholar_id == None:
             return crawl_dic
         
@@ -421,8 +433,8 @@ class Crawler:
         try:
             page = requests.get(link)
         except Exception:
-            if self.verbose:
-                print('Google Scholar blocked crawling :(')
+            print('Google Scholar blocked crawling, long sleep..')
+            #time.sleep(self.scholar_block_sleep)
             return crawl_dic
 
         soup = BeautifulSoup(page.content, 'html.parser')
@@ -565,6 +577,7 @@ class Crawler:
                 print('Failed finding paper author or confs')
             
         ##Dont forget to remove this after
-        #crawl_dic['soup'] = soup
+        crawl_dic['soup'] = soup
+        time.sleep(self.scholar_sleep)
         return crawl_dic
 
