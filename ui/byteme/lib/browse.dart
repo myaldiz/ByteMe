@@ -78,17 +78,12 @@ class BrowsePageState extends State<BrowsePage> {
 
   Future<void> updateList() async {
     http.Response response = await http.get(
-<<<<<<< HEAD
         Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/browse?type=all'),
         headers: {
           "content-type": "application/json",
           "accept": "application/json",
           "Authorization": "Token " + token
         });
-=======
-      Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/browse?type=all'), headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"}
-    );
->>>>>>> 45cd2d74e4a3f05f4d726307c4fa61df29316ad1
     setState(() {
       data = json.decode(response.body);
       events = data["Events"];
