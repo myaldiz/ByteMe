@@ -17,8 +17,8 @@ class EventSerializer(serializers.Serializer):
     req        = serializers.CharField(required = False, allow_blank=True, max_length=100)
     Iscore     = serializers.DecimalField(required = False, allow_null = True, max_digits = 3, decimal_places = 3)
     speaker    = SpeakerSerializer(required = False)
-    tags       = TagSerializer(required = False, many = True)
-    poster_image = serializers.CharField(required = False, allow_blank=True, max_length=100)
+    tags       = TagSerializer(required = False, many = True) 
+    imgurl     = serializers.CharField(required = False, allow_blank=True, max_length=100)
 
 
 

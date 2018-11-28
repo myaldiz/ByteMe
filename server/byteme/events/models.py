@@ -23,14 +23,14 @@ class Event(models.Model):
 		('mod', 'Modification'),
 	)
 	req = models.CharField(max_length=3, choices = REQUEST, default='non')
-	abstractReq = models.TextField(max_length=3000, default=None, null=True)
-	placeReq = models.CharField(max_length=100, default=None, null=True)
-	timeReq = models.DateTimeField(default=None, null=True)
-	titleReq = models.CharField(max_length=300, default=None, null=True)
-	detailsReq = models.TextField(default=None, null=True)
-	tagsReq = models.ManyToManyField(Tag, related_name="tagsReq", default = None)
-	speakerReq = models.ForeignKey(Speaker, on_delete=models.CASCADE, related_name="speakerReq", default = None, null=True)
-	imgurLReq  = models.CharField(max_length = 100, default=None, null=True)
+	abstractReq = models.TextField(max_length=3000, default=None, null=True , blank = True)
+	placeReq = models.CharField(max_length=100, default=None, null=True, blank = True)
+	timeReq = models.DateTimeField(default=None, null=True, blank = True)
+	titleReq = models.CharField(max_length=300, default=None, null=True, blank = True)
+	detailsReq = models.TextField(default=None, null=True, blank = True)
+	tagsReq = models.ManyToManyField(Tag, related_name="tagsReq", default = None, blank = True)
+	speakerReq = models.ForeignKey(Speaker, on_delete=models.CASCADE, related_name="speakerReq", default = None, null=True, blank = True)
+	imgurLReq  = models.CharField(max_length = 100, default=None, null=True, blank = True)
 
 	intersection_max = 5
 	citation_max = 50000
