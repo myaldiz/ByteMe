@@ -33,7 +33,7 @@ Future<Map<String, dynamic>> getJson(String jsonName) async {
 
 class Tag {
   Tag(this.name);
-  final name;
+  final String name;
 }
 
 typedef void TagFormCallback(List<Tag> selectedTags);
@@ -78,7 +78,6 @@ class _TagFormState extends State<TagForm> {
 
   @override
   Widget build(BuildContext context) {
-    print(selectedTags);
     List<CheckboxListTile> allCheckBoxes = [];
     for (Tag tag in allTags) {
       allCheckBoxes.add(
@@ -281,26 +280,24 @@ class DateTimeItem extends StatelessWidget {
   }
 }
 
-List<Widget> filterCards(List<Widget> cards, List<Tag> selectedTags){
-  
+List filterCards(List events, List selectedTags){
+  var tagsSet = selectedTags.toSet();
+  events = events.where((m) => !m["tags"].toSet().intersection(tagsSet).isEmpty).toList();
+  return events;
 }
 
 List sortCards(List events, String criteria){
-  print(criteria);
-  print("_----------------");
-  print(events);
   if (criteria == "By Ranking") {
-    print(events[0]["Iscore"]);
     events.sort((m1, m2) {
-        if(m1["Iscore"] == null || m2["Iscore"] == null){
-          print("NOoooooooo");
-        }
         var r = m1["Iscore"].compareTo(m2["Iscore"]);
         if (r != 0) return r;
       });
+      events = List.from(events.reversed);
     return events;
   } else if (criteria == "By Name") {
     events.sort((m1, m2) {
+      m1["title"] = m1["title"].toLowerCase();
+      m2["title"] = m2["title"].toLowerCase();
         var r = m1["title"].compareTo(m2["title"]);
         if (r != 0) return r;
       });
