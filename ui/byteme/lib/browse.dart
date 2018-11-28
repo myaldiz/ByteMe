@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:byteme/createCardListBrowse.dart';
 import 'utils.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http; 
+import 'package:http/http.dart' as http;
+import './token.dart';
 
 class BrowsePage extends StatefulWidget {
   @override
@@ -43,14 +44,12 @@ class BrowsePageState extends State<BrowsePage> {
                         print("+++++++++++++++");
                         print(events);
                         events = sortCards(events, selectedSort);
-                        
                       });
                       List<Widget> newList = createCardListBrowse(events);
-                      setState((){
-                        
-                          // setState(() {
-                            _cardsList = newList;
-                          // });
+                      setState(() {
+                        // setState(() {
+                        _cardsList = newList;
+                        // });
                       });
                     });
                   });
@@ -79,13 +78,16 @@ class BrowsePageState extends State<BrowsePage> {
 
   Future<void> updateList() async {
     http.Response response = await http.get(
-      Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/browse?type=all'), headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token  " + "fc409decc5b05b43c39b8ec5b4de6a59d699afa2"}
-    );
-    setState(() {
-              data = json.decode(response.body);
-    events = data["Events"];
-
+        Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/browse?type=all'),
+        headers: {
+          "content-type": "application/json",
+          "accept": "application/json",
+          "Authorization": "Token " + token
         });
+    setState(() {
+      data = json.decode(response.body);
+      events = data["Events"];
+    });
     List<Widget> newList = createCardListBrowse(events);
     setState(() {
       _cardsList = newList;
