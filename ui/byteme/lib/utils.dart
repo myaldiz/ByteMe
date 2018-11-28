@@ -50,7 +50,7 @@ class TagForm extends StatefulWidget {
 
 class _TagFormState extends State<TagForm> {
   List<Tag> selectedTags = [];
-  List<Tag> allTags;
+  List<Tag> allTags = [];
 
   @override
   void initState() {
@@ -67,7 +67,7 @@ class _TagFormState extends State<TagForm> {
     Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/tag/browse'), 
     headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token " + token}
     );
-    Map<String, dynamic> data = json.decode(response.body);
+    Map<String, dynamic> data = await json.decode(response.body);
     for (Map<String,dynamic> tag in data["Tags"]) {
       newTags.add(Tag(tag["name"]));
     }
@@ -99,9 +99,7 @@ class _TagFormState extends State<TagForm> {
     return AlertDialog(
       title: Text("Please select tags"),
       content: Column(
-        children: allCheckBoxes.isEmpty ?
-        CircularProgressIndicator() : 
-        allCheckBoxes,
+        children: allCheckBoxes,
       ),
       actions: [
         RaisedButton(
