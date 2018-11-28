@@ -13,7 +13,6 @@ Future<List<Widget>> createCardListModify(String url) async {
     headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token " + token}
     );
   Map<String, dynamic> data = json.decode(response.body);
-  print(data);
   if (data["Events"].isEmpty) {
     card = Card(
       child: Row(

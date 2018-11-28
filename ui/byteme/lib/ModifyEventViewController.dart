@@ -64,7 +64,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     _eventAbstract.text = event["abstract"];
     _imageURL.text = event["poster_image"];
     List<Tag> initialTags = [];
-    for(Map<String,String> tag in event["tags"]){
+    for (Map<String, dynamic> tag in event["tags"]) {
       initialTags.add(Tag(tag["name"]));
     }
     // final _title = TextEditingController(
@@ -137,12 +137,14 @@ class MyCustomFormState extends State<MyCustomForm> {
                       showDialog(
                           context: context,
                           builder: (context) {
-                            return TagForm(onSubmit: (List<Tag> newList) {
-                              setState(() {
-                                selectedTags = newList;
-                              });
-                            },
-                            initialValue: initialTags,);
+                            return TagForm(
+                              onSubmit: (List<Tag> newList) {
+                                setState(() {
+                                  selectedTags = newList;
+                                });
+                              },
+                              initialValue: initialTags,
+                            );
                           });
                     },
                   )),
@@ -210,33 +212,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: RaisedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    makeRequest();
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                              content: Text(
-                                  "Your modifications were submitted for review. Changes will be applied after administrator's review."),
-                              actions: <Widget>[
-                                RaisedButton(
-                                    onPressed: () {
-                                      //TODO: Send delete request
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text(
-                                      'OK',
-                                    )),
-                              ]);
-                        });
-                    // Validate will return true if the form is valid, or false if
-                    // the form is invalid.
-                    // if (_formKey.currentState.validate()) {
-                    //   // If the form is valid, we want to show a Snackbar
-                    //   Navigator.of(context).pop();
-                    // }
-                  },
+                  onPressed: onSubmit,
                   child: Text(
                     'Edit',
                     style: TextStyle(color: Colors.white),
@@ -248,7 +224,57 @@ class MyCustomFormState extends State<MyCustomForm> {
         ));
   }
 
-  Future<void> makeRequest() async {
+  onSubmit() async{
+      if(await makeRequest()){
+      Navigator.of(context).pop();
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+                content: Text(
+                    "Your modifications were submitted for review. Changes will be applied after administrator's review."),
+                actions: <Widget>[
+                  RaisedButton(
+                      textColor: Theme.of(context)
+                          .primaryTextTheme
+                          .button
+                          .color,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'OK',
+                      )),
+                ]);
+          });
+      }else{
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+                content: Text(
+                    "Request sending failed."),
+                actions: <Widget>[
+                  RaisedButton(
+                      textColor: Theme.of(context)
+                          .primaryTextTheme
+                          .button
+                          .color,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'OK',
+                      )),
+                ]);
+          });
+      }
+  }
+
+  Future<bool> makeRequest() async {
+    if(dateTime == null){
+      return false;
+    }
     setState(() {
       title = _title.text;
       place = _place.text;
@@ -273,24 +299,23 @@ class MyCustomFormState extends State<MyCustomForm> {
     eventj["details"] = details;
     eventj["speaker"] = speaker;
     eventj["poster_image"] = imageURL;
-    List<Map<String,String>> tagsList = [];
-    for(Tag tag in selectedTags){
+    List<Map<String, dynamic>> tagsList = [];
+    for (Tag tag in selectedTags) {
       tagsList.add({"name": tag.name});
     }
     eventj["tags"] = tagsList;
     data["Event"] = eventj;
     var tool = JsonEncoder();
-    var json = tool.convert(data);
+    var postJson = tool.convert(data);
     var response = await http.post(
         Uri.encodeFull(
             'http://127.0.0.1:8000/api/v1/event/modify/' + event["identifier"]),
-        body: json,
+        body: postJson,
         headers: {
           "content-type": "application/json",
           "accept": "application/json",
-          "Authorization":
-              "Token " + token
+          "Authorization": "Token " + token
         });
-    return;
+    return json.decode(response.body)["Response"] == "Modify_Event";
   }
 }

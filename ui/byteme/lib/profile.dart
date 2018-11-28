@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'modifyProfile.dart';
-import 'utils.dart';
 import './token.dart';
 
 class ProfilePage extends StatefulWidget {

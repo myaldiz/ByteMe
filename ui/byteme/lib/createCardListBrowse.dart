@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:convert';
 import './CustomCard.dart';
-import 'package:http/http.dart' as http; 
-import './token.dart';
 
 List<Widget> createCardListBrowse(List events) {
   List<Widget> newCardsList = [];

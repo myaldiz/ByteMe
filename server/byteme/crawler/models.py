@@ -281,11 +281,16 @@ class GoogleSearch:
                 url = self.url_next_page_num % vars()
 
 class Crawler:
+
     def __init__(self, trend_sleep=2, scholar_sleep=2):
         self.scholar_sleep = scholar_sleep
         self.scholar_q = queue.Queue()
         self.scholar_thread = None
         self.google = GoogleSearch()
+
+        # Change this to true for debugging Crawler
+        self.verbose = False
+
         #self.pytrend = TrendReq(hl='en-US', tz=360)
 
         
@@ -294,7 +299,9 @@ class Crawler:
         return is_trends_working
 
 
-    def scholar_worker(self):    
+    def scholar_worker(self):  
+        if self.verbose:  
+            print("Scholar Worker Back!")
         while not self.scholar_q.empty():
             cur_scholar = self.scholar_q.get()
             scholar_dic = self.crawl_scholar(cur_scholar)
@@ -304,42 +311,47 @@ class Crawler:
                     scholar_dic['tags'] = tag_objects
                 self.update_scholar_info(cur_scholar, scholar_dic)
             time.sleep(self.scholar_sleep)
-        print("Finished crawling :(")
+        if self.verbose:
+            print("Scholar Worker Stopped")
 
             
     def scholar_crawl_request(self, scholar):
         if not scholar.is_crawled:
-            print('scholar is not crawled')
+            if self.verbose:
+                print('scholar is not crawled')
             if not self.is_workers_working(): #Tag worker is not working
                 self.scholar_q.put(scholar)
                 self.scholar_thread = threading.Timer(self.scholar_sleep, self.scholar_worker)
                 self.scholar_thread.start()
             else:
                 self.scholar_q.put(scholar)
-        else:
+        elif self.verbose:
             print('scholar is already crawled')
 
 
     def update_scholar_info(self, scholar, dic):
-        print('Entered Scholar Update')
         try:
             scholar.name = str(dic['name'])
             scholar.univ = str(dic['association'])
             scholar.h_index = int(dic['citations'][2])
             scholar.i_index = int(dic['citations'][4])
             scholar.citations = int(dic['citations'][0])
-            print('Will add keys')
+            if self.verbose:
+                print('Will add keys')
             if 'tags' in dic.keys():
                 for key in dic['tags']:
                     #print(type(key))
                     scholar.tags.add(key)
             scholar.is_crawled = True
             scholar.save()
-            print('Succesfully added keys to scholar')
+            if self.verbose:
+                print('Succesfully added keys to scholar')
         except KeyError:
-            print('There is key error')
+            if self.verbose:
+                print('There is key error')
         except Exception:
-            print('There is another exception')
+            if self.verbose:
+                print('There is another exception')
             
 
 
@@ -392,7 +404,13 @@ class Crawler:
 
     def crawl_scholar(self, scholar):
         crawl_dic = {}
-        scholar_id = self.crawl_single_scholar_id(scholar)
+        try:
+            scholar_id = self.crawl_single_scholar_id(scholar)
+        except:
+            if self.verbose:
+                print('Google Search blocked crawling :(')
+            return crawl_dic
+        
         if scholar_id == None:
             return crawl_dic
         
@@ -400,7 +418,13 @@ class Crawler:
         link = self.create_link(scholar_id)
 
         #Get the page
-        page = requests.get(link)
+        try:
+            page = requests.get(link)
+        except Exception:
+            if self.verbose:
+                print('Google Scholar blocked crawling :(')
+            return crawl_dic
+
         soup = BeautifulSoup(page.content, 'html.parser')
 
         try:
@@ -410,7 +434,8 @@ class Crawler:
             crawl_dic['name'] = name
             #print(name, '\n')
         except Exception:
-            print('Failed finding name')
+            if self.verbose:
+                print('Failed finding name')
 
         try:
             association = soup.find_all('a', class_='gsc_prf_ila')
@@ -422,7 +447,8 @@ class Crawler:
                     crawl_dic['association'] = association
                     #print(association, '\n')
         except Exception:
-            print('Failed finding association')
+            if self.verbose:
+                print('Failed finding association')
 
         try:
             title = soup.find_all('div', class_="gsc_prf_il")
@@ -431,7 +457,8 @@ class Crawler:
                 crawl_dic['title'] = title
             #    print(title, '\n')
         except Exception:
-            print('Failed finding title')
+            if self.verbose:
+                print('Failed finding title')
 
 
         try:
@@ -444,7 +471,8 @@ class Crawler:
                     'All i10-index', 'i10 index since 2013']
                 crawl_dic['citation_str'] = citation_str
         except Exception:
-            print('Failed finding citations')
+            if self.verbose:
+                print('Failed finding citations')
         
         try:
             years_cite = soup.find_all('span', class_='gsc_g_t')
@@ -452,7 +480,8 @@ class Crawler:
                 years_cite = [list(cite.children)[0] for cite in years_cite]
                 crawl_dic['years_cite'] = years_cite
         except Exception:
-            print('Failed finding citation year')
+            if self.verbose:
+                print('Failed finding citation year')
             
         try:
             yearly_cite = soup.find_all('span', class_='gsc_g_al')
@@ -460,7 +489,8 @@ class Crawler:
                 yearly_cite = [list(cite.children)[0] for cite in yearly_cite]
                 crawl_dic['yearly_cite'] = yearly_cite
         except Exception:
-            print('Failed finding yearly citations')
+            if self.verbose:
+                print('Failed finding yearly citations')
 
         #print(citation_str, '\n', citations, '\n', years_cite, '\n', yearly_cite)
 
@@ -471,7 +501,8 @@ class Crawler:
                 crawl_dic['field_of_study'] = field_of_study
             #    print(field_of_study)
         except Exception:
-            print('Failed finding field of study')
+            if self.verbose:
+                print('Failed finding field of study')
 
         try:
             co_auth_info = soup.find_all('span', class_='gsc_rsb_a_desc')
@@ -483,7 +514,8 @@ class Crawler:
                 crawl_dic['co_auth_id'] = co_auth_id
             #    print(co_authors, co_auth_id)
         except Exception:
-            print('Failed finding co_authors')
+            if self.verbose:
+                print('Failed finding co_authors')
 
         try:
             paper_names = soup.find_all('a', class_='gsc_a_at')
@@ -492,7 +524,8 @@ class Crawler:
                 crawl_dic['paper_names'] = paper_names
             #    print(paper_names)
         except Exception:
-            print('Failed finding paper_names')
+            if self.verbose:
+                print('Failed finding paper_names')
         
         try:
             cite_num = soup.find_all('a', class_='gsc_a_ac gs_ibl')
@@ -501,7 +534,8 @@ class Crawler:
                 crawl_dic['cite_num'] = cite_num
             #    print(cite_num)
         except Exception:
-            print('Failed finding citation numbers')
+            if self.verbose:
+                print('Failed finding citation numbers')
 
         try:
             paper_year = soup.find_all('span', class_='gs_oph')
@@ -510,7 +544,8 @@ class Crawler:
                 crawl_dic['paper_year'] = paper_year
                 #print(paper_year)
         except Exception:
-            print('Failed finding paper years')    
+            if self.verbose:
+                print('Failed finding paper years')    
         
         try:
             paper_info = soup.find_all('div', class_='gs_gray')
@@ -526,10 +561,10 @@ class Crawler:
                 crawl_dic['paper_confs'] = paper_confs
                 #print(paper_authors, paper_confs)
         except Exception:
-            print('Failed finding paper author or confs')
+            if self.verbose:
+                print('Failed finding paper author or confs')
             
         ##Dont forget to remove this after
         #crawl_dic['soup'] = soup
-
         return crawl_dic
 

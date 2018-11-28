@@ -150,7 +150,7 @@ class _LoginState extends State<LoginPage> {
 
 
     if (await authenticate()) {
-      Navigator.of(context).popAndPushNamed('/');
+      Navigator.of(context).pushNamed('/');
     } else {
       showDialog(
           context: context,

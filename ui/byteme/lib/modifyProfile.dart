@@ -98,7 +98,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     Map<String, dynamic> data = {};
     data["Request"] = "Modify_profile";
     data["dept"] = _dept.text;
-    List<Map<String,String>> tagsList = [];
+    List<Map<String,dynamic>> tagsList = [];
     for(Tag tag in selectedTags){
       tagsList.add({"name": tag.name});
     }
