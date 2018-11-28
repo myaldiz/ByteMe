@@ -31,7 +31,8 @@ class BrowsePageState extends State<BrowsePage> {
     // _cardsList = filterCards(_cardsList, selectedTags);
     // _cardsList = sortCards(_cardsList, selectedSort);
     return Scaffold(
-        appBar: AppBar(title: Text("Events"), actions: [
+        appBar: AppBar(title: Text("Events"), 
+        actions: [
           IconButton(
             icon: Icon(Icons.sort),
             onPressed: () {

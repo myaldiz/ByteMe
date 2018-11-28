@@ -100,7 +100,9 @@ class _TagFormState extends State<TagForm> {
     return AlertDialog(
       title: Text("Please select tags"),
       content: Column(
-        children: allCheckBoxes,
+        children: allCheckBoxes.isEmpty ?
+        CircularProgressIndicator() : 
+        allCheckBoxes,
       ),
       actions: [
         RaisedButton(
@@ -192,17 +194,17 @@ class _SortFormState extends State<SortForm> {
 }
 
 class DateTimeItem extends StatelessWidget {
-  DateTimeItem({Key key, DateTime dateTime, @required this.onChanged})
+  DateTimeItem({Key key, this.dateTime, @required this.onChanged})
       : assert(onChanged != null),
         date = dateTime == null
             ? DateTime.now()
             : DateTime(dateTime.year, dateTime.month, dateTime.day),
         time = dateTime == null
-            ? TimeOfDay(
-                hour: DateTime.now().hour, minute: DateTime.now().minute)
+            ? TimeOfDay.now()
             : TimeOfDay(hour: dateTime.hour, minute: dateTime.minute),
         super(key: key);
 
+  DateTime dateTime;
   final DateTime date;
   final TimeOfDay time;
   final ValueChanged<DateTime> onChanged;
@@ -219,6 +221,7 @@ class DateTimeItem extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
+                    dateTime ==null ? "Please select date" :
                     DateFormat('EEEE, MMMM d').format(date),
                     style: TextStyle(
                       fontSize: 18.0,
@@ -238,6 +241,7 @@ class DateTimeItem extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Text(
+                  dateTime == null ? "Please select time":
                   '${time.format(context)}',
                   style: TextStyle(
                     fontSize: 18.0,
@@ -257,8 +261,8 @@ class DateTimeItem extends StatelessWidget {
     DateTime dateTimePicked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: date.subtract(const Duration(days: 1)),
-        lastDate: date.add(const Duration(days: 20000)));
+        firstDate: DateTime.now().subtract(const Duration(days: 1)),
+        lastDate: DateTime.now().add(const Duration(days: 20000)));
 
     if (dateTimePicked != null) {
       onChanged(DateTime(dateTimePicked.year, dateTimePicked.month,
@@ -268,7 +272,7 @@ class DateTimeItem extends StatelessWidget {
 
   Future _showTimePicker(BuildContext context) async {
     TimeOfDay timeOfDay =
-        await showTimePicker(context: context, initialTime: time);
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
 
     if (timeOfDay != null) {
       onChanged(DateTime(

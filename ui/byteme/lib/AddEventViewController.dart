@@ -36,7 +36,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
 
   DateTime dateTime;
-  List<Tag> selectedTags;
+  List<Tag> selectedTags = [];
   String title, place, speakerName, speakerUni, speakerEmail , details, eventAbstract, imageURL;
   static final _title = TextEditingController();
   static final _place = TextEditingController();
@@ -157,33 +157,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: RaisedButton(
                   color: Theme.of(context).primaryColor,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    makeRequest();
-                    showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                                content: Text(
-                                    "Your event was submitted for review. It will be posted after administrator's review."),
-                                actions: <Widget>[
-                                  RaisedButton(
-                                      onPressed: () {
-                                        //TODO: Send delete request
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text(
-                                        'OK',
-                                      )),
-                                ]);
-                          });
-                    // Validate will return true if the form is valid, or false if
-                    // the form is invalid.
-                    // if (_formKey.currentState.validate()) {
-                    //   // If the form is valid, we want to show a Snackbar
-                    //   Navigator.of(context).pop();
-                    // }
-                  },
+                  textColor: Theme.of(context).primaryTextTheme.button.color,
+                  onPressed: onSubmit,
                   child: Text(
                     'Add',
                     style: TextStyle(color: Colors.white),
@@ -195,7 +170,57 @@ class MyCustomFormState extends State<MyCustomForm> {
         ));
   }
 
-  Future<void> makeRequest() async {
+  void onSubmit() async{
+      if(await makeRequest()){
+        Navigator.of(context).pop();
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+                content: Text(
+                    "Your modifications were submitted for review. Changes will be applied after administrator's review."),
+                actions: <Widget>[
+                  RaisedButton(
+                      textColor: Theme.of(context)
+                          .primaryTextTheme
+                          .button
+                          .color,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'OK',
+                      )),
+                ]);
+          });
+      }else{
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+                content: Text(
+                    "Request sending failed."),
+                actions: <Widget>[
+                  RaisedButton(
+                      textColor: Theme.of(context)
+                          .primaryTextTheme
+                          .button
+                          .color,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'OK',
+                      )),
+                ]);
+          });
+      }
+  }
+
+  Future<bool> makeRequest() async {
+    if(dateTime == null){
+      return false;
+    }
     setState(() {
       title = _title.text;
       place = _place.text;
@@ -220,23 +245,23 @@ class MyCustomFormState extends State<MyCustomForm> {
     event["details"] = details;
     event["speaker"] = speaker;
     event["poster_image"] = imageURL;
-    List<Map<String,String>> tagsList = [];
+    List<Map<String,dynamic>> tagsList = [];
     for(Tag tag in selectedTags){
       tagsList.add({"name": tag.name});
     }
     event["tags"] = tagsList;
     data["Event"] = event;
     var tool = JsonEncoder();
-    var json = tool.convert(data);
+    var postJson = tool.convert(data);
     var response = await http.post(
         Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/add'),
-        body: json,
+        body: postJson,
         headers: {
           "content-type": "application/json",
           "accept": "application/json",
           "Authorization": "Token " + token
         });
-    return;
+    return json.decode(response.body)["Response"] == "Add_Event";
   }
 }
 
