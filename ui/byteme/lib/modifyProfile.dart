@@ -77,6 +77,8 @@ class MyCustomFormState extends State<MyCustomForm> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: RaisedButton(
+                  color: Theme.of(context).primaryColor,
+                  textColor: Theme.of(context).primaryTextTheme.button.color,
                   onPressed: () {
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
@@ -86,7 +88,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                       Navigator.pop(context);
                     }
                   },
-                  child: Text('Submit'),
+                  child: Text('Edit'),
                 ),
               ),
             ],

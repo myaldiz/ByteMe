@@ -115,7 +115,7 @@ class AttendingButtonState extends State<AttendingButton> {
       setState(() {
         result = RaisedButton(
           child: Text("Attend"),
-          color: Colors.greenAccent,
+          color: Colors.lightGreen,
           onPressed: () {
             http.post("http://127.0.0.1:8000/api/v1/event/attend/" + id,
                 headers: {

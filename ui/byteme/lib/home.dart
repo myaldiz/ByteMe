@@ -35,7 +35,7 @@ class HomePageState extends State<HomePage> {
                 title: Text("Manage")),
             BottomNavigationBarItem(
                 backgroundColor: Theme.of(context).primaryColor,
-                icon: Icon(Icons.list),
+                icon: Icon(Icons.search),
                 title: Text("Events")),
             BottomNavigationBarItem(
                 backgroundColor: Theme.of(context).primaryColor,

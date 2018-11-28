@@ -213,10 +213,14 @@ class MyCustomFormState extends State<MyCustomForm> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: RaisedButton(
                   color: Theme.of(context).primaryColor,
+<<<<<<< HEAD
                   textColor: Theme.of(context)
                           .primaryTextTheme
                           .button
                           .color,
+=======
+                  textColor: Theme.of(context).primaryTextTheme.button.color,
+>>>>>>> 45cd2d74e4a3f05f4d726307c4fa61df29316ad1
                   onPressed: onSubmit,
                   child: Text(
                     'Edit',
