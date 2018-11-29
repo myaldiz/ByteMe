@@ -63,9 +63,9 @@ class MyCustomFormState extends State<MyCustomForm> {
     _details.text = event["details"];
     _eventAbstract.text = event["abstract"];
     _imageURL.text = event["imgurl"];
-    List<Tag> initialTags = [];
+    List<String> initialTags = [];
     for (Map<String, dynamic> tag in event["tags"]) {
-      initialTags.add(Tag(tag["name"]));
+      initialTags.add(tag["name"]);
     }
     // final _title = TextEditingController(
     //   text: event["title"],

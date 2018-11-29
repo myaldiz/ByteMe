@@ -111,7 +111,7 @@ class ProfilePageState extends State<ProfilePage> {
               icon: Icon(Icons.edit),
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => ModifyProfile()),
+                  MaterialPageRoute(builder: (context) => ModifyProfile(data)),
                 )
                 .then((value) {
                   initContent();

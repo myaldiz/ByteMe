@@ -6,6 +6,8 @@ import './token.dart';
 import 'dart:convert';
 
 class ModifyProfile extends StatelessWidget {
+  Map<String, dynamic> initialValue;
+  ModifyProfile(this.initialValue);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,16 +15,18 @@ class ModifyProfile extends StatelessWidget {
       appBar: AppBar(
         title: Text("Edit Information"),
       ),
-      body: MyCustomForm(),
+      body: MyCustomForm(initialValue),
     );
   }
 }
 
 // Create a Form Widget
 class MyCustomForm extends StatefulWidget {
+  Map<String, dynamic> data;
+  MyCustomForm(this.data);
   @override
   MyCustomFormState createState() {
-    return MyCustomFormState();
+    return MyCustomFormState(data);
   }
 }
 
@@ -34,12 +38,26 @@ class MyCustomFormState extends State<MyCustomForm> {
   //
   // Note: This is a GlobalKey<FormState>, not a GlobalKey<MyCustomFormState>!
   final _formKey = GlobalKey<FormState>();
+  Map<String, dynamic> initialValue;
+  MyCustomFormState(this.initialValue);
 
   List<Tag> selectedTags = [];
   TextEditingController _dept = TextEditingController();
 
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     _dept.text = initialValue["dept"];
+  }
+
   @override
   Widget build(BuildContext context) {
+   
+    List<String> initialTags = [];
+    for(String tag in initialValue["tags"]){
+      initialTags.add(tag);
+    }
     // Build a Form widget using the _formKey we created above
     return Container(
         margin: EdgeInsets.all(15.0),
@@ -69,7 +87,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                               setState(() {
                                 selectedTags = newList;
                               });
-                            });
+                            },
+                            initialValue: initialTags,);
                           });
                     },
                   )),
@@ -79,12 +98,12 @@ class MyCustomFormState extends State<MyCustomForm> {
                 child: RaisedButton(
                   color: Theme.of(context).primaryColor,
                   textColor: Theme.of(context).primaryTextTheme.button.color,
-                  onPressed: () {
+                  onPressed: () async {
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
                     if (_formKey.currentState.validate()) {
                       // If the form is valid, we want to show a Snackbar
-                      sendRequest();
+                      await sendRequest();
                       Navigator.pop(context);
                     }
                   },

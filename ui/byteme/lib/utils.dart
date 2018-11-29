@@ -40,7 +40,7 @@ typedef void TagFormCallback(List<Tag> selectedTags);
 
 class TagForm extends StatefulWidget {
   final TagFormCallback onSubmit;
-  final List<Tag> initialValue;
+  final List<String> initialValue;
 
   TagForm({this.onSubmit, this.initialValue});
 
@@ -56,23 +56,26 @@ class _TagFormState extends State<TagForm> {
   void initState() {
     super.initState();
     initTags();
-    if(widget.initialValue != null && widget.initialValue.length > 0){
-      selectedTags = widget.initialValue;
-    }
   }
 
   initTags() async{
     List<Tag> newTags = [];
+    List<Tag> newSelected = [];
     http.Response response = await http.get(
     Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/tag/browse'), 
     headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token " + token}
     );
     Map<String, dynamic> data = json.decode(response.body);
     for (Map<String,dynamic> tag in data["Tags"]) {
-      newTags.add(Tag(tag["name"]));
+      Tag newTag = Tag(tag["name"]);
+      newTags.add(newTag);
+      if(widget.initialValue.contains(tag["name"])){
+        newSelected.add(newTag);
+      }
     }
     setState((){
       allTags = newTags;
+      selectedTags = newSelected;
     });
   }
 
@@ -104,6 +107,7 @@ class _TagFormState extends State<TagForm> {
       actions: [
         RaisedButton(
           textColor: Theme.of(context).primaryTextTheme.button.color,
+          color: Theme.of(context).primaryColor,
           child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop();

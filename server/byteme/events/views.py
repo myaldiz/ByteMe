@@ -40,7 +40,7 @@ def queryEvent(user, event_type):
         if event_type == "attending":
             return Event.objects.filter(~Q(req="add")).filter(attendant__user__username = user.user.username)
         elif event_type == "created":
-            return Event.objects.filter(creater=user)
+            return Event.objects.filter(creater=user).filter(~Q(req="add"))
         else:
             return Event.objects.all().filter(~Q(req="add"))
     except Event.DoesNotExist:
@@ -183,7 +183,7 @@ def AddEvent(request):
         json_speaker_email = json_speaker.get('speakerEmail')
         json_speaker_name  = json_speaker.get('name')
         json_speaker_univ  = json_speaker.get('univ')
-
+        validate_email(json_speaker_email)
 
     except : 
         return Response({"Response":"Add_Event", "status": "Please check the response json"}, status=status.HTTP_400_BAD_REQUEST)
@@ -196,6 +196,7 @@ def AddEvent(request):
             univ = json_speaker_univ
             )[0]
     except:
+        speaker.delete()
         return Response({"Response":"Add_Event", "status": "Email already used!"}, status=status.HTTP_400_BAD_REQUEST)
     
     

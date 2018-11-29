@@ -14,7 +14,7 @@ from events.views import approveEventChange
 def approve(request):
     login_user = request.user #get login user
     login_userprofile = UserProfile.objects.get(user = login_user) #get userprofile
-    event_created = Event.objects.filter(creater = login_userprofile)
+    event_created = Event.objects.all()
 
     if request.method == "POST":
         event_id = request.POST["id"]
