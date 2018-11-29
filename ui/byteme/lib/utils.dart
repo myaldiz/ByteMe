@@ -83,7 +83,7 @@ class _TagFormState extends State<TagForm> {
 
   @override
   Widget build(BuildContext context) {
-    List<CheckboxListTile> allCheckBoxes = [];
+    List<Widget> allCheckBoxes = [];
     for (Tag tag in allTags) {
       allCheckBoxes.add(
         CheckboxListTile(
@@ -101,21 +101,16 @@ class _TagFormState extends State<TagForm> {
         ),
       );
     }
-    return AlertDialog(
-      title: Text("Please select tags"),
-      content: Column(
-        children: allCheckBoxes,
-      ),
-      actions: [
-        RaisedButton(
+    List<Widget> bottomBar = [];
+    bottomBar.add(RaisedButton(
           textColor: Theme.of(context).primaryTextTheme.button.color,
           color: Theme.of(context).primaryColor,
           child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop();
           },
-        ),
-        RaisedButton(
+        ),);
+        bottomBar.add(RaisedButton(
           child: Text("Apply"),
           textColor: Theme.of(context).primaryTextTheme.button.color,
           color: Theme.of(context).primaryColor,
@@ -124,7 +119,17 @@ class _TagFormState extends State<TagForm> {
             widget.onSubmit(selectedTags);
           },
         )
-      ],
+); 
+        
+    return Scaffold(
+      appBar: AppBar(
+       title: Text("Please select tags"),
+      ),
+      body: ListView(
+        children: allCheckBoxes,
+      ),
+      bottomSheet: Row(children: bottomBar,
+      mainAxisAlignment: MainAxisAlignment.end,)
     );
   }
 }
