@@ -42,13 +42,23 @@ class CustomCard extends StatelessWidget {
               Container(
                 constraints: BoxConstraints(maxWidth: 200.0),
                   child: Column(children: [
-                Text(
-                  event["title"],
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                    FittedBox(
+                      child: Text(
+                        event["title"],
+                        style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      ),
+                      fit: BoxFit.scaleDown,
+                    ),
+                // Text(
+                //   event["title"],
+                //   style: TextStyle(
+                //     fontSize: 18.0,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
                 Text(
                   event["abstract"],
                   style: TextStyle(
