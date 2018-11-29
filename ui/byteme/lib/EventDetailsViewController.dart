@@ -8,6 +8,10 @@ class EventDetailsViewController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(event);
+    List<Widget> tagsList = [];
+    for(Map<String,dynamic> tag in event["tags"]){
+      tagsList.add(Text(tag["name"]));
+    }
     return Scaffold(
       appBar: new AppBar(
         title: new Text(
@@ -71,6 +75,14 @@ class EventDetailsViewController extends StatelessWidget {
               fontSize: 20.0,
               fontWeight: FontWeight.normal,
             ),
+          ),
+          Column(
+            children: tagsList,
+            // style: TextStyle(
+            //   color: Colors.black,
+            //   fontSize: 20.0,
+            //   fontWeight: FontWeight.normal,
+            // ),
           ),
         ],
       ),
