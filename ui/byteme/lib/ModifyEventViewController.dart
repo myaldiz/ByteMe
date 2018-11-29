@@ -321,6 +321,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           "accept": "application/json",
           "Authorization": "Token " + token
         });
-    return json.decode(response.body)["Response"] == "Modify_Event";
+    if(json.decode(response.body) == "Event json is not valid") return false;
+    return json.decode(response.body)["status"] == "processing";
   }
 }

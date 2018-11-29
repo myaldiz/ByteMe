@@ -11,6 +11,7 @@ from django.utils import timezone
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_protect
+from django.core.validators import validate_email
 
 from rest_framework import status
 from rest_framework.response import Response

@@ -6,9 +6,12 @@ import 'attending.dart';
 import 'profile.dart';
 
 class HomePage extends StatefulWidget {
+  int index;
+  HomePage(this.index);
+  
   @override
   State<StatefulWidget> createState() {
-    return HomePageState();
+    return HomePageState(index);
   }
 }
 
@@ -19,12 +22,13 @@ class HomePageState extends State<HomePage> {
     AttendingPage(),
     ProfilePage(),
   ];
-
-  int _currentIndex = 1;
-  // Widget customBar;
+  int index;
+  HomePageState(this._currentIndex);
+  int _currentIndex;
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.shifting,
