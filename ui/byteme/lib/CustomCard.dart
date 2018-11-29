@@ -40,10 +40,10 @@ class CustomCard extends StatelessWidget {
                 // ),
               ),
               Container(
+                constraints: BoxConstraints(maxWidth: 200.0),
                   child: Column(children: [
                 Text(
                   event["title"],
-                  overflow: TextOverflow.clip,
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
