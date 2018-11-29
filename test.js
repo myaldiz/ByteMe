@@ -113,11 +113,11 @@ switch(API) {
                     "title": "Superman",         
                     "details": "Blabla",
                     "poster_image": "imageimage",
-                    // "speaker": {
-                    //     "name": "Harlem",
-                    //     "univ": "KAIST",
-                    //     "speakerEmail": "Harlem@email.com"
-                    // },  
+                    "speaker": {
+                        "name": "Harlem",
+                        "univ": "KAIST",
+                        "speakerEmail": "Harlem@email.com"
+                    },  
                     "tags": [
                         {
                             "name":"Anaerobic Digestion"
