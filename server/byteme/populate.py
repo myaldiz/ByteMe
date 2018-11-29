@@ -66,7 +66,7 @@ with open('crawling_output/images.csv', newline='\n') as csvfile:
 
 admin = User.objects.create_superuser(username='admin', password='password@', email='berk17@gmail.com')
 UserProfile.objects.create(user=admin)
-username = 'myaldiz'
+username = 'harlem'
 passw = '1234'
 email = 'myaldiz@kaist.ac.kr'
 staff = True
