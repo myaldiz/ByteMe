@@ -7,14 +7,14 @@ class Event(models.Model):
 	identifier = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
 	creater = models.ForeignKey(UserProfile, on_delete = models.CASCADE, related_name="created", default = None)
 	attendant = models.ManyToManyField(UserProfile, related_name="attendant", default = None)
-	abstract = models.TextField(max_length = 3000)
-	place = models.CharField(max_length = 100)
+	abstract = models.TextField(max_length = 5000)
+	place = models.CharField(max_length = 500)
 	time = models.DateTimeField()
-	title = models.CharField(max_length = 300)
-	details = models.TextField(max_length = 3000)
+	title = models.CharField(max_length = 500)
+	details = models.TextField(max_length = 5000)
 	tags = models.ManyToManyField(Tag, default = None, related_name="tags")
 	speaker = models.ForeignKey(Speaker, on_delete = models.CASCADE, related_name="events", default = None)
-	imgurl  =  models.CharField(max_length = 100, default=None, null=True)
+	imgurl  =  models.CharField(max_length = 500, default=None, null=True)
 
 	REQUEST = (
 		('non', 'No Request'),
@@ -22,15 +22,15 @@ class Event(models.Model):
 		('del', 'Deletion'),
 		('mod', 'Modification'),
 	)
-	req = models.CharField(max_length=3, choices = REQUEST, default='non')
-	abstractReq = models.TextField(max_length=3000, default=None, null=True , blank = True)
-	placeReq = models.CharField(max_length=100, default=None, null=True, blank = True)
+	req = models.CharField(max_length=50, choices = REQUEST, default='non')
+	abstractReq = models.TextField(max_length=5000, default=None, null=True , blank = True)
+	placeReq = models.CharField(max_length=500, default=None, null=True, blank = True)
 	timeReq = models.DateTimeField(default=None, null=True, blank = True)
-	titleReq = models.CharField(max_length=300, default=None, null=True, blank = True)
+	titleReq = models.CharField(max_length=500, default=None, null=True, blank = True)
 	detailsReq = models.TextField(default=None, null=True, blank = True)
 	tagsReq = models.ManyToManyField(Tag, related_name="tagsReq", default = None, blank = True)
 	speakerReq = models.ForeignKey(Speaker, on_delete=models.CASCADE, related_name="speakerReq", default = None, null=True, blank = True)
-	imgurLReq  = models.CharField(max_length = 100, default=None, null=True, blank = True)
+	imgurLReq  = models.CharField(max_length = 500, default=None, null=True, blank = True)
 
 	intersection_max = 5
 	citation_max = 50000
