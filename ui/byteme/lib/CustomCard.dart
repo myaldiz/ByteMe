@@ -184,7 +184,7 @@ String representScore(double score) {
 
 String modifyAbstract(String abstr) {
   if (abstr.length > 50) {
-    return abstr.substring(0, 50);
+    return abstr.substring(0, 50) + "...";
   }
   return abstr;
 }
