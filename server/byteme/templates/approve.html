@@ -1,0 +1,42 @@
+{% load static %}
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Byteme</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'result_pretty.css'%}"> 
+    </head>         
+        <body>    
+            <p>Login User: {{login_userprofile}}</p>
+            <p>Your Events: </p>
+            <table id="mytable" border="1" cellspacing="3">
+                <tr>
+                    <th>event_id</th>
+                    <th>host_id</th>
+                    <th>content</th>
+                    <th>is_approved</th>
+                    <th>approve</th>
+                </tr>
+                {% for event in event_created %}
+                <tr>
+                    <th>{{event.identifier}}</th>
+                    <th>{{event.creater}}</th>
+                    <th>{{event.abstract}}</th>
+                    {% if event.req != "non" %}
+                        <th>processing</th>
+                        {% else %}
+                        <th>accepted</th>
+                    {% endif %}
+                    <th>
+                    {% if event.req != "non" %}
+                    <form action="" method="post" id="approve" enctype="multipart/form-data">{% csrf_token %}
+                        <input type="hidden" name="id" value={{event.identifier}}>
+                        <input type="submit" value=approve>              
+                    </form>  
+                    {% endif %}
+                    </th>
+                </tr>
+            {% endfor %}
+                <tbody></tbody>
+            </table>
+    </body>
+</html>

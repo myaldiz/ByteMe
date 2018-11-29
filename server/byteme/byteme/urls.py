@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/v1/account/', include('accounts.urls')),
     url(r'^api/v1/event/', include('events.urls')),
+    url(r'^webinterface/', include('webinterface.urls')),
 ]
