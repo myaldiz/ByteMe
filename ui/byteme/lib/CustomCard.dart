@@ -42,25 +42,15 @@ class CustomCard extends StatelessWidget {
               Container(
                 constraints: BoxConstraints(maxWidth: 200.0),
                   child: Column(children: [
-                    FittedBox(
-                      child: Text(
-                        event["title"],
-                        style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      ),
-                      fit: BoxFit.scaleDown,
-                    ),
-                // Text(
-                //   event["title"],
-                //   style: TextStyle(
-                //     fontSize: 18.0,
-                //     fontWeight: FontWeight.bold,
-                //   ),
-                // ),
                 Text(
-                  event["abstract"],
+                  event["title"],
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  modifyAbstract(event["abstract"]),
                   style: TextStyle(
                     fontSize: 15.0,
                   ),
@@ -190,4 +180,11 @@ String beautifyString(String date) {
 String representScore(double score) {
   // var scoreDouble = double.parse(score);
   return (score * 10.0).toStringAsFixed(1) + " / 10";
+}
+
+String modifyAbstract(String abstr) {
+  if (abstr.length > 50) {
+    return abstr.substring(0, 50);
+  }
+  return abstr;
 }
