@@ -62,7 +62,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     _speakerEmail.text = event["speaker"]["speakerEmail"];
     _details.text = event["details"];
     _eventAbstract.text = event["abstract"];
-    _imageURL.text = event["poster_image"];
+    _imageURL.text = event["imgurl"];
     List<Tag> initialTags = [];
     for (Map<String, dynamic> tag in event["tags"]) {
       initialTags.add(Tag(tag["name"]));
@@ -212,6 +212,11 @@ class MyCustomFormState extends State<MyCustomForm> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: RaisedButton(
+                  color: Theme.of(context).primaryColor,
+                  textColor: Theme.of(context)
+                          .primaryTextTheme
+                          .button
+                          .color,
                   onPressed: onSubmit,
                   child: Text(
                     'Edit',

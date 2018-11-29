@@ -25,11 +25,18 @@ class CustomCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Container(
-                child: Image.asset(
-                  'assets/img.jpg',
-                  height: 100.0,
-                  fit: BoxFit.cover,
-                ),
+                child: 
+                Image.network(
+                event["imgurl"],
+                // "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/seminar-invite-poster-template-3b05386c8bba04259f80ef882c38b7f5_screen.jpg?ts=1515025190",
+                height: 100.0,
+                fit: BoxFit.cover,
+              ),
+                // Image.asset( //imgurl
+                //   'assets/img.jpg',
+                //   height: 100.0,
+                //   fit: BoxFit.cover,
+                // ),
               ),
               Container(
                   child: Column(children: [
@@ -115,7 +122,7 @@ class AttendingButtonState extends State<AttendingButton> {
       setState(() {
         result = RaisedButton(
           child: Text("Attend"),
-          color: Colors.greenAccent,
+          color: Colors.lightGreen,
           onPressed: () {
             http.post("http://127.0.0.1:8000/api/v1/event/attend/" + id,
                 headers: {
