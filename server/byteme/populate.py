@@ -17,16 +17,30 @@ import random
 from datetime import datetime
 from django.utils import timezone
 
-num_random_scholars = 50
 sys.setrecursionlimit(100000)
 my_crawler = Crawler()
 my_crawler.verbose = False
 
+if len(sys.argv) > 1:
+    num_random_scholars = int(sys.argv[1])
+else:
+    num_random_scholars = 25
+
+print('Populating ' + str(num_random_scholars) + ' events now..')
+
 with open('crawling_output/scholar_crawled.pickle', 'rb') as handle:
     scholar_dic_pickle = pickle.load(handle)
+print('Loaded scholars')
+
+index_list = set()
+while len(index_list) < num_random_scholars:
+    index_list.add(random.randint(0, len(scholar_dic_pickle)-1))
+index_list = list(index_list)
+#print('Finished random index selection')
 
 scholar_list = []
-for scholar_dic in scholar_dic_pickle:
+scholar_dic_selected = [scholar_dic_pickle[i] for i in index_list]
+for scholar_dic in scholar_dic_selected:
     name = scholar_dic['name']
     try:
         univ = scholar_dic['association']
@@ -42,18 +56,13 @@ for scholar_dic in scholar_dic_pickle:
             scholar_dic['tags'] = tag_objects
         my_crawler.update_scholar_info(scholar, scholar_dic)
     scholar_list.append(scholar)
+print('Saved scholars')
 
 image_urls = []
 with open('crawling_output/images.csv', newline='\n') as csvfile:
     m_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
     for row in m_reader:
         image_urls.append(row[0])
-
-
-index_list = set()
-while len(index_list) != num_random_scholars:
-    index_list.add(random.randint(0, len(scholar_dic_pickle)-1))
-index_list = list(index_list)
 
 admin = User.objects.create_superuser(username='admin', password='password@', email='berk17@gmail.com')
 UserProfile.objects.create(user=admin)
@@ -77,10 +86,10 @@ for i in vals['Events']:
     title_list.append(i['title'])
     details_list.append(i['details'])
 
-
-for index in index_list:
+print('Starting to add events')
+for count, index in enumerate(index_list):
     scholar_dic = scholar_dic_pickle[index]
-    scholar = scholar_list[index] 
+    scholar = scholar_list[count] 
     image_url = image_urls[random.randint(0, len(image_urls)-1)]
     time = timezone.now()
     time = time.replace(year=2019, month = random.randint(1,12), 
