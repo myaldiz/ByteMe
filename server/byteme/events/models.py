@@ -43,8 +43,10 @@ class Event(models.Model):
 		event_tags = set(self.tags.all())
 		speaker_tags = set(speaker.tags.all())
 		inters_event_num = min(self.intersection_max, len(user_tags.intersection(event_tags)))
+		inters_event_num = inters_event_num / self.intersection_max
 		inters_speaker_num = min(self.intersection_max, len(user_tags.intersection(speaker_tags)))
-		
+		inters_speaker_num = inters_speaker_num / self.intersection_max
+
 		i_score = inters_event_num * 0.2 + inters_speaker_num * 0.2
 		i_score += (speaker.citations / self.citation_max) * 0.2
 		i_score += (speaker.h_index / self.h_index_max) * 0.2
