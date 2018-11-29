@@ -287,17 +287,19 @@ class DateTimeItem extends StatelessWidget {
 }
 
 List filterCards(List events, List selectedTags){
-  List selectedEvents;
+  List selectedEvents = [];
   events.forEach((event){
     event["tags"].forEach((tagObject){
       if(selectedTags.contains(tagObject["name"])) {
-        selectedEvents.add(event);
+        if (event != null && !selectedEvents.contains(event)){
+          selectedEvents.add(event);
+        }
       }
     });
   });
   // var tagsSet = selectedTags.toSet();
   // events = events.where((m) => !m["tags"].toSet().intersection(tagsSet).isEmpty).toList();
-  return selectedEvents;
+  return selectedEvents.toSet().toList();
 }
 
 List sortCards(List events, String criteria){
