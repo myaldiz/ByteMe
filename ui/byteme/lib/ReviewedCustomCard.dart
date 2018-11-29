@@ -17,11 +17,18 @@ class ReviewedCustomCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Container(
-              child: Image.asset(
-                'assets/img.jpg',
+              child: Image.network(
+                event["imgurl"] != null ?
+                event["imgurl"]: 
+                "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/seminar-invite-poster-template-3b05386c8bba04259f80ef882c38b7f5_screen.jpg?ts=1515025190",
                 height: 100.0,
                 fit: BoxFit.cover,
               ),
+              // Image.asset( //imgurl
+              //   'assets/img.jpg',
+              //   height: 100.0,
+              //   fit: BoxFit.cover,
+              // ),
             ),
             Container(
                 child: Column(children: [

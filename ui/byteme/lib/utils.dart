@@ -33,14 +33,14 @@ Future<Map<String, dynamic>> getJson(String jsonName) async {
 
 class Tag {
   Tag(this.name);
-  final name;
+  final String name;
 }
 
 typedef void TagFormCallback(List<Tag> selectedTags);
 
 class TagForm extends StatefulWidget {
   final TagFormCallback onSubmit;
-  final List<Tag> initialValue;
+  final List<String> initialValue;
 
   TagForm({this.onSubmit, this.initialValue});
 
@@ -50,35 +50,37 @@ class TagForm extends StatefulWidget {
 
 class _TagFormState extends State<TagForm> {
   List<Tag> selectedTags = [];
-  List<Tag> allTags;
+  List<Tag> allTags = [];
 
   @override
   void initState() {
     super.initState();
     initTags();
-    if(widget.initialValue != null && widget.initialValue.length > 0){
-      selectedTags = widget.initialValue;
-    }
   }
 
   initTags() async{
     List<Tag> newTags = [];
+    List<Tag> newSelected = [];
     http.Response response = await http.get(
     Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/tag/browse'), 
     headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token " + token}
     );
     Map<String, dynamic> data = json.decode(response.body);
     for (Map<String,dynamic> tag in data["Tags"]) {
-      newTags.add(Tag(tag["name"]));
+      Tag newTag = Tag(tag["name"]);
+      newTags.add(newTag);
+      if(widget.initialValue.contains(tag["name"])){
+        newSelected.add(newTag);
+      }
     }
     setState((){
       allTags = newTags;
+      selectedTags = newSelected;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print(selectedTags);
     List<CheckboxListTile> allCheckBoxes = [];
     for (Tag tag in allTags) {
       allCheckBoxes.add(
@@ -100,13 +102,12 @@ class _TagFormState extends State<TagForm> {
     return AlertDialog(
       title: Text("Please select tags"),
       content: Column(
-        children: allCheckBoxes.isEmpty ?
-        CircularProgressIndicator() : 
-        allCheckBoxes,
+        children: allCheckBoxes,
       ),
       actions: [
         RaisedButton(
           textColor: Theme.of(context).primaryTextTheme.button.color,
+          color: Theme.of(context).primaryColor,
           child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop();
@@ -115,6 +116,7 @@ class _TagFormState extends State<TagForm> {
         RaisedButton(
           child: Text("Apply"),
           textColor: Theme.of(context).primaryTextTheme.button.color,
+          color: Theme.of(context).primaryColor,
           onPressed: () {
             Navigator.of(context).pop();
             widget.onSubmit(selectedTags);
@@ -181,6 +183,7 @@ class _SortFormState extends State<SortForm> {
         )
         ,RaisedButton(
           textColor: Theme.of(context).primaryTextTheme.button.color,
+          color: Theme.of(context).primaryColor,
           child: Text("Apply"),
           onPressed: () {
             Navigator.of(context).pop();
@@ -281,26 +284,24 @@ class DateTimeItem extends StatelessWidget {
   }
 }
 
-List<Widget> filterCards(List<Widget> cards, List<Tag> selectedTags){
-  
+List filterCards(List events, List selectedTags){
+  var tagsSet = selectedTags.toSet();
+  events = events.where((m) => !m["tags"].toSet().intersection(tagsSet).isEmpty).toList();
+  return events;
 }
 
 List sortCards(List events, String criteria){
-  print(criteria);
-  print("_----------------");
-  print(events);
   if (criteria == "By Ranking") {
-    print(events[0]["Iscore"]);
     events.sort((m1, m2) {
-        if(m1["Iscore"] == null || m2["Iscore"] == null){
-          print("NOoooooooo");
-        }
         var r = m1["Iscore"].compareTo(m2["Iscore"]);
         if (r != 0) return r;
       });
+      events = List.from(events.reversed);
     return events;
   } else if (criteria == "By Name") {
     events.sort((m1, m2) {
+      m1["title"] = m1["title"].toLowerCase();
+      m2["title"] = m2["title"].toLowerCase();
         var r = m1["title"].compareTo(m2["title"]);
         if (r != 0) return r;
       });
