@@ -69,13 +69,15 @@ class _TagFormState extends State<TagForm> {
     for (Map<String,dynamic> tag in data["Tags"]) {
       Tag newTag = Tag(tag["name"]);
       newTags.add(newTag);
-      if(widget.initialValue.contains(tag["name"])){
+      if(widget.initialValue != null && widget.initialValue.contains(tag["name"])){
         newSelected.add(newTag);
       }
     }
     setState((){
       allTags = newTags;
+      if(widget.initialValue != null){
       selectedTags = newSelected;
+      }
     });
   }
 

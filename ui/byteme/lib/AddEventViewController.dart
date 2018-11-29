@@ -219,6 +219,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   Future<bool> makeRequest() async {
     if(dateTime == null){
+      print("Missing datetime");
       return false;
     }
     setState(() {
@@ -253,6 +254,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     data["Event"] = event;
     var tool = JsonEncoder();
     var postJson = tool.convert(data);
+    print(postJson);
     var response = await http.post(
         Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/add'),
         body: postJson,
@@ -261,6 +263,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           "accept": "application/json",
           "Authorization": "Token " + token
         });
+        print(response.body);
     if(json.decode(response.body) == "Event json is not valid") return false;
     return json.decode(response.body)["status"] == "processing";
   }

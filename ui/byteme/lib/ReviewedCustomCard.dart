@@ -5,8 +5,9 @@ import './token.dart';
 
 class ReviewedCustomCard extends StatelessWidget {
   final Map<String, dynamic> event;
+  var onSubmit;
 
-  ReviewedCustomCard(this.event);
+  ReviewedCustomCard(this.event, this.onSubmit);
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,10 @@ class ReviewedCustomCard extends StatelessWidget {
                     onPressed: () async {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              ModifyEventViewController(event)));
+                              ModifyEventViewController(event)))
+                              .then((value){
+                                onSubmit();
+                              });
                     },
                   ),
                   IconButton(

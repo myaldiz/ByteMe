@@ -17,6 +17,7 @@ class ManagePageState extends State<ManagePage> {
 
   @override
   Widget build(BuildContext context) {
+    print("build");
     if (_cardsList.length == 0) {
       updateList();
       return Scaffold(appBar: AppBar(title: Text("Manage")), 
@@ -46,13 +47,12 @@ class ManagePageState extends State<ManagePage> {
             IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () {
-                  Navigator.push(
-                    context,
+                  Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) => AddEventViewController()),
-                  ).then((value){
-                    updateList();
-                  });
+                        builder: (context) => AddEventViewController()),);
+                  // ).then((value) {
+                  //   updateList();
+                  // });
                 })
           ],
         ),
@@ -64,7 +64,10 @@ class ManagePageState extends State<ManagePage> {
 
   Future<void> updateList() async {
     List<Widget> newList =
-        await createCardListModify('http://127.0.0.1:8000/api/v1/event/browse?type=created');
+        await createCardListModify('http://127.0.0.1:8000/api/v1/event/browse?type=created', (){
+          Navigator.of(context).popAndPushNamed('manage');
+          // Navigator.of(context).pop();
+        });
     setState(() {
       _cardsList = newList;
     });

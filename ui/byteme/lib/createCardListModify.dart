@@ -5,7 +5,7 @@ import 'ReviewedCustomCard.dart';
 import 'package:http/http.dart' as http; 
 import './token.dart';
 
-Future<List<Widget>> createCardListModify(String url) async {
+Future<List<Widget>> createCardListModify(String url, onSubmit) async {
   List<Widget> newCardsList = [];
   Widget card;
   http.Response response = await http.get(
@@ -29,7 +29,7 @@ Future<List<Widget>> createCardListModify(String url) async {
       return newCardsList;
   }
   data["Events"].forEach((event) {
-    card = ReviewedCustomCard(event);
+    card = ReviewedCustomCard(event, onSubmit);
     newCardsList.add(card);
   });
   return newCardsList;

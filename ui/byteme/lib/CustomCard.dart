@@ -43,6 +43,7 @@ class CustomCard extends StatelessWidget {
                   child: Column(children: [
                 Text(
                   event["title"],
+                  overflow: TextOverflow.clip,
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,

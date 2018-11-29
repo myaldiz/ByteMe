@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
       theme: appTheme,
       initialRoute: '/login',
       routes: <String, WidgetBuilder>{
-        '/': (BuildContext context) => HomePage(),
+        '/': (BuildContext context) => HomePage(1),
+        'manage': (BuildContext context) => HomePage(0),
         '/login': (BuildContext context) => LoginPage(),
         '/signup': (BuildContext context) => SignupPage(),
       },
