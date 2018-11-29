@@ -37,6 +37,10 @@ Please don't forget to write README.md files for others to understand..
 1. cd server/byteme   
 run `python manage.py runserver`    
 
+### Testing
+run `python manage.py flush`
+`python populate [number_of_events_to_populate]`
+
 ##### View Admin website
 1. use browser, url: http://127.0.0.1:8000/admin/   
 > account:  admin   
