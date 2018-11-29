@@ -16,11 +16,12 @@ class EventDetailsViewController extends StatelessWidget {
         ),
         // iconTheme: IconThemeData(color: Colors.white),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: ListView(
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Image.network(
-                // event["imgurl"],
+                event["imgurl"] != null ?
+                event["imgurl"]: 
                 "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/seminar-invite-poster-template-3b05386c8bba04259f80ef882c38b7f5_screen.jpg?ts=1515025190",
                 height: 350.0,
                 fit: BoxFit.fitHeight,
