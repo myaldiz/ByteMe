@@ -186,6 +186,14 @@ class MyCustomFormState extends State<MyCustomForm> {
                           .button
                           .color,
                       onPressed: () {
+                        _title.clear();
+                        _place.clear();
+                        _speakerName.clear();
+                        _speakerUni.clear();
+                        _speakerEmail.clear();
+                        _details.clear();
+                        _eventAbstract.clear();
+                        _imageURL.clear();
                         Navigator.of(context).pop();
                       },
                       child: Text(
