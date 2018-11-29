@@ -42,7 +42,7 @@ class ReviewedCustomCard extends StatelessWidget {
                 ),
               ),
               Text(
-                event["abstract"],
+                modifyAbstract(event["abstract"]),
                 style: TextStyle(
                   fontSize: 15.0,
                 ),
@@ -132,4 +132,11 @@ Color typeColor(String type){
   }else{
     return Colors.red;
   }
+}
+
+String modifyAbstract(String abstr) {
+  if (abstr.length > 50) {
+    return abstr.substring(0, 50) + "...";
+  }
+  return abstr;
 }
