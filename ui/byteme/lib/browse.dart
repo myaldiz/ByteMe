@@ -21,7 +21,9 @@ class BrowsePageState extends State<BrowsePage> {
   @override
   Widget build(BuildContext context) {
     if (_cardsList.length == 0) {
-      updateList();
+      if(token != null){
+        updateList();
+      }
       return Scaffold(
           appBar: AppBar(title: Text("Events")),
           body: Container(

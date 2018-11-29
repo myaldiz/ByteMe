@@ -19,11 +19,12 @@ class EventDetailsViewController extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Image.asset(
-              'assets/img.jpg',
-              height: 250.0,
-              fit: BoxFit.cover,
-            ),
+          Image.network(
+                // event["imgurl"],
+                "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/seminar-invite-poster-template-3b05386c8bba04259f80ef882c38b7f5_screen.jpg?ts=1515025190",
+                height: 350.0,
+                fit: BoxFit.fitHeight,
+              ),
           Text(
             event["title"],
             style: TextStyle(
@@ -32,10 +33,11 @@ class EventDetailsViewController extends StatelessWidget {
             ),
           ),
           Text(
-            DateFormat('EEEE, MMMM d - hh:mm').format(DateTime.parse(event["time"])),
+            "Date: " + DateFormat('EEEE, MMMM d - hh:mm').format(DateTime.parse(event["time"])),
             style: TextStyle(
+              color: Colors.black,
               fontSize: 18.0,
-              fontWeight: FontWeight.w100,
+              fontWeight: FontWeight.normal,
             ),
           ),
           // Text(
@@ -46,24 +48,27 @@ class EventDetailsViewController extends StatelessWidget {
           //   ),
           // ),
           Text(
-            event["place"],
+            "Place: " + event["place"],
             style: TextStyle(
+              color: Colors.black,
               fontSize: 18.0,
-              fontWeight: FontWeight.w100,
+              fontWeight: FontWeight.normal,
             ),
           ),
           Text(
-            event["speaker"]["name"],
+            "Speaker: " + event["speaker"]["name"],
             style: TextStyle(
+              color: Colors.black,
               fontSize: 18.0,
-              fontWeight: FontWeight.w100,
+              fontWeight: FontWeight.normal,
             ),
           ),
           Text(
             event["abstract"],
             style: TextStyle(
+              color: Colors.black,
               fontSize: 20.0,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.normal,
             ),
           ),
         ],
