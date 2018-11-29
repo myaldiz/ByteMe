@@ -107,9 +107,10 @@ for count, index in enumerate(index_list):
         tags.add(cur_tag)
     for tag in tags:
         cur_event.tags.add(tag)
+    cur_event.save()
     
     if bool(random.randint(0,2)):
         approveEventChange(cur_event.identifier, req="add")
-    cur_event.save()
+    
 
 print('Population Complete!!')

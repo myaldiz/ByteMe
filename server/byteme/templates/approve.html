@@ -20,10 +20,11 @@
                 <tr>
                     <th>{{event.identifier}}</th>
                     <th>{{event.creater}}</th>
-                    <th>{{event.abstract}}</th>
                     {% if event.req != "non" %}
+                        <th>{{event.abstractReq}}</th>
                         <th>processing</th>
                         {% else %}
+                        <th>{{event.abstract}}</th>
                         <th>accepted</th>
                     {% endif %}
                     <th>

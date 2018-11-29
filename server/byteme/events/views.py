@@ -196,7 +196,6 @@ def AddEvent(request):
             univ = json_speaker_univ
             )[0]
     except:
-        speaker.delete()
         return Response({"Response":"Add_Event", "status": "Email already used!"}, status=status.HTTP_400_BAD_REQUEST)
     
     
