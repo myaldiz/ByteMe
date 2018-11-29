@@ -32,6 +32,7 @@ class ReviewedCustomCard extends StatelessWidget {
               // ),
             ),
             Container(
+              constraints: BoxConstraints(maxWidth: 200.0),
                 child: Column(children: [
               Text(
                 event["title"],
