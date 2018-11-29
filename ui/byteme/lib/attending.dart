@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'utils.dart';
 import 'package:byteme/createCardListAttending.dart';
+import './token.dart';
+
 
 class AttendingPage extends StatefulWidget {
   @override
@@ -66,7 +68,7 @@ class AttendingPageState extends State<AttendingPage> {
 
   Future<void> updateList() async {
     List<Widget> newList = await createCardListAttending(
-        'http://admin:asdfghjkl@127.0.0.1:8000/api/v1/event/browse?type=attending');
+        IP_ADDRESS + 'api/v1/event/browse?type=attending');
     setState(() {
       _cardsList = newList;
     });

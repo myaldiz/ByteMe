@@ -108,7 +108,7 @@ class AttendingButtonState extends State<AttendingButton> {
           child: Text("Un-Attend"),
           color: Colors.redAccent,
           onPressed: () {
-            http.post("http://127.0.0.1:8000/api/v1/event/unattend/" + id,
+            http.post(IP_ADDRESS + "api/v1/event/unattend/" + id,
                 headers: {
                   "content-type": "application/json",
                   "accept": "application/json",
@@ -126,7 +126,7 @@ class AttendingButtonState extends State<AttendingButton> {
           child: Text("Attend"),
           color: Colors.lightGreen,
           onPressed: () {
-            http.post("http://127.0.0.1:8000/api/v1/event/attend/" + id,
+            http.post(IP_ADDRESS + "api/v1/event/attend/" + id,
                 headers: {
                   "content-type": "application/json",
                   "accept": "application/json",

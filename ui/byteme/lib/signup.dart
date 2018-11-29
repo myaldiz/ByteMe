@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import './token.dart';
+
 
 class SignupPage extends StatefulWidget {
   @override
@@ -61,7 +63,7 @@ class _SignupState extends State<SignupPage> {
     var postJson = tool.convert(data);
 
     var response = await http.post(
-        Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/register'),
+        Uri.encodeFull(IP_ADDRESS + 'api/v1/account/register'),
         body: postJson,
         headers: {
           "content-type": "application/json",

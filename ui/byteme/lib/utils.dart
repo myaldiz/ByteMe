@@ -62,7 +62,7 @@ class _TagFormState extends State<TagForm> {
     List<Tag> newTags = [];
     List<Tag> newSelected = [];
     http.Response response = await http.get(
-    Uri.encodeFull('http://127.0.0.1:8000/api/v1/event/tag/browse'), 
+    Uri.encodeFull(IP_ADDRESS + 'api/v1/event/tag/browse'), 
     headers: {"content-type": "application/json", "accept": "application/json", "Authorization": "Token " + token}
     );
     Map<String, dynamic> data = json.decode(response.body);

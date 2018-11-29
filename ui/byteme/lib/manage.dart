@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'createCardListModify.dart';
 import 'utils.dart';
 import './AddEventViewController.dart';
+import './token.dart';
+
 
 class ManagePage extends StatefulWidget {
   @override
@@ -64,7 +66,7 @@ class ManagePageState extends State<ManagePage> {
 
   Future<void> updateList() async {
     List<Widget> newList =
-        await createCardListModify('http://127.0.0.1:8000/api/v1/event/browse?type=created', (){
+        await createCardListModify(IP_ADDRESS + 'api/v1/event/browse?type=created', (){
           Navigator.of(context).popAndPushNamed('manage');
           // Navigator.of(context).pop();
         });

@@ -83,7 +83,7 @@ class ReviewedCustomCard extends StatelessWidget {
                                 actions: <Widget>[
                                   RaisedButton(
                                       onPressed: () {
-                                        http.delete("http://127.0.0.1:8000/api/v1/event/delete/" + event["identifier"],
+                                        http.delete(IP_ADDRESS + "api/v1/event/delete/" + event["identifier"],
                                           headers: {
                                             "content-type": "application/json",
                                             "accept": "application/json",

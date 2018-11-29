@@ -38,7 +38,7 @@ class ProfilePageState extends State<ProfilePage> {
     ];
     await getData();
     // http.Response response = await http.get(
-    //     Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/profile'),
+    //     Uri.encodeFull(IP_ADDRESS + 'api/v1/account/profile'),
     //     headers: {
     //       "content-type": "application/json",
     //       "accept": "application/json",
@@ -125,7 +125,7 @@ class ProfilePageState extends State<ProfilePage> {
 
   Future<void> getData() async {
     http.Response response = await http.get(
-        Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/profile'),
+        Uri.encodeFull(IP_ADDRESS + 'api/v1/account/profile'),
         headers: {
           "content-type": "application/json",
           "accept": "application/json",

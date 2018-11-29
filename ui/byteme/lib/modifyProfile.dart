@@ -128,7 +128,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     var postJson = tool.convert(data);
 
     await http.post(
-        Uri.encodeFull('http://127.0.0.1:8000/api/v1/account/modify'),
+        Uri.encodeFull(IP_ADDRESS + 'api/v1/account/modify'),
         body: postJson,
         headers: {
           "content-type": "application/json",
